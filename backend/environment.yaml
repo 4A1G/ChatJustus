@@ -1,0 +1,6 @@
+name: tc
+channels:
+  - defaults
+dependencies:
+  - python=3.12
+prefix: /Users/jw/anaconda3/envs/tc
