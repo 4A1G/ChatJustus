@@ -7,6 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12"
+gpt-wrapper = {git = "git@github.com:JoongWonSeo/gpt-wrapper.git"}
 
 
 [build-system]
