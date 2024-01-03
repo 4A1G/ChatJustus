@@ -213,7 +213,7 @@ tiktoken = "^0.5.2"
 
 [package.source]
 type = "git"
-url = "git@github.com:JoongWonSeo/gpt-wrapper.git"
+url = "https://github.com/JoongWonSeo/gpt-wrapper.git"
 reference = "HEAD"
 resolved_reference = "841fc8b2f709b640a2890b815a79bce97503ec2d"
 
@@ -859,4 +859,4 @@ zstd = ["zstandard (>=0.18.0)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "54564b1a717f7b774610efc099ac5890f05735343f67df04f7445620050a746b"
+content-hash = "af0adff6733d49b06afe30c3f1e5dcf2cb2a13282004216f2b3e49d637c3bba8"
