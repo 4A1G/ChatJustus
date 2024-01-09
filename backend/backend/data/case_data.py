@@ -4,3 +4,4 @@ class FirstContactSummary(BaseModel):
     name: str
     email: str
     case: str
+    lawyer: str

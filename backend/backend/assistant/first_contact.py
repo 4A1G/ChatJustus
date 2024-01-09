@@ -24,7 +24,7 @@ class FirstContactToolkit(Toolkit):
         self.summary["name"] = name
         self.summary["email"] = email
         self.summary["case"] = case
-        self.summary[]
+        self.summay["lawyer"] = lawyer
         return "Success"
     
     @function_tool(name = "end_chat")
