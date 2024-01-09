@@ -1,3 +1,6 @@
+# Qdrant database files
+backend/storage
+
 # macos
 .DS_Store
 
