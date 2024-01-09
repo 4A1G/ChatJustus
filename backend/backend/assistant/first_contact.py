@@ -3,11 +3,11 @@ from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool
 from .chatgpt import SyncedGPT, SyncedHistory
 
 
-class LegalDBToolkit(Toolkit):
+class FirstContactToolkit(Toolkit):
     def __init__(self):
         super().__init__()
         self.summary = {}
-        self.chatEnd = False
+        self.chatEnded = False
 
         @function_tool(name = "summarize_first_contact")
         async def summarize_first_contact(self, name:str, email:str, case: str ):
@@ -23,13 +23,15 @@ class LegalDBToolkit(Toolkit):
             self.summary["name"] = name
             self.summary["email"] = email
             self.summary["case"] = case
+            return "Success"
         
         @function_tool(name = "end_chat")
         async def end_chat(self):
             '''
             Terminate chat
             '''
-            self.chatEnd = True
+            self.chatEnded = True
+            return "Success"
 
 
 
@@ -41,7 +43,7 @@ class FirstContactBot(SyncedGPT):
 
         super().__init__(
             messages=initial_messages,
-            tools=LegalDBToolkit(),
+            tools=FirstContactToolkit(),
         )
 
 
