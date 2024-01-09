@@ -35,3 +35,9 @@ poetry update
 ```
 
 Finally, we also need to setup the `.env` file. Find the `.env.example` file and copy it to `.env`. Then, fill in the values for the environment variables. You can go to our discord under `PROTOTYPE > #important` to find the values for the environment variables.
+
+
+### Running the server
+```bash
+uvicorn backend.server.server:app --reload --port 42069
+```
