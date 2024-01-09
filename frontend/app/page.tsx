@@ -74,13 +74,20 @@ export default function Home() {
             <div className='flex flex-col content-between h-full bg-default-100'>
 
               <div className='p-4 px-2 text-xl text-primary/100'>
-                ChatJustus
+                Chat History
               </div>
 
               <div className='w-full h-full flex flex-col overflow-auto p-2'>
                 <ScrollShadow>
-                  <div>
-                    Chat History
+                  <div className='flex flex-col'>
+                    {
+                      [
+                        ['1st Meeting on 02.10.2023', 'Getting Started'],
+                        ['2nd Meeting on 17.10.2023', 'etc'],
+                      ].map(([title, summary]) => (
+                        <div>{title}</div>
+                      ))
+                    }
                   </div>
                 </ScrollShadow>
               </div>

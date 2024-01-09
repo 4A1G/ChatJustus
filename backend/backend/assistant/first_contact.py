@@ -19,19 +19,19 @@ class FirstContactToolkit(Toolkit):
             email: email of the client
             case: summary of the legal situation of the client
 
-            '''
-            self.summary["name"] = name
-            self.summary["email"] = email
-            self.summary["case"] = case
-            return "Success"
+        '''
+        self.summary["name"] = name
+        self.summary["email"] = email
+        self.summary["case"] = case
+        return "Success"
         
-        @function_tool(name = "end_chat")
-        async def end_chat(self):
-            '''
-            Terminate chat
-            '''
-            self.chatEnded = True
-            return "Success"
+    @function_tool(name = "end_chat")
+    async def end_chat(self):
+        '''
+        Terminate chat
+        '''
+        self.chatEnded = True
+        return "Success"
 
 
 

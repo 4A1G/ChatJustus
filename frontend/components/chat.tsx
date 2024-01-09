@@ -55,18 +55,24 @@ const DefaultTool = ({ tool_call, i }: ToolProps) => (
 
 const SummaryTool = ({ tool_call, i }: ToolProps) => {
   const { firstContactSummarySchema } = useContext(DataContext)
+  let parsed = null
+  try {
+    parsed = JSON.parse(tool_call.function.arguments)
+  } catch (e) {
+    parsed = null
+  }
   return (
     <div>
       {/* {JSON.stringify(firstContactSummarySchema)}
       {tool_call.function.arguments} */}
-      <Form
+      {parsed && <Form
         schema={firstContactSummarySchema}
-        formData={JSON.parse(tool_call.function.arguments)}
+        formData={parsed}
         // onChange={(e) => onChange(e.formData)}
         // onSubmit={(e) => onSubmit(e.formData)} //validated, TODO: set temp to final
         validator={validator}
         readonly={true}
-      />
+      />}
     </div>
   )
 }
@@ -299,7 +305,7 @@ const Chat = ({ history, onSend, isConnected, isGenerating, showSystem }: ChatPr
       <div className='flex-initial h-screen flex flex-col'>
         <Card className='my-10 p-3 self-center max-w-lg bg-default/50 backdrop-saturate-200 shadow-md'>
           <CardHeader className='justify-center'>
-            <h1 className='text-xl text-primary-foreground'>Welcome to ChatJustus!</h1>
+            <h1 className='text-2xl text-primary/100'>Welcome to ChatJustus!</h1>
           </CardHeader>
           <CardBody>
             <MD>
@@ -314,7 +320,7 @@ Feel free to ask me anything! I'm here to help you.
             </MD>
           </CardBody>
           <CardFooter className='justify-center'>
-            <p className='text-tiny text-primary-foreground'>Made with &lt;3 by Team 4A1G.</p>
+            <p className='text-xs text-primary/100'>Made with &lt;3 by Team 4A1G.</p>
           </CardFooter>
         </Card>
       </div>
