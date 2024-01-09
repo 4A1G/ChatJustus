@@ -1,3 +1,6 @@
+from dotenv import load_dotenv
+load_dotenv(override=True)
+
 import asyncio
 import traceback
 
@@ -5,7 +8,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.staticfiles import StaticFiles
 
 from gpt_wrapper.messages import msg
-from backend.assistant.chatgpt import SyncedGPT, SyncedHistory
+from backend.assistant.first_contact import FirstContactBot
 from .sync import Connection
 
 
@@ -14,25 +17,7 @@ users = {} # {session_id: (connection, assistant)}
 
 async def new_session(session_id: str):
     with Connection() as connection:
-        assistant = SyncedGPT(SyncedHistory([
-            msg(system="You are a helpful assistant."),
-            msg(user="show me the definition of telescope sum"),
-            msg(assistant="""
-Certainly! The telescope sum is a mathematical notation used to represent the sum of a sequence of terms in a telescoping series. The telescope sum is expressed as:
-
-$$
-\sum_{k=1}^{n} (a_{k+1} - a_k)
-$$
-
-Where $a_k$ represents the terms of the sequence. This notation emphasizes the concept of cancellation, as consecutive terms in the sequence tend to cancel each other out, leaving only the first and last term remaining.
-                
-Here's how you'd implement this in Python:
-```python
-def telescope_sum(sequence):
-    return sequence[-1] - sequence[0]
-```
-                """)
-        ]))
+        assistant = FirstContactBot()
         # if we have tools, initialize them here
         # await assistant.default_tools.initialize()
         users[session_id] = (connection, assistant)
