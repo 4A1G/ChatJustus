@@ -24,7 +24,13 @@ $$
 \sum_{k=1}^{n} (a_{k+1} - a_k)
 $$
 
-Where (a_k) represents the terms of the sequence. This notation emphasizes the concept of cancellation, as consecutive terms in the sequence tend to cancel each other out, leaving only the first and last term remaining.
+Where $a_k$ represents the terms of the sequence. This notation emphasizes the concept of cancellation, as consecutive terms in the sequence tend to cancel each other out, leaving only the first and last term remaining.
+                
+Here's how you'd implement this in Python:
+```python
+def telescope_sum(sequence):
+    return sequence[-1] - sequence[0]
+```
                 """)
         ]))
         # if we have tools, initialize them here

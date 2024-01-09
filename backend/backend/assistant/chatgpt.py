@@ -40,7 +40,7 @@ class SyncedGPT(ChatGPT):
         super().__init__(messages=messages, tools=tools, model=model)
 
         # model setting
-        self.temperature = temperature
+        self.temperature = temperature or 0.9
 
         self.sync = Sync("GPT", self,
             on_action={
