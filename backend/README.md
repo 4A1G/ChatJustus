@@ -5,8 +5,10 @@
 We use conda for python version and virtual environment.
 On top of that, for dependency management, we use poetry.
 
-### Initial Setup
+### Environment Setup
+
 Ensure you have conda and poetry installed.
+
 1. Clone the repository and cd into this directory
 ```bash
 cd backend
@@ -31,3 +33,5 @@ poetry add <package>
 ```bash
 poetry update
 ```
+
+Finally, we also need to setup the `.env` file. Find the `.env.example` file and copy it to `.env`. Then, fill in the values for the environment variables. You can go to our discord under `PROTOTYPE > #important` to find the values for the environment variables.
