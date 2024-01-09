@@ -71,7 +71,7 @@ const SummaryTool = ({ tool_call, i }: ToolProps) => {
         // onChange={(e) => onChange(e.formData)}
         // onSubmit={(e) => onSubmit(e.formData)} //validated, TODO: set temp to final
         validator={validator}
-        readonly={true}
+        readonly={false}
       />}
     </div>
   )
@@ -296,11 +296,11 @@ const Chat = ({ history, onSend, isConnected, isGenerating, showSystem }: ChatPr
 
   return (
     <div className="w-full h-full px-8 flex flex-col overflow-y-scroll">
-      {/* <div>
+      <div>
         {
           JSON.stringify(history)
         }
-      </div> */}
+      </div>
 
       <div className='flex-initial h-screen flex flex-col'>
         <Card className='my-10 p-3 self-center max-w-lg bg-default/50 backdrop-saturate-200 shadow-md'>
