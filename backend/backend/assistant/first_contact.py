@@ -10,12 +10,12 @@ class LegalDBToolkit(Toolkit):
 
 class FirstContactBot(SyncedGPT):
     def __init__(self):
-        message = SyncedHistory([
+        initial_messages = SyncedHistory([
             msg(system="You are a helpful assistant.")
         ])
 
         super().__init__(
-            messages=message,
-            tools=ToolList([LegalDBToolkit()])
+            messages=initial_messages,
+            # tools=LegalDBToolkit(),
         )
 
