@@ -10,6 +10,7 @@ from fastapi.staticfiles import StaticFiles
 from gpt_wrapper.messages import msg
 from backend.assistant.first_contact import FirstContactBot
 from .sync import Connection
+from .synced_data import ExposeData
 
 
 # connections
@@ -20,7 +21,11 @@ async def new_session(session_id: str):
         assistant = FirstContactBot()
         # if we have tools, initialize them here
         # await assistant.default_tools.initialize()
-        users[session_id] = (connection, assistant)
+
+        # other exposed data
+        exposed_data = ExposeData()
+
+        users[session_id] = (connection, assistant, exposed_data)
 
 # websocket endpoint
 app = FastAPI()
@@ -30,7 +35,7 @@ async def websocket_endpoint(ws: WebSocket, session_id: str):
     await ws.accept()
     if session_id not in users:
         await new_session(session_id)
-    connection, assistant = users[session_id]
+    connection = users[session_id][0]
 
     try:
         await connection.new_connection(ws)

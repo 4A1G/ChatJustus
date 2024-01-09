@@ -1,12 +1,16 @@
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect, useMemo, useContext } from 'react'
 import { produce } from 'immer'
 
 import { js_beautify } from "js-beautify"
 import { FaAnglesUp, FaCircleCheck, FaStop } from "react-icons/fa6"
 
+import validator from '@rjsf/validator-ajv8'
+import { Form } from './json-forms'
+
 import { Button, Card, CardHeader, CardBody, CardFooter, Avatar, Textarea, Spinner } from "@nextui-org/react"
 import { Expander, ExpanderItem } from '@/components/base/expander'
 import { MD } from '@/components/base/md'
+import { DataContext } from '@/app/page'
 
 
 // define messages state object and its reducer
@@ -31,12 +35,58 @@ export { initialMessages }
 
 
 // UI
-const ToolCalls = ({ message }: { message: Message }) => (
-  <Expander
+interface ToolProps {
+  tool_call: any,
+  i: number
+}
+
+const DefaultTool = ({ tool_call, i }: ToolProps) => (
+  <div>
+    <MD>
+      {`\`\`\`json\n${js_beautify(tool_call.function.arguments, { indent_size: 2 })}\n\`\`\``}
+    </MD>
+    {
+      tool_call.result
+        ? <MD>{`**Result:** \`${tool_call.result}\``}</MD>
+        : null
+    }
+  </div>
+)
+
+const SummaryTool = ({ tool_call, i }: ToolProps) => {
+  const { firstContactSummarySchema } = useContext(DataContext)
+  return (
+    <div>
+      {/* {JSON.stringify(firstContactSummarySchema)}
+      {tool_call.function.arguments} */}
+      <Form
+        schema={firstContactSummarySchema}
+        formData={JSON.parse(tool_call.function.arguments)}
+        // onChange={(e) => onChange(e.formData)}
+        // onSubmit={(e) => onSubmit(e.formData)} //validated, TODO: set temp to final
+        validator={validator}
+        readonly={true}
+      />
+    </div>
+  )
+}
+
+const toolRenderers = (tool_name: string) => {
+  switch (tool_name) {
+    case 'summarize_first_contact':
+      return ['Legal Inquiry to Lawyer', SummaryTool]
+    default:
+      return [tool_name, DefaultTool]
+  }
+}
+
+const ToolCalls = ({ message }: { message: Message }) => {
+  return (<Expander
     defaultExpandedKeys={
       // message.tool_calls!.filter((m) => !m.result).map((m, i) => String(i))
       message.tool_calls!.reduce((keys, m, i) => {
-        if (!m.result) keys.push(String(i))
+        // if (!m.result) keys.push(String(i))
+        keys.push(String(i))
         return keys
       }, [] as string[])
     }
@@ -44,31 +94,29 @@ const ToolCalls = ({ message }: { message: Message }) => (
     variant='bordered'
   >
     {
-      message.tool_calls!.map((tool_call, i) => (
-        <ExpanderItem
-          key={String(i)}
-          title={`${tool_call.function.name}`}
-          startContent={
-            <div className="flex justify-center w-5 h-5">
-              {tool_call.result ? (
-                <FaCircleCheck className='text-primary/100 text-lg' />
-              ) : (
-                <Spinner color='primary' size='sm' />
-              )}
-            </div>
-          }
-        >
-          <MD>{`\`\`\`json\n${js_beautify(tool_call.function.arguments, { indent_size: 2 })}\n\`\`\``}</MD>
-          {
-            tool_call.result
-              ? <MD>{`**Result:** \`${tool_call.result}\``}</MD>
-              : null
-          }
-        </ExpanderItem>
-      ))
+      message.tool_calls!.map((tool_call, i) => {
+        const [tool_name, ToolRenderer] = toolRenderers(tool_call.function.name)
+        return (
+          <ExpanderItem
+            key={String(i)}
+            title={`${tool_name}`}
+            startContent={
+              <div className="flex justify-center w-5 h-5">
+                {tool_call.result ? (
+                  <FaCircleCheck className='text-primary/100 text-lg' />
+                ) : (
+                  <Spinner color='primary' size='sm' />
+                )}
+              </div>
+            }
+          >
+            <ToolRenderer tool_call={tool_call} i={i} />
+          </ExpanderItem>
+        )
+      })
     }
-  </Expander>
-)
+  </Expander>)
+}
 
 
 type ChatMessageProps = {
@@ -242,6 +290,11 @@ const Chat = ({ history, onSend, isConnected, isGenerating, showSystem }: ChatPr
 
   return (
     <div className="w-full h-full px-8 flex flex-col overflow-y-scroll">
+      {/* <div>
+        {
+          JSON.stringify(history)
+        }
+      </div> */}
 
       <div className='flex-initial h-screen flex flex-col'>
         <Card className='my-10 p-3 self-center max-w-lg bg-default/50 backdrop-saturate-200 shadow-md'>

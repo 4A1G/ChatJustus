@@ -129,7 +129,7 @@ function SubmitButton(props: SubmitButtonProps) {
   }
   return (
     <Button type='submit' color='primary'>
-      Validate
+      Send Legal Inquiry
     </Button>
   );
 }
