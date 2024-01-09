@@ -46,7 +46,7 @@ export default function RootLayout({
 						<main className="w-full h-full">
 							{children}
 						</main>
-						<Toaster richColors position="bottom-center" />
+						<Toaster richColors position="bottom-right" />
 					</div>
 				</Providers>
 			</body>
