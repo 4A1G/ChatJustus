@@ -314,27 +314,26 @@ const Chat = ({ history, onSend, isConnected, isGenerating, showSystem }: ChatPr
         <Card className='my-10 p-3 self-center max-w-lg bg-default/50 backdrop-saturate-200 shadow-md'>
           <CardHeader className='justify-center'>
             <ChatAvatar className='mr-3' role='assistant' />
-            <h1 className='text-2xl text-primary/100'>Welcome Back, Sofia!</h1>
+            <h1 className='text-2xl text-primary/100'>
+              Welcome to ChatJustus!
+            </h1>
           </CardHeader>
           <CardBody>
             <MD className='leading-5'>
               {`
-In your last meeting with Marcus, you discussed the following topics:
-- **Child Custody**: Your client agreed on joint custody of their children.
-- **Divorce Papers**: Marcus and his spouse have agreed on the terms of the divorce, and she has signed the papers.
-- **Submitting to Court**: Marcus has a court hearing scheduled for **15.12.2023**.
+Do you have any legal questions? I can help you with:
+- Answering your questions about the law
+- Your legal situation
+- Finding Lawyers at *Sterling Legal Associates*, specialized for your case
+- Forwarding your case to the lawyer
 
-Continuing from where you left off, according to your notes, you were planning to:
-- **Submit the divorce papers to the court**.
-- **Prepare for the court hearing**.
-
-Let's get to work!
+*For your privacy, this conversation will **not be saved**, and only the final inquiry you send will be forwarded to the lawyer.*
               `}
             </MD>
           </CardBody>
-          {/* <CardFooter className='justify-center'>
+          <CardFooter className='justify-center'>
             <p className='text-xs text-primary/100'>Made with <FaHeart className='inline-block align-text-bottom' /> by Team 4A1G</p>
-          </CardFooter> */}
+          </CardFooter>
         </Card>
       </div>
 

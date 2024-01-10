@@ -75,35 +75,35 @@ export default function Home() {
             <div className='flex flex-col content-between h-full bg-default-100'>
 
               <div className='p-4 px-2 text-xl text-primary/100'>
-                Case #312: Marcus Divorce
+                Your Case Timeline
               </div>
 
               <div className='w-full h-full flex flex-col overflow-auto p-2'>
-                {/* <ScrollShadow> */}
+                <ScrollShadow>
                 <div className='flex flex-col gap-3'>
                   {
-                    [
-                      ['1st Meeting on 02.10.2023', 'First Meeting: Marcus'],
-                      ['2nd Meeting on 17.10.2023', 'Agreeing on the terms of the divorce'],
-                      ['3rd Meeting on 01.11.2023', 'Finalizing the divorce papers'],
-                      ['4th Meeting on 15.11.2023', 'Emergency meeting with Marcus'],
-                    ].map(([title, summary]) => (
-                      <div className='flex flex-col bg-default-50 rounded-lg p-3'>
-                        <div className='text-xs text-default-700'>{title}</div>
-                        <div>{summary}</div>
-                      </div>
-                    ))
+                    // [
+                    //   ['1st Meeting on 02.10.2023', 'First Meeting: Marcus'],
+                    //   ['2nd Meeting on 17.10.2023', 'Agreeing on the terms of the divorce'],
+                    //   ['3rd Meeting on 01.11.2023', 'Finalizing the divorce papers'],
+                    //   ['4th Meeting on 15.11.2023', 'Emergency meeting with Marcus'],
+                    // ].map(([title, summary]) => (
+                    //   <div className='flex flex-col bg-default-50 rounded-lg p-3'>
+                    //     <div className='text-xs text-default-700'>{title}</div>
+                    //     <div>{summary}</div>
+                    //   </div>
+                    // ))
                   }
                   <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3'>
-                    <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
-                    <div className='text-primary/100'>Signing the papers</div>
+                    <div className='text-xs text-primary-700/100'>First Contact: Today</div>
+                    <div className='text-primary/100'>Getting to know your case</div>
                   </div>
                 </div>
-                {/* </ScrollShadow> */}
+                </ScrollShadow>
               </div>
 
               <Expander variant='light' defaultExpandedKeys={'1'}>
-                <ExpanderItem title='Documents' key='1'>
+                <ExpanderItem title='Model Settings' key='1'>
                   <SingleSelect
                     label='model'
                     selected={gpt.selectedModel}
@@ -122,7 +122,7 @@ export default function Home() {
                   />
                 </ExpanderItem>
 
-                <ExpanderItem title='Client Management' key='2'>
+                <ExpanderItem title='UI Settings' key='2'>
                   <Switch size='sm' color='primary' isSelected={showSystem} onValueChange={setShowSystem}>
                     Show System Messages
                   </Switch>
@@ -146,12 +146,12 @@ export default function Home() {
 
           {/* main chat view */}
           <Allotment.Pane minSize={400} priority={LayoutPriority.High}>
-            {/* <button
+            <button
               className='absolute left-2 top-1/2 z-50 w-4 h-8 rounded-full bg-default text-tiny text-default-600 flex items-center justify-center hover:scale-125 transition'
               onClick={() => setSidebarVisible(!sidebarVisible)}
             >
               {sidebarVisible ? <FaChevronLeft /> : <FaChevronRight />}
-            </button> */}
+            </button>
 
             <Chat
               history={
