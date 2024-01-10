@@ -14,6 +14,7 @@ import { Expander, ExpanderItem } from '@/components/base/expander'
 import { SingleSelect } from '@/components/base/single-select'
 import { ThemeSwitch } from "@/components/theme-switch"
 import { Chat, Messages, initialMessages } from '@/components/chat'
+import Image from 'next/image'
 
 
 export const DataContext = createContext({} as any)
@@ -74,35 +75,35 @@ export default function Home() {
             <div className='flex flex-col content-between h-full bg-default-100'>
 
               <div className='p-4 px-2 text-xl text-primary/100'>
-                Your Case Timeline
+                Case #312: Marcus Divorce
               </div>
 
               <div className='w-full h-full flex flex-col overflow-auto p-2'>
                 {/* <ScrollShadow> */}
-                  <div className='flex flex-col gap-3'>
-                    {
-                      [
-                        ['1st Meeting on 02.10.2023', 'Your first meeting with Sofia'],
-                        ['2nd Meeting on 17.10.2023', 'Agreeing on the terms of the divorce'],
-                        ['3rd Meeting on 01.11.2023', 'Finalizing the divorce papers'],
-                        ['4th Meeting on 15.11.2023', 'Emergency meeting with Sofia'],
-                      ].map(([title, summary]) => (
-                        <div className='flex flex-col bg-default-50 rounded-lg p-3'>
-                          <div className='text-xs text-default-700'>{title}</div>
-                          <div>{summary}</div>
-                        </div>
-                      ))
-                    }
-                    <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3'>
-                          <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
-                          <div className='text-primary/100'>Signing the papers</div>
-                        </div>
+                <div className='flex flex-col gap-3'>
+                  {
+                    [
+                      ['1st Meeting on 02.10.2023', 'First Meeting: Marcus'],
+                      ['2nd Meeting on 17.10.2023', 'Agreeing on the terms of the divorce'],
+                      ['3rd Meeting on 01.11.2023', 'Finalizing the divorce papers'],
+                      ['4th Meeting on 15.11.2023', 'Emergency meeting with Marcus'],
+                    ].map(([title, summary]) => (
+                      <div className='flex flex-col bg-default-50 rounded-lg p-3'>
+                        <div className='text-xs text-default-700'>{title}</div>
+                        <div>{summary}</div>
+                      </div>
+                    ))
+                  }
+                  <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3'>
+                    <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
+                    <div className='text-primary/100'>Signing the papers</div>
                   </div>
+                </div>
                 {/* </ScrollShadow> */}
               </div>
 
               <Expander variant='light' defaultExpandedKeys={'1'}>
-                <ExpanderItem title='Your Documents' key='1'>
+                <ExpanderItem title='Documents' key='1'>
                   <SingleSelect
                     label='model'
                     selected={gpt.selectedModel}
@@ -121,7 +122,7 @@ export default function Home() {
                   />
                 </ExpanderItem>
 
-                <ExpanderItem title='Messages from Sofia' key='2'>
+                <ExpanderItem title='Client Management' key='2'>
                   <Switch size='sm' color='primary' isSelected={showSystem} onValueChange={setShowSystem}>
                     Show System Messages
                   </Switch>
@@ -134,6 +135,14 @@ export default function Home() {
               </div>
             </div>
           </Allotment.Pane>
+
+          {/* document view */}
+          {/* <Allotment.Pane minSize={400} priority={LayoutPriority.High}>
+                  <div className='flex flex-col gap-3 p-2'>
+                    <img src='/divorce.png' alt='' width={800} height={600} />
+                    </div>
+          </Allotment.Pane> */}
+
 
           {/* main chat view */}
           <Allotment.Pane minSize={400} priority={LayoutPriority.High}>
