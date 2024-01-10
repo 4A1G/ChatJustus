@@ -10,19 +10,17 @@ class FirstContactToolkit(Toolkit):
         self.chatEnded = False
 
     @function_tool(name = "summarize_first_contact")
-    async def summarize_first_contact(self, name:str, email:str, case: str, lawyer: str):
+    async def summarize_first_contact(self, case: str, lawyer: str):
         '''
         Summarize potential client's contact and case details for the lawyer and ask for potential's client permission to send 
 
         Args:
-            name: name of the client
-            email: email of the client
             case: summary of the legal situation of the client
             lawyer: suitable lawyer for the case
 
         '''
-        self.summary["name"] = name
-        self.summary["email"] = email
+        # self.summary["name"] = name
+        # self.summary["email"] = email
         self.summary["case"] = case
         self.summary["lawyer"] = lawyer
         return "Success"

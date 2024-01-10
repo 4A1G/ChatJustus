@@ -2,12 +2,12 @@ import { useState, useRef, useEffect, useMemo, useContext } from 'react'
 import { produce } from 'immer'
 
 import { js_beautify } from "js-beautify"
-import { FaAnglesUp, FaCircleCheck, FaStop } from "react-icons/fa6"
+import { FaAnglesUp, FaCircleCheck, FaHeart, FaStop, FaUser } from "react-icons/fa6"
 
 import validator from '@rjsf/validator-ajv8'
 import { Form } from './json-forms'
 
-import { Button, Card, CardHeader, CardBody, CardFooter, Avatar, Textarea, Spinner } from "@nextui-org/react"
+import { Button, Card, CardHeader, CardBody, CardFooter, Avatar, Textarea, Spinner, AvatarIcon } from "@nextui-org/react"
 import { Expander, ExpanderItem } from '@/components/base/expander'
 import { MD } from '@/components/base/md'
 import { DataContext } from '@/app/page'
@@ -81,6 +81,8 @@ const toolRenderers = (tool_name: string) => {
   switch (tool_name) {
     case 'summarize_first_contact':
       return ['Legal Inquiry to Lawyer', SummaryTool]
+    case 'end_chat':
+      return ['Finished', DefaultTool]
     default:
       return [tool_name, DefaultTool]
   }
@@ -130,10 +132,16 @@ type ChatMessageProps = {
   className?: string
 }
 
-const avatar_fallback: { [key: string]: string } = {
-  "user": "U",
-  "assistant": "A",
-  "system": "S",
+
+const ChatAvatar = ({ role, className }: { role: string, className?: string }) => {
+  switch (role) {
+    case 'user':
+      return <Avatar className={className} icon={<FaUser className='text-2xl text-primary/100' />} />
+    case 'assistant':
+      return <Avatar className={className} src='/avatar_bg_none.png' />
+    case 'system':
+      return <Avatar className={className} name='S' />
+  }
 }
 const style: { [key: string]: string } = {
   "user": "bg-default/50",
@@ -147,7 +155,7 @@ const ChatMessage = ({ messageGroup, className }: ChatMessageProps) => {
   return (
     <Card className={`rounded-3xl ${cls} shadow-md backdrop-blur ${className ?? ''}`}>
       <CardBody className='flex flex-row p-0'>
-        <Avatar className='flex-none m-4' name={avatar_fallback[messageGroup[0].role]} />
+        <ChatAvatar className='flex-none m-4 ' role={messageGroup[0].role} />
         <div className='min-w-0 w-full flex flex-col gap-2 p-5 pl-0'>
           {
             messageGroup.map((message, i) => (
@@ -296,32 +304,33 @@ const Chat = ({ history, onSend, isConnected, isGenerating, showSystem }: ChatPr
 
   return (
     <div className="w-full h-full px-8 flex flex-col overflow-y-scroll">
-      <div>
+      {/* <div>
         {
           JSON.stringify(history)
         }
-      </div>
+      </div> */}
 
       <div className='flex-initial h-screen flex flex-col'>
         <Card className='my-10 p-3 self-center max-w-lg bg-default/50 backdrop-saturate-200 shadow-md'>
           <CardHeader className='justify-center'>
-            <h1 className='text-2xl text-primary/100'>Welcome to ChatJustus!</h1>
+            <ChatAvatar className='mr-3' role='assistant' />
+            <h1 className='text-2xl text-primary/100'>Welcome Back, Marcus!</h1>
           </CardHeader>
           <CardBody>
-            <MD>
+            <MD className='leading-5'>
               {`
-Do you have any legal questions? I'm here to help! I can answer questions about:
-- Law
-- Case management
-- Lawyers at this firm
+In your last meeting with Sofia, you discussed the following topics:
+- **Child Custody**: Your spouse agreed on joint custody of your children.
+- **Divorce Papers**: You and your spouse have agreed on the terms of the divorce, and she has signed the papers.
+- **Submitting to Court**: You have a court hearing scheduled for **15.12.2023**.
 
-Feel free to ask me anything! I'm here to help you.
+Do you have any questions about your documents, the status of your case, or the next steps? You can also request me to pass on a message to Sofia.
               `}
             </MD>
           </CardBody>
-          <CardFooter className='justify-center'>
-            <p className='text-xs text-primary/100'>Made with &lt;3 by Team 4A1G.</p>
-          </CardFooter>
+          {/* <CardFooter className='justify-center'>
+            <p className='text-xs text-primary/100'>Made with <FaHeart className='inline-block align-text-bottom' /> by Team 4A1G</p>
+          </CardFooter> */}
         </Card>
       </div>
 

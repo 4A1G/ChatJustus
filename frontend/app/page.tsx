@@ -46,7 +46,7 @@ export default function Home() {
 
 
   useEffect(() => {
-    if (window.innerWidth >= 1000)
+    if (window.innerWidth >= 600)
       setSidebarVisible(true)
   }, [])
 
@@ -74,26 +74,35 @@ export default function Home() {
             <div className='flex flex-col content-between h-full bg-default-100'>
 
               <div className='p-4 px-2 text-xl text-primary/100'>
-                Chat History
+                Your Case Timeline
               </div>
 
               <div className='w-full h-full flex flex-col overflow-auto p-2'>
-                <ScrollShadow>
-                  <div className='flex flex-col'>
+                {/* <ScrollShadow> */}
+                  <div className='flex flex-col gap-3'>
                     {
                       [
-                        ['1st Meeting on 02.10.2023', 'Getting Started'],
-                        ['2nd Meeting on 17.10.2023', 'etc'],
+                        ['1st Meeting on 02.10.2023', 'Your first meeting with Sofia'],
+                        ['2nd Meeting on 17.10.2023', 'Agreeing on the terms of the divorce'],
+                        ['3rd Meeting on 01.11.2023', 'Finalizing the divorce papers'],
+                        ['4th Meeting on 15.11.2023', 'Emergency meeting with Sofia'],
                       ].map(([title, summary]) => (
-                        <div>{title}</div>
+                        <div className='flex flex-col bg-default-50 rounded-lg p-3'>
+                          <div className='text-xs text-default-700'>{title}</div>
+                          <div>{summary}</div>
+                        </div>
                       ))
                     }
+                    <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3'>
+                          <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
+                          <div className='text-primary/100'>Signing the papers</div>
+                        </div>
                   </div>
-                </ScrollShadow>
+                {/* </ScrollShadow> */}
               </div>
 
               <Expander variant='light' defaultExpandedKeys={'1'}>
-                <ExpanderItem title='Model Options' key='1'>
+                <ExpanderItem title='Your Documents' key='1'>
                   <SingleSelect
                     label='model'
                     selected={gpt.selectedModel}
@@ -112,7 +121,7 @@ export default function Home() {
                   />
                 </ExpanderItem>
 
-                <ExpanderItem title='UI Options' key='2'>
+                <ExpanderItem title='Messages from Sofia' key='2'>
                   <Switch size='sm' color='primary' isSelected={showSystem} onValueChange={setShowSystem}>
                     Show System Messages
                   </Switch>
@@ -128,12 +137,12 @@ export default function Home() {
 
           {/* main chat view */}
           <Allotment.Pane minSize={400} priority={LayoutPriority.High}>
-            <button
+            {/* <button
               className='absolute left-2 top-1/2 z-50 w-4 h-8 rounded-full bg-default text-tiny text-default-600 flex items-center justify-center hover:scale-125 transition'
               onClick={() => setSidebarVisible(!sidebarVisible)}
             >
               {sidebarVisible ? <FaChevronLeft /> : <FaChevronRight />}
-            </button>
+            </button> */}
 
             <Chat
               history={
