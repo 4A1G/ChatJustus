@@ -16,9 +16,17 @@ from .synced_data import ExposeData
 # connections
 users = {} # {session_id: (connection, assistant)}
 
-async def new_session(session_id: str):
+
+assistant_factory = {
+    "first_contact": FirstContactBot
+}
+
+async def new_session(assistant_type: str, session_id: str):
     with Connection() as connection:
-        assistant = FirstContactBot()
+        if assistant_type not in assistant_factory:
+            raise Exception(f"Assistant type {assistant_type} not found")
+        
+        assistant = assistant_factory[assistant_type]()
         # if we have tools, initialize them here
         # await assistant.default_tools.initialize()
 
@@ -30,11 +38,12 @@ async def new_session(session_id: str):
 # websocket endpoint
 app = FastAPI()
 
-@app.websocket("/ws/{session_id}")
-async def websocket_endpoint(ws: WebSocket, session_id: str):
+@app.websocket("/{assistant_type}/ws/{session_id}")
+async def websocket_endpoint(ws: WebSocket, assistant_type: str, session_id: str):
+    print(f"New websocket connection: {assistant_type} {session_id}")
     await ws.accept()
     if session_id not in users:
-        await new_session(session_id)
+        await new_session(assistant_type, session_id)
     connection = users[session_id][0]
 
     try:
@@ -50,6 +59,7 @@ async def websocket_endpoint(ws: WebSocket, session_id: str):
             pass
 
 
+
 # it's important this is mounted after the websocket route
 app.mount(
     "/", StaticFiles(directory="webapp_static", html=True), name="static"
@@ -58,8 +68,8 @@ app.mount(
 
 def start():
     import uvicorn
-    uvicorn.run(app, port=42069)
+    uvicorn.run("backend.server.server:app", port=42069)
 
 def dev():
     import uvicorn
-    uvicorn.run(app, port=42069, reload=True)
+    uvicorn.run("backend.server.server:app", port=42069, reload=True)

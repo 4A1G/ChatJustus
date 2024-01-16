@@ -10,7 +10,7 @@ export interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
 	return (
-		<ConnectionProvider url={"ws://localhost:42069/ws/default_session"}>
+		<ConnectionProvider url={"ws://localhost:42069/first_contact/ws/default_session"}>
 			{children}
 		</ConnectionProvider>
 	);

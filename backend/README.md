@@ -39,5 +39,5 @@ Finally, we also need to setup the `.env` file. Find the `.env.example` file and
 
 ### Running the server
 ```bash
-uvicorn backend.server.server:app --reload --port 42069
+poetry run server
 ```
