@@ -9,6 +9,7 @@ from fastapi.staticfiles import StaticFiles
 
 from gpt_wrapper.messages import msg
 from backend.assistant.first_contact import FirstContactBot
+from backend.assistant.follow_up_qa import FollowUpBot
 from .sync import Connection
 from .synced_data import ExposeData
 
@@ -18,7 +19,8 @@ users = {} # {session_id: (connection, assistant)}
 
 
 assistant_factory = {
-    "first_contact": FirstContactBot
+    "first_contact": FirstContactBot,
+    "follow_up": FollowUpBot,
 }
 
 async def new_session(assistant_type: str, session_id: str):
@@ -38,7 +40,7 @@ async def new_session(assistant_type: str, session_id: str):
 # websocket endpoint
 app = FastAPI()
 
-@app.websocket("/{assistant_type}/ws/{session_id}")
+@app.websocket("/ws/{assistant_type}/{session_id}")
 async def websocket_endpoint(ws: WebSocket, assistant_type: str, session_id: str):
     print(f"New websocket connection: {assistant_type} {session_id}")
     await ws.accept()
