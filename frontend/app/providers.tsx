@@ -5,7 +5,6 @@ import { NextUIProvider } from "@nextui-org/system";
 import { useRouter } from 'next/navigation'
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProviderProps } from "next-themes/dist/types";
-import { ConnectionProvider } from '@/components/networking/connection'
 
 
 export interface ProvidersProps {
@@ -19,9 +18,7 @@ export function Providers({ children, themeProps }: ProvidersProps) {
 	return (
 		<NextUIProvider navigate={router.push}>
 			<NextThemesProvider {...themeProps}>
-				<ConnectionProvider url={"ws://localhost:42069/ws/default_session"}>
-					{children}
-				</ConnectionProvider>
+				{children}
 			</NextThemesProvider>
 		</NextUIProvider>
 	);

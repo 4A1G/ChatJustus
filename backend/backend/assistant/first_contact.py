@@ -74,7 +74,8 @@ Lawyers Information:
 
         super().__init__(
             messages=initial_messages,
-            model="gpt-3.5-turbo-1106",
+            # model="gpt-3.5-turbo-1106",
+            model="echo",
             tools=FirstContactToolkit(),
         )
 
