@@ -9,6 +9,16 @@ Concepts:
     - Patch Event: Apply a jsonpatch to the state, i.e. a list of operations
     - Action Event: Dispatch an action, can be handled however defined
 
+The most convinient way to use this module is to create an object of Connection, passing all the attributes that should be synced with the frontend, while defining their sync config:
+    self.connection = Connection(
+        obj = self,
+        state1 = sync(),
+        state2 = sync(key="state2_key"),
+        state3 = exposed(),
+        state4 = remote(),
+    )
+Then, whenever you want to sync, simply call self.connection.sync().
+
 For actions, you can subscribe to the action event by calling self.connection.subscribe(action_event(key), handler), and dispatch actions by calling self.connection.dispatch(action_event(key), action).
 '''
 
@@ -30,8 +40,8 @@ class Connection:
     '''
     def __init__(self):
         self.ws = None
-        self.event_handlers: dict[str, Callable] = {}
-        self.init_handlers: list[Callable] = []
+        self.event_handlers: dict[str, Callable] = {} # triggered on event
+        self.init_handlers: list[Callable] = [] # triggered on connection init
     
     @property
     def is_connected(self):
@@ -124,6 +134,14 @@ def action_event(key: str):
     '''Action has been dispatched'''
     return f"_ACTION:{key}"
 
+def task_start_event(key: str):
+    '''Task has been started'''
+    return f"_TASK_START:{key}"
+
+def task_cancel_event(key: str):
+    '''Task has been cancelled'''
+    return f"_TASK_CANCEL:{key}"
+
 # TODO: for key-space, global key prefix and context manager function in Sync
 
 class Sync:
@@ -136,7 +154,10 @@ class Sync:
         obj: object,
         connection: Connection | None = None,
         on_action: Callable | dict[str, Callable] | None = None,
+        tasks: dict[str, Callable] | None = None,
+        on_task_cancel: dict[str, Callable] | None = None,
         send_on_init: bool = True,
+        expose_running_tasks: bool = False,
         **sync_attributes: dict[str, Ellipsis]
     ):
         '''
@@ -147,6 +168,10 @@ class Sync:
             obj: the object whose attributes should be synced
             connection: the connection to use, if None, use the global connection
             on_action: either an action handler taking a single action dict, or a dict of action handlers for each action type, each taking the data of the action as keyword arguments
+            tasks: a dict of task factories for each task type, each returning a coroutine to be used as a task
+            on_task_cancel: a dict of task cancel handlers for each task type
+            send_on_init: whether to send the state on connection init
+            expose_running_tasks: whether to expose the running tasks to the frontend
             sync_attributes: attribute names to observe, value being either ... or a string of the key of the attribute, leave empty to observe all attributes
         '''
         self.key = key
@@ -162,10 +187,17 @@ class Sync:
             self.on_action = self._create_action_handler(on_action)
         else:
             self.on_action = on_action
+        
+        # task handler
+        self.running_tasks: dict[str, asyncio.Task] = {}
+        if tasks:
+            self.on_task_start, self.on_task_cancel = self._create_task_handlers(tasks, on_task_cancel)
+        else:
+            self.on_task_start, self.on_task_cancel = None, None
 
         # register attributes to sync
         for attr in sync_attributes:
-            assert hasattr(obj, attr), f"Failed to register attribute: Object has no attribute {attr}"
+            assert attr in dir(obj), f"Failed to register attribute: Object has no attribute {attr}"
 
         self.sync_attributes = {
             attr: attr if key is ... else key
@@ -182,6 +214,8 @@ class Sync:
                     and not isinstance(getattr(obj, attr), Sync)
             }
         
+        self.expose_running_tasks = expose_running_tasks
+        
         # create reverse-lookup for patching
         self.key_to_attr = {
             key: attr
@@ -189,7 +223,7 @@ class Sync:
         }
 
         # assertions
-        assert len(self.sync_attributes) > 0, "No attributes to sync"
+        assert len(self.sync_attributes) + expose_running_tasks > 0, "No attributes to sync"
         print(f"{self.key}: Syncing {self.sync_attributes}")
         for key in self.sync_attributes.values():
             if '_' in key:
@@ -206,7 +240,7 @@ class Sync:
         return {
             key: deepcopy(getattr(self.obj, attr))
             for attr, key in self.sync_attributes.items()
-        }
+        } | ({"runningTasks": list(self.running_tasks.keys())} if self.expose_running_tasks else {})
     
     def observe(self, obj, **sync_attributes: dict[str, Ellipsis]):
         '''
@@ -224,6 +258,10 @@ class Sync:
             self.connection.register_init(self._send_state)
         if self.on_action:
             self.connection.register_event(action_event(self.key), self.on_action)
+        if self.on_task_start:
+            self.connection.register_event(task_start_event(self.key), self.on_task_start)
+        if self.on_task_cancel:
+            self.connection.register_event(task_cancel_event(self.key), self.on_task_cancel)
 
     async def _send_state(self, _ = None):
         self.state_snapshot = self._snapshot()
@@ -236,6 +274,8 @@ class Sync:
     async def _patch_state(self, patch):
         self.state_snapshot = jsonpatch.apply_patch(self.state_snapshot, patch, in_place=True)
         for key, value in self.state_snapshot.items():
+            if self.expose_running_tasks and key == 'runningTasks':
+                continue
             setattr(self.obj, self.key_to_attr[key], deepcopy(value))
     
     @staticmethod
@@ -245,9 +285,48 @@ class Sync:
             if action_type in handlers:
                 await handlers[action_type](**action)
             else:
-                print(f"Warning: No handler for action {action_type}")
+                print(f"Warning: No handler for action {type}")
         return _handle_action
     
+    def _create_task_handlers(self, factories: dict[str, Callable], on_cancel: dict[str, Callable] | None):
+        async def _run_and_pop(task, task_type: str):
+            try:
+                await task
+            except asyncio.CancelledError:
+                print(f"Task {task_type} cancelled")
+                if on_cancel and task_type in on_cancel:
+                    await on_cancel[task_type]()
+                raise    
+            finally:
+                self.running_tasks.pop(task_type, None)
+                if self.expose_running_tasks:
+                    print(f"syncing running tasks: {list(self.running_tasks.keys())}")
+                    await self.sync()
+
+        async def _create_task(task: dict):
+            task_type = task.pop('type')
+            if task_type in factories:
+                if task_type not in self.running_tasks:
+                    todo = factories[task_type](**task)
+                    task = asyncio.create_task(_run_and_pop(todo, task_type))
+                    self.running_tasks[task_type] = task
+                    if self.expose_running_tasks:
+                        print(f"syncing running tasks: {list(self.running_tasks.keys())}")
+                        await self.sync()
+                else:
+                    print(f"Warning: Task {task_type} already running")
+            else:
+                print(f"Warning: No factory for task {task_type}")
+    
+        async def _cancel_task(task: dict):
+            task_type = task.pop('type')
+            if task_type in self.running_tasks:
+                self.running_tasks[task_type].cancel()
+            else:
+                print(f"Warning: Task {task_type} not running")
+        
+        return _create_task, _cancel_task
+
 
     #===== High-Level: Sync and Actions =====#
     async def sync(self):
@@ -277,6 +356,15 @@ class Sync:
         Send an action to the frontend.
         '''
         await self.connection.send(action_event(self.key), action)
+    
+    async def toast(self, *messages, type: str = 'default') -> str:
+        '''
+        Send a toast message to the frontend.
+        Returns the sent message content, so that you can easily return or print it.
+        '''
+        messages = ' '.join(str(message) for message in messages)
+        await self.connection.send('_TOAST', {"type": type, "message": messages})
+        return messages
 
 
 
@@ -290,4 +378,90 @@ async def nonblock_call(func: Callable, *args, **kwargs):
     else:
         print("Warning: function is not async.")
         return await asyncio.to_thread(func, *args, **kwargs)
+
+
+# High-level API
+# # Decorator which is a pythonic version of useSyncedReducer in the frontend
+# def SyncedObject(cls):
+#     '''
+#     A decorator for the counterpart of useSyncedReducer in the frontend.
+#     Simply define the attributes in __init__ and implement async handle_action.
+#     If needed, you could use self.handle_action and 
+#     '''
+#     class SyncedObjectWrapper(cls):
+#         def __init__(self, *args, **kwargs):
+#             super().__init__(*args, **kwargs)
+#             self._connection = None
+#             self._key = None
+
+#         def register(self, connection: Connection, key: str, send_on_init=True):
+#             self._connection = connection
+#             self._key = key
+
+#             connection.register_event(action_event(key), self.handle_action)
+#             connection.register_event(set_event(key), self._set_state)
+#             connection.register_event(get_event(key), self._send_state)
+#             if send_on_init:
+#                 connection.register_init(self._send_state)
+
+#             return self # for convenience
+
+#         async def handle_action(self, action):
+#             '''
+#             ONLY call this explicitly if you want to apply an action without sending it to the frontend.
+#             You must implement this method to update the internal state of the object based on the action.
+#             '''
+#             if hasattr(super(), 'handle_action'):
+#                 return await super().handle_action(action)
+#             raise NotImplementedError("handle_action must be implemented by subclasses")
+
+#         @overload
+#         async def apply(self, action: dict[str, any]) -> None:
+#             '''Specify the raw action as a dict'''
+#             ...
+        
+#         @overload
+#         async def apply(self, type: str, **data) -> None:
+#             '''Specify the action as a type and data'''
+#             ...
+
+#         async def apply(self, action_or_type: dict[str, any] | str, **data):
+#             '''
+#             Usually, you should be using this method to apply actions to the state, since it also sends the action to the frontend.
+#             Only if you want to apply an action without sending it to the frontend, you should call self.handle_action directly.
+#             '''
+#             if isinstance(action_or_type, str):
+#                 action = {'type': action_or_type, **data}
+                
+#             await self.handle_action(action)
+#             await self._send_action(action)
+
+#         async def _set_state(self, new_state):
+#             for attr, value in new_state.items():
+#                 setattr(self, attr, value)
+
+#         @overload
+#         async def _send_action(self, action: dict[str, any]) -> None:
+#             '''Specify the raw action as a dict'''
+#             ...
+
+#         @overload
+#         async def _send_action(self, type: str, **data) -> None:
+#             '''Specify the action as a type and data'''
+#             ...
+
+#         async def _send_action(self, action_or_type: dict[str, any] | str, **data):
+#             if isinstance(action_or_type, str):
+#                 action = {'type': action_or_type, **data}
+#             else:
+#                 action = action_or_type
+#             if self._connection:
+#                 await self._connection.send(action_event(self._key), action)
+
+#         async def _send_state(self, _ = None):
+#             if self._connection:
+#                 state = {attr: getattr(self, attr) for attr in self.__dict__ if not attr.startswith('_')}
+#                 await self._connection.send(set_event(self._key), state)
+
+#     return SyncedObjectWrapper
 

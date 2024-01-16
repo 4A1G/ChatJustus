@@ -52,5 +52,14 @@ async def websocket_endpoint(ws: WebSocket, session_id: str):
 
 # it's important this is mounted after the websocket route
 app.mount(
-    "/", StaticFiles(directory="../frontend/out", html=True), name="static"
+    "/", StaticFiles(directory="webapp_static", html=True), name="static"
 )
+
+
+def start():
+    import uvicorn
+    uvicorn.run(app, port=42069)
+
+def dev():
+    import uvicorn
+    uvicorn.run(app, port=42069, reload=True)

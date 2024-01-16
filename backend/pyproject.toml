@@ -6,7 +6,7 @@ authors = ["Joong-Won Seo <joong.won.seo@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "3.12"
+python = ">=3.10,<3.13"
 gpt-wrapper = {git = "https://github.com/JoongWonSeo/gpt-wrapper.git"}
 qdrant-client = "^1.7.0"
 python-dotenv = "^1.0.0"
@@ -14,6 +14,10 @@ fastapi = "^0.108.0"
 jsonpatch = "^1.33"
 uvicorn = {extras = ["standard"], version = "^0.25.0"}
 
+
+[tool.poetry.scripts]
+server = "backend.server.server:start"
+server-dev = "backend.server.server:dev"
 
 [build-system]
 requires = ["poetry-core"]

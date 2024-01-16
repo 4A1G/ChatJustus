@@ -5,69 +5,25 @@ import { castImmutable, produceWithPatches, enablePatches } from "immer"
 enablePatches()
 
 
-// export function useStateAndSync<T>(defaultValue: T, key: string, sendOnInit = false) {
-//   const connection = useContext(ConnectionContext)
-//   const [state, setState] = useState<T>(defaultValue)
-
-//   const send = (newState: T) => {
-//     connection?.send(set_event(key), newState)
-//   }
-
-//   useEffect(() => {
-//     connection?.register_event(set_event(key), setState)
-//     connection?.register_event(get_event(key), () => {
-//       send(state)
-//     })
-//     if (sendOnInit) {
-//       connection?.register_init(key, () => {
-//         send(state)
-//       })
-//     }
-
-//     return () => {
-//       connection?.deregister_event(set_event(key))
-//       connection?.deregister_event(get_event(key))
-//       if (sendOnInit) {
-//         connection?.deregister_init(key)
-//       }
-//     }
-//   }, [connection, key])
-
-//   const setSyncedState = (newState: T) => {
-//     send(newState)
-//     setState(newState)
-//   }
-
-//   return [state, setState, setSyncedState] as const
-// }
-
-// export function useSyncedState<T>(defaultValue: T, key: string, sendOnInit = false) {
-//   const [state, setState, setSyncedState] = useStateAndSync(defaultValue, key, sendOnInit)
-//   return [state, setSyncedState] as const
-// }
-
-// export function useRemoteState<T>(defaultValue: T, key: string) {
-//   const [state, setState] = useSyncedState(defaultValue, key, false)
-//   // do not expose the setter, since only the server can set the state
-//   return state
-// }
-
-// export function useExposedState<T>(defaultValue: T, key: string) {
-//   const [state, setState] = useSyncedState(defaultValue, key, true)
-//   return [state, setState] as const
-// }
-
-
-
 const setEvent = (key: string) => "_SET:" + key
 const getEvent = (key: string) => "_GET:" + key
 const patchEvent = (key: string) => "_PATCH:" + key
 const actionEvent = (key: string) => "_ACTION:" + key
+const taskStartEvent = (key: string) => "_TASK_START:" + key
+const taskCancelEvent = (key: string) => "_TASK_CANCEL:" + key
 
 
 export type Action = {
   type: string
 } & Record<string, any>
+
+export type TaskStart = {
+  type: string
+} & Record<string, any>
+
+export type TaskCancel = {
+  type: string
+}
 
 // sync object that can calculate the json patch and send it to remote
 export type Sync<S> = () => void
@@ -92,6 +48,12 @@ export function useSyncedReducer<S>(
   }
   const sendAction = (action: Action) => {
     connection?.send(actionEvent(key), action)
+  }
+  const startTask = (task: TaskStart) => {
+    connection?.send(taskStartEvent(key), task)
+  }
+  const cancelTask = (task: TaskCancel) => {
+    connection?.send(taskCancelEvent(key), task)
   }
 
   // Dynamically create setters and syncers for each attribute
@@ -215,7 +177,9 @@ export function useSyncedReducer<S>(
   const stateWithSync = {
     ...state,
     ...setters,
-    sendAction
+    sendAction,
+    startTask,
+    cancelTask,
   }
 
   return [stateWithSync, dispatch]
@@ -229,55 +193,3 @@ export function useSynced<S>(
   const [stateWithSync, dispatch] = useSyncedReducer(key, undefined, initialState, sendOnInit)
   return stateWithSync
 }
-
-
-// export function useReducerAndSync<S>(
-//   reducer: Reducer<S, Action>,
-//   initialState: S,
-//   key: string,
-//   sendOnInit = false
-// ) {
-//   const [state, dispatch, syncedDispatch, setState] = useReducerAndSyncAndState(reducer, initialState, key, sendOnInit)
-
-//   return [state, dispatch, syncedDispatch] as const
-// }
-
-// export function useSyncedReducerAndSet<S>(
-//   reducer: Reducer<S, Action>,
-//   initialState: S,
-//   key: string,
-//   sendOnInit = false
-// ) {
-//   const [state, dispatch, syncedDispatch, setState] = useReducerAndSyncAndState(reducer, initialState, key, sendOnInit)
-
-//   return [state, syncedDispatch, setState] as const
-// }
-
-// export function useSyncedReducer<S>(
-//   reducer: Reducer<S, Action>,
-//   initialState: S,
-//   key: string,
-//   sendOnInit = false
-// ) {
-//   const [state, dispatch, syncedDispatch] = useReducerAndSync(reducer, initialState, key, sendOnInit)
-//   return [state, syncedDispatch] as const
-// }
-
-// export function useRemoteReducer<S>(
-//   reducer: Reducer<S, Action>,
-//   initialState: S,
-//   key: string
-// ) {
-//   const [state, dispatch] = useSyncedReducer(reducer, initialState, key, false)
-//   // do not expose the setter, since only the server can set the state
-//   return state
-// }
-
-// export function useExposedReducer<S>(
-//   reducer: Reducer<S, Action>,
-//   initialState: S,
-//   key: string
-// ) {
-//   const [state, dispatch] = useSyncedReducer(reducer, initialState, key, true)
-//   return [state, dispatch] as const
-// }
