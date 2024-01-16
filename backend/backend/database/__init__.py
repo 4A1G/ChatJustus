@@ -150,11 +150,11 @@ def get_legal_text(book):
 
 
 def get_dialog_db(case_id, meeting_timestamp):
-    return VectorDB(f"Dialog:{case_id}_{meeting_timestamp}", Dialog)
+    return VectorDB(f"Dialog_{case_id}_{meeting_timestamp}", Dialog)
 
 
 def get_legal_text_db(book):
-    return VectorDB(f"LegalText:{book}", LawArticle)
+    return VectorDB(f"LegalText_{book}", LawArticle)
 
 def get_meeting_db(case_id):
-    return VectorDB(f"Meeting:{case_id}", Meeting)
+    return VectorDB(f"Meeting_{case_id}", Meeting)
