@@ -17,7 +17,6 @@ uvicorn = {extras = ["standard"], version = "^0.25.0"}
 
 [tool.poetry.scripts]
 server = "backend.server.server:start"
-server-dev = "backend.server.server:dev"
 
 [build-system]
 requires = ["poetry-core"]
