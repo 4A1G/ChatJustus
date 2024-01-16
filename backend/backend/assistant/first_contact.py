@@ -59,9 +59,9 @@ Lawyers Information:
 - Introduction: With over 20 years of experience in corporate law, Johnathan Sterling is the driving force behind the firm's M&A practice. He has successfully facilitated numerous high-profile mergers and acquisitions, earning a reputation for his strategic insight and negotiation skills. 
 - Practice Areas: Corporate mergers and acquisitions, Due diligence, Negotiation and structuring of deals, Regulatory compliance
 
-2. Sophia Turner
+2. Justicius
 - Specialization: Divorce Law.
-- Introduction: A compassionate and skilled family law attorney, Sophia Turner leads the divorce practice at Sterling Legal Associates. With a focus on ensuring the best interests of her clients, Sophia has guided numerous individuals through the complexities of divorce, custody, and spousal support cases.
+- Introduction: A compassionate and skilled family law attorney, Justicius leads the divorce practice at Sterling Legal Associates. With a focus on ensuring the best interests of her clients, Justicius has guided numerous individuals through the complexities of divorce, custody, and spousal support cases.
 - Practice Areas: Divorce and legal separation, Child custody and support, Spousal support (alimony), Property division
 
 3. David Chambers
