@@ -16,10 +16,15 @@ import { ThemeSwitch } from "@/components/theme-switch"
 import { Chat, Messages, initialMessages } from '@/components/chat'
 import Image from 'next/image'
 import { DataContext } from './contexts'
+import { DebugSidebar } from '@/components/sidebar/debug-sidebar'
+import { SidebarLayout } from '@/components/sidebar/layout'
 
 
 
 export default function Home() {
+  // UI
+  const [showSystem, setShowSystem] = useState(false)
+
   // connection
   const connection = useContext(ConnectionContext)
   const [isConnected, setIsConnected] = useState<boolean>(false)
@@ -50,32 +55,48 @@ export default function Home() {
 
   return (
     <DataContext.Provider value={data}>
-      <div className='w-full h-full'>
+      <SidebarLayout
+        leftSidebar={
+          <div className='flex flex-col content-between h-full'>
 
-        {/* main chat view */}
+            <DebugSidebar
+              gpt={gpt}
+              messages={messages}
+              showSystem={showSystem}
+              setShowSystem={setShowSystem}
+            />
+
+            <div className='flex flex-wrap justify-between p-2 items-center bg-default-100'>
+              <ThemeSwitch />
+              <div className='flex gap-2'>
+              </div>
+            </div>
+          </div>
+        }
+      >
 
         <Chat
-            history={
-              messages.partial
-                ? [...messages.history, messages.partial]
-                : messages.history
+          history={
+            messages.partial
+              ? [...messages.history, messages.partial]
+              : messages.history
+          }
+          onSend={
+            (message) => {
+              gpt.startTask({ type: "PROMPT", prompt: message })
             }
-            onSend={
-              (message) => {
-                gpt.startTask({ type: "PROMPT", prompt: message })
-              }
+          }
+          onCancel={
+            () => {
+              gpt.cancelTask({ type: "PROMPT" })
             }
-            onCancel={
-              () => {
-                gpt.cancelTask({ type: "PROMPT" })
-              }
-            }
-            isConnected={isConnected}
-            isGenerating={gpt.runningTasks.includes("PROMPT")}
-            showSystem={true}
-          />
+          }
+          isConnected={isConnected}
+          isGenerating={gpt.runningTasks.includes("PROMPT")}
+          showSystem={showSystem}
+        />
 
-      </div>
+      </SidebarLayout>
     </DataContext.Provider>
   )
 }

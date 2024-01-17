@@ -137,7 +137,7 @@ type ChatMessageProps = {
 const ChatAvatar = ({ role, className }: { role: string, className?: string }) => {
   switch (role) {
     case 'user':
-      return <Avatar className={className} icon={<FaUser className='text-2xl text-primary/100' />} />
+      return <Avatar className={`${className} text-primary/100`} showFallback />
     case 'assistant':
       return <Avatar className={className} src='/avatar_bg_none.png' />
     case 'system':
