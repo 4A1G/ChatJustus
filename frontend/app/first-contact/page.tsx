@@ -1,8 +1,8 @@
 'use client'
 
 import { useState, useRef, useEffect, useContext, createContext } from 'react'
-import { useSynced, useSyncedReducer } from '@/components/networking/sync'
-import { ConnectionContext } from '@/components/networking/connection'
+import { useSynced, useSyncedReducer } from '@/hooks/networking/sync'
+import { ConnectionContext } from '@/hooks/networking/connection'
 
 import { Allotment, LayoutPriority } from 'allotment'
 import 'allotment/dist/style.css'

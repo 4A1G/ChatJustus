@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from fastapi.websockets import WebSocketState
 load_dotenv(override=True)
 
 import asyncio
@@ -36,14 +37,43 @@ async def new_session(assistant_type: str, session_id: str):
         exposed_data = ExposeData()
 
         users[f"{assistant_type}/{session_id}"] = (connection, assistant, exposed_data)
+        print(f"New session: {assistant_type}/{session_id}")
 
 # websocket endpoint
 app = FastAPI()
 
-@app.websocket("/ws/{assistant_type}/{session_id}")
-async def websocket_endpoint(ws: WebSocket, assistant_type: str, session_id: str):
-    print(f"New websocket connection: {assistant_type} {session_id}")
+async def ws_auth(ws: WebSocket) -> str | None:
+    try:
+        await ws.send_json({"type": "_REQUEST_SESSION_ID"})
+        msg = await ws.receive_json()
+        if msg["type"] != "_SESSION_ID":
+            raise Exception("Client did not send session id")
+        
+        max_retries = 5
+        while msg["type"] != "_SESSION_ID" or not msg["data"] or msg["data"] in users:
+            await ws.send_json({"type": "_REGEN_SESSION_ID"})
+            msg = await ws.receive_json()
+            max_retries -= 1
+            if max_retries == 0:
+                raise Exception("Client did not send valid session id")
+        
+        return msg["data"]
+    except:
+        try:
+            await ws.close()
+        finally:
+            return None
+
+@app.websocket("/ws/{assistant_type}")
+async def websocket_endpoint(ws: WebSocket, assistant_type: str):
+    print(f"New websocket connection: {assistant_type}")
     await ws.accept()
+
+    session_id = await ws_auth(ws)
+    if not session_id:
+        print("Failed to authenticate")
+        return
+
     id = f"{assistant_type}/{session_id}"
     if id not in users:
         await new_session(assistant_type, session_id)

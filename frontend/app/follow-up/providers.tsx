@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ConnectionProvider } from '@/components/networking/connection'
+import { ConnectionProvider } from '@/hooks/networking/connection'
 
 
 export interface ProvidersProps {

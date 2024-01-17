@@ -1,6 +1,6 @@
 import { produce } from 'immer'
 import { RJSFSchema } from '@rjsf/utils'
-import { SyncedReducer } from '@/components/networking/sync'
+import { SyncedReducer } from '@/hooks/networking/sync'
 
 
 // define usecases state object and its reducer
