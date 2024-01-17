@@ -44,21 +44,19 @@ app = FastAPI()
 
 async def ws_auth(ws: WebSocket) -> str | None:
     try:
-        await ws.send_json({"type": "_REQUEST_SESSION_ID"})
+        await ws.send_json({"type": "_REQUEST_USER_SESSION"})
         msg = await ws.receive_json()
-        if msg["type"] != "_SESSION_ID":
-            raise Exception("Client did not send session id")
+        if msg["type"] != "_USER_SESSION":
+            raise Exception("Client sent wrong message type")
+        user = msg["data"]["user"]
+        session = msg["data"]["session"]
+
+        if not user or not session:
+            raise Exception("Client sent invalid user or session")
         
-        max_retries = 5
-        while msg["type"] != "_SESSION_ID" or not msg["data"] or msg["data"] in users:
-            await ws.send_json({"type": "_REGEN_SESSION_ID"})
-            msg = await ws.receive_json()
-            max_retries -= 1
-            if max_retries == 0:
-                raise Exception("Client did not send valid session id")
-        
-        return msg["data"]
+        return f"{user}/{session}"
     except:
+        print(f"Error in authentication: {traceback.format_exc()}")
         try:
             await ws.close()
         finally:
@@ -66,7 +64,6 @@ async def ws_auth(ws: WebSocket) -> str | None:
 
 @app.websocket("/ws/{assistant_type}")
 async def websocket_endpoint(ws: WebSocket, assistant_type: str):
-    print(f"New websocket connection: {assistant_type}")
     await ws.accept()
 
     session_id = await ws_auth(ws)
