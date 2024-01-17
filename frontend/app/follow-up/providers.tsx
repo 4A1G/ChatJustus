@@ -9,9 +9,21 @@ export interface ProvidersProps {
 }
 
 export function Providers({ children }: ProvidersProps) {
-	return (
-		<ConnectionProvider url={"ws://localhost:42069/ws/follow_up/default_session"}>
-			{children}
-		</ConnectionProvider>
-	);
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    // Set isClient to true once the component is mounted on the client
+    setIsClient(true);
+  }, []);
+
+  return (
+    <>
+      {isClient && (
+        <ConnectionProvider url={`ws://${window.location.hostname}:42069/ws/follow_up/default_session`}>
+          {children}
+        </ConnectionProvider>
+      )}
+      {!isClient && children}
+    </>
+  );
 }

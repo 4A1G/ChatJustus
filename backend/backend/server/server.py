@@ -15,7 +15,7 @@ from .synced_data import ExposeData
 
 
 # connections
-users = {} # {session_id: (connection, assistant)}
+users = {} # {assistant_type/session_id: (connection, assistant)}
 
 
 assistant_factory = {
@@ -35,7 +35,7 @@ async def new_session(assistant_type: str, session_id: str):
         # other exposed data
         exposed_data = ExposeData()
 
-        users[session_id] = (connection, assistant, exposed_data)
+        users[f"{assistant_type}/{session_id}"] = (connection, assistant, exposed_data)
 
 # websocket endpoint
 app = FastAPI()
@@ -44,9 +44,10 @@ app = FastAPI()
 async def websocket_endpoint(ws: WebSocket, assistant_type: str, session_id: str):
     print(f"New websocket connection: {assistant_type} {session_id}")
     await ws.accept()
-    if session_id not in users:
+    id = f"{assistant_type}/{session_id}"
+    if id not in users:
         await new_session(assistant_type, session_id)
-    connection = users[session_id][0]
+    connection = users[id][0]
 
     try:
         await connection.new_connection(ws)
@@ -72,6 +73,6 @@ def start():
     import uvicorn
     uvicorn.run("backend.server.server:app", port=42069)
 
-def dev():
+def expose():
     import uvicorn
-    uvicorn.run("backend.server.server:app", port=42069, reload=True)
+    uvicorn.run("backend.server.server:app", port=42069, host="0.0.0.0")

@@ -170,8 +170,8 @@ const ChatMessage = ({ messageGroup, className }: ChatMessageProps) => {
     >
       <Card className={`rounded-3xl ${cls} shadow-md ${className ?? ''}`}>
         <CardBody className='flex flex-row p-0'>
-          <ChatAvatar className='flex-none m-5 ' role={messageGroup[0].role} />
-          <div className='min-w-0 w-full flex flex-col gap-2 p-5 pl-0'>
+          <ChatAvatar className='flex-none m-3 ' role={messageGroup[0].role} />
+          <div className='min-w-0 w-full flex flex-col gap-2 p-4 pl-0'>
             {
               messageGroup.map((message, i) => (
                 <>
@@ -214,7 +214,7 @@ const ChatInput = ({ onSend, onCancel, isGenerating, className }: ChatInputProps
   }
 
   return (
-    <div className={`flex flex-row items-center justify-center border bg-default-50 rounded-3xl focus:outline-none resize-none shadow-lg backdrop-blur overflow-y-visible ${className}`}>
+    <div className={`flex flex-row items-center justify-center border bg-default-50 rounded-3xl focus:outline-none resize-none shadow-lg backdrop-blur-sm overflow-y-visible ${className}`}>
       <Textarea
         value={inputValue}
         onValueChange={setInputValue}
@@ -328,12 +328,11 @@ const Chat = ({ history, onSend, onCancel, isConnected, isGenerating, showSystem
   }, [history])
 
   return (
-    <div className="w-full h-full px-8 flex flex-col overflow-y-scroll">
-      {/* <div>
-        {
-          JSON.stringify(history)
-        }
-      </div> */}
+    <div
+    className="w-full h-full px-2 flex flex-col overflow-y-scroll"
+    onScroll={onScroll}
+    >
+      
 
       <div className='flex-initial h-screen flex flex-col'>
         <Card className='my-10 p-3 self-center max-w-lg bg-default/50 backdrop-saturate-200 shadow-md'>
@@ -377,7 +376,7 @@ Do you have any legal questions? I can help you with:
           !isBottom &&
           <div className="relative">
             <button
-              className='absolute bottom-3 left-1/2 w-12 h-8 rounded-full text-tiny text-default-600 border border-default-600 flex items-center justify-center backdrop-blur-sm bg-default-50/10 hover:bg-primary hover:scale-125 transition shadow-lg'
+              className='absolute bottom-3 left-1/2 -translate-x-1/2 w-12 h-8 rounded-full text-tiny text-default-600 border border-default-600 flex items-center justify-center backdrop-blur-sm bg-default-50/10 hover:bg-primary hover:scale-125 transition shadow-lg'
               onClick={() => { scrollToBottom("smooth") }}
             >
               <FaAnglesDown />
@@ -395,7 +394,7 @@ Do you have any legal questions? I can help you with:
               isGenerating={isGenerating} />
           )
             : (
-              <Card className='bg-danger rounded-3xl shadow-md backdrop-blur'>
+              <Card className='bg-danger rounded-3xl shadow-md backdrop-blur-sm'>
                 <CardBody className='flex flex-row gap-5 items-center'>
                   <Spinner color='default' />
                   <p className='text-danger-foreground'>Reconnecting to the server...</p>

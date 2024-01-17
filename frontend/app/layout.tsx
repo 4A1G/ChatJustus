@@ -36,12 +36,12 @@ export default function RootLayout({
 			<head />
 			<body
 				className={clsx(
-					"min-h-screen bg-background font-sans antialiased",
+					"min-h-[calc(100dvh)] bg-background font-sans antialiased",
 					fontSans.variable
 				)}
 			>
 				<Providers themeProps={{ attribute: "class", defaultTheme: "system" }}>
-					<div className="relative flex flex-col w-full h-screen bg-gradient-to-bl from-[#9982DD] to-[#283E88] dark:from-blue-900 dark:to-orange-900">
+					<div className="relative flex flex-col w-full h-[calc(100dvh)] bg-gradient-to-bl from-[#9982DD] to-[#283E88] dark:from-blue-900 dark:to-orange-900">
 						{/* <Navbar /> */}
 						<main className="w-full h-full">
 							{children}
