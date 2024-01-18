@@ -1,5 +1,4 @@
 from dotenv import load_dotenv
-from fastapi.websockets import WebSocketState
 load_dotenv(override=True)
 
 import asyncio

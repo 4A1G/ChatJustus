@@ -13,6 +13,7 @@ python-dotenv = "^1.0.0"
 fastapi = "^0.108.0"
 jsonpatch = "^1.33"
 uvicorn = {extras = ["standard"], version = "^0.25.0"}
+yagmail = "^0.15.293"
 
 
 [tool.poetry.scripts]

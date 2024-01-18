@@ -56,7 +56,7 @@ const DefaultTool = ({ tool_call, i }: ToolProps) => (
 )
 
 const SummaryTool = ({ tool_call, i }: ToolProps) => {
-  const { summarySchema, summary, setSummary, syncSummary, chatEnded, syncChatEnded } = useContext(DataContext)
+  const { summarySchema, summary, setSummary, chatEnded, sendAction } = useContext(DataContext)
 
   let parsed = null
   try {
@@ -76,11 +76,9 @@ const SummaryTool = ({ tool_call, i }: ToolProps) => {
           readonly={chatEnded}
           onChange={(e) => setSummary(e.formData)}
           onSubmit={(e) => {
-            syncSummary(e.formData)
-            syncChatEnded(true)
-            toast.success(`Thank you, ${e.formData.lawyer || 'your lawyer'} will contact you soon!`)
+            sendAction({type: "SUMMARY_SUBMITTED", ...e.formData})
+            toast.info("Sending legal inquiry...")
           }}
-
         >
           {
             chatEnded

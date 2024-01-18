@@ -11,6 +11,7 @@ import { Chat, Messages, initialMessages } from '@/components/chat'
 import { DataContext } from './contexts'
 import { DebugSidebar } from '@/components/sidebar/debug-sidebar'
 import { SidebarLayout } from '@/components/sidebar/layout'
+import { useRemoteToast } from '@/hooks/networking/remote-toast'
 
 
 
@@ -21,6 +22,7 @@ export default function Home() {
   // connection
   const connection = useContext(ConnectionContext)
   const [isConnected, setIsConnected] = useState<boolean>(false)
+  useRemoteToast()
 
   // assistant settings
   const gpt = useSynced("GPT", {
