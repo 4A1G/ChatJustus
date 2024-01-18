@@ -9,7 +9,13 @@ module.exports = {
     './node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}'
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['var(--my-font-sans)'],
+        serif: ['var(--my-font-serif)'],
+        mono: ['var(--my-font-mono)'],
+      },
+    },
   },
   darkMode: "class",
   plugins: [
@@ -64,7 +70,7 @@ module.exports = {
               DEFAULT: "#ffebc680",
               foreground: "#11181C",
             },
-            focus: "#1C9B91",
+            focus: "#5C84CF",
             success: "#0ca04f80",
             warning: "#db8b0a80",
             danger: "#e5051080",

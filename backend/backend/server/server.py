@@ -12,7 +12,6 @@ from gpt_wrapper.messages import msg
 from backend.assistant.first_contact import FirstContactBot
 from backend.assistant.follow_up_qa import FollowUpBot
 from .sync import Connection
-from .synced_data import ExposeData
 
 
 # connections
@@ -30,13 +29,10 @@ async def new_session(assistant_type: str, session_id: str):
             raise Exception(f"Assistant type {assistant_type} not found")
         
         assistant = assistant_factory[assistant_type]()
-        # if we have tools, initialize them here
+        # if we have tools that need to be initialized, initialize them here
         # await assistant.default_tools.initialize()
 
-        # other exposed data
-        exposed_data = ExposeData()
-
-        users[f"{assistant_type}/{session_id}"] = (connection, assistant, exposed_data)
+        users[f"{assistant_type}/{session_id}"] = (connection, assistant)
         print(f"New session: {assistant_type}/{session_id}")
 
 # websocket endpoint
@@ -56,7 +52,6 @@ async def ws_auth(ws: WebSocket) -> str | None:
         
         return f"{user}/{session}"
     except:
-        print(f"Error in authentication: {traceback.format_exc()}")
         try:
             await ws.close()
         finally:

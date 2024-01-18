@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 import { Metadata, Viewport } from "next";
 import { siteConfig } from "@/config/site";
-import { fontSans } from "@/config/fonts";
+import { fontSans, fontSerif } from "@/config/fonts";
 import { Providers } from "./providers";
 import { Toaster } from 'sonner';
 import clsx from "clsx";
@@ -37,7 +37,8 @@ export default function RootLayout({
 			<body
 				className={clsx(
 					"min-h-[calc(100dvh)] bg-background font-sans antialiased",
-					fontSans.variable
+					fontSans.variable,
+					fontSerif.variable
 				)}
 			>
 				<Providers themeProps={{ attribute: "class", defaultTheme: "system" }}>

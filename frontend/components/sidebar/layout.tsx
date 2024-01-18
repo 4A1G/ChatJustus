@@ -44,17 +44,18 @@ const SidebarLayout = ({ leftSidebar, children }: SidebarLayoutProps) => {
         isMobile ?
           <>
             <button
-              className="absolute z-50 rounded-xl w-10 h-10 top-4 left-4 text-default-600 flex items-center justify-center bg-default-50/10 hover:bg-default-50 hover:scale-125 transition backdrop-blur-sm shadow-lg"
+              className="absolute z-50 rounded-xl w-10 h-10 top-4 left-4 text-default-600 flex items-center justify-center border border-default-600 bg-default-50/10 hover:bg-default-50 hover:scale-125 transition backdrop-blur-sm shadow-lg"
               onClick={() => setSidebarVisible(!sidebarVisible)}
             >
               <FaBars />
             </button>
 
             <Modal
-              className="overflow-hidden bg-default-100 backdrop-blur"
+              className="overflow-hidden bg-default-100"
               isOpen={sidebarVisible}
               onOpenChange={setSidebarVisible}
               scrollBehavior="inside"
+              backdrop="blur"
             >
               <ModalContent>
                 <ModalBody className="p-0">

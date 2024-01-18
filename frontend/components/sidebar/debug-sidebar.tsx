@@ -25,7 +25,7 @@ const LoadChat = ({ messages }: LoadChatProps) => {
         backdrop: "blur"
       }}
       trigger={
-        <Button size='sm' fullWidth>
+        <Button fullWidth>
           <FaFileArrowUp className='flex-none' /> Load Chat
         </Button>
       }
@@ -80,12 +80,11 @@ const DebugSidebar = ({ gpt, messages, showSystem, setShowSystem, className }: D
   return (
     <div className={`flex flex-col min-h-0 h-full${className || ''}`}>
 
-      <div className='p-4 px-2 text-xl text-primary/100'>
+      <div className='p-4 text-xl text-primary/100 font-bold font-serif'>
         Your Case Timeline
       </div>
 
       <div className='w-full h-full flex flex-col overflow-auto'>
-
         <ScrollShadow>
           <div className='flex flex-col gap-3 m-3 mt-0'>
             {
@@ -98,14 +97,14 @@ const DebugSidebar = ({ gpt, messages, showSystem, setShowSystem, className }: D
                 <>
                   <div className='flex flex-col bg-default-50 rounded-lg p-3'>
                     <div className='text-xs text-default-700'>{title}</div>
-                    <div>{summary}</div>
+                    <div className='font-serif'>{summary}</div>
                   </div>
                 </>
               ))
             }
-            <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3'>
+            <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3 -m-1'>
               <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
-              <div className='text-primary/100'>Signing the papers</div>
+              <div className='text-primary/100 font-serif font-bold'>Signing the papers</div>
             </div>
           </div>
         </ScrollShadow>
@@ -138,13 +137,12 @@ const DebugSidebar = ({ gpt, messages, showSystem, setShowSystem, className }: D
 
         <ExpanderItem title='Chat Options' key='2'>
 
-          <Switch size='sm' color='primary' isSelected={showSystem} onValueChange={setShowSystem}>
+          <Switch size='md' color='primary' isSelected={showSystem} onValueChange={setShowSystem}>
             Show System Messages
           </Switch>
 
           <div className='flex flex-row flex-wrap gap-2'>
             <Button
-              size='sm'
               className='grow'
               onClick={() => {
                 fileDownload(JSON.stringify(messages.history), "chat.json")
@@ -159,7 +157,7 @@ const DebugSidebar = ({ gpt, messages, showSystem, setShowSystem, className }: D
 
           <ConfirmButton
             tooltip='Reset chat history permanently'
-            buttonProps={{ fullWidth: true, size: 'sm' }}
+            buttonProps={{ fullWidth: true }}
             onConfirm={() => messages.sendAction({ type: "RESET_CHAT" })}
           >
             <FaRecycle /> Reset Chat

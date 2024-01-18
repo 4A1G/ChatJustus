@@ -3,7 +3,7 @@ import { produce } from 'immer'
 import { motion, useAnimate, usePresence } from 'framer-motion'
 
 import { js_beautify } from "js-beautify"
-import { FaAnglesDown, FaAnglesUp, FaCircleCheck, FaHeart, FaStop, FaUser } from "react-icons/fa6"
+import { FaAnglesDown, FaAnglesUp, FaCheck, FaCircleCheck, FaHeart, FaPaperPlane, FaStop, FaUser } from "react-icons/fa6"
 
 import validator from '@rjsf/validator-ajv8'
 import { Form } from './json-forms'
@@ -12,6 +12,7 @@ import { Button, Card, CardHeader, CardBody, CardFooter, Avatar, Textarea, Spinn
 import { Expander, ExpanderItem } from '@/components/base/expander'
 import { MD } from '@/components/base/md'
 import { DataContext } from '@/app/first-contact/contexts'
+import { toast } from 'sonner'
 
 
 // define messages state object and its reducer
@@ -55,7 +56,8 @@ const DefaultTool = ({ tool_call, i }: ToolProps) => (
 )
 
 const SummaryTool = ({ tool_call, i }: ToolProps) => {
-  const { firstContactSummarySchema } = useContext(DataContext)
+  const { summarySchema, summary, setSummary, syncSummary, chatEnded, syncChatEnded } = useContext(DataContext)
+
   let parsed = null
   try {
     parsed = JSON.parse(tool_call.function.arguments)
@@ -64,26 +66,53 @@ const SummaryTool = ({ tool_call, i }: ToolProps) => {
   }
   return (
     <div>
-      {/* {JSON.stringify(firstContactSummarySchema)}
-      {tool_call.function.arguments} */}
-      {parsed && <Form
-        schema={firstContactSummarySchema}
-        formData={parsed}
-        // onChange={(e) => onChange(e.formData)}
-        // onSubmit={(e) => onSubmit(e.formData)} //validated, TODO: set temp to final
-        validator={validator}
-        readonly={false}
-      />}
+      {/* {JSON.stringify(data)} */}
+      {/* {tool_call.function.arguments} */}
+      {
+        parsed && <Form
+          schema={summarySchema}
+          formData={{ ...parsed, ...summary }}
+          validator={validator}
+          readonly={chatEnded}
+          onChange={(e) => setSummary(e.formData)}
+          onSubmit={(e) => {
+            syncSummary(e.formData)
+            syncChatEnded(true)
+            toast.success(`Thank you, ${e.formData.lawyer || 'your lawyer'} will contact you soon!`)
+          }}
+
+        >
+          {
+            chatEnded
+              ? <Button type='button' color='success' className='font-sans' onClick={
+                () => toast.success(`Your inquiry has already been sent. ${summary.lawyer || 'Your lawyer'} will contact you soon!`)}>
+                <FaCheck /> Legal Inquiry Sent
+              </Button>
+              : <Button type='submit' color='primary' className='font-sans'>
+                <FaPaperPlane /> Send Legal Inquiry
+              </Button>
+          }
+        </Form>
+      }
     </div>
   )
 }
+
+const ChatEndTool = ({ tool_call, i }: ToolProps) => (
+  <div>
+    {/* <MD>
+      {`Thank you for using ChatJustus!`}
+    </MD> */}
+  </div>
+
+)
 
 const toolRenderers = (tool_name: string) => {
   switch (tool_name) {
     case 'summarize_first_contact':
       return ['Legal Inquiry to Lawyer', SummaryTool]
     case 'end_chat':
-      return ['Finished', DefaultTool]
+      return ['Finished', ChatEndTool]
     default:
       return [tool_name, DefaultTool]
   }
@@ -101,6 +130,7 @@ const ToolCalls = ({ message }: { message: Message }) => {
     }
     showDivider
     variant='bordered'
+    className='font-serif'
   >
     {
       message.tool_calls!.map((tool_call, i) => {
@@ -259,17 +289,19 @@ type ChatProps = {
 }
 
 const Chat = ({ history, onSend, onCancel, isConnected, isGenerating, showSystem }: ChatProps) => {
+  const chatRef = useRef<HTMLDivElement>(null)
   const chatBottomRef = useRef<HTMLDivElement>(null)
   const [isBottom, setIsBottom] = useState(true)
 
-  const scrollToBottom = (behavior: ScrollBehavior = "auto") => {
+  const scrollToBottom = (behavior: ScrollBehavior = "auto", force = false) => {
     const chatContainer = chatBottomRef.current;
-    if (chatContainer) {
-      //if we're in "detached mode", i.e. the user scrolled up, don't scroll down
+    if (chatContainer && (force || isBottom)) {
+      console.log("scrolling to bottom")
       chatContainer.scrollIntoView({ behavior: behavior, block: "end", inline: "nearest" })
     }
   }
 
+  // detect if user is at the bottom of the chat
   const onScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const t = e.target as HTMLDivElement
     const bottom = Math.abs(t.scrollHeight - (t.scrollTop + t.clientHeight)) <= 50;
@@ -277,13 +309,24 @@ const Chat = ({ history, onSend, onCancel, isConnected, isGenerating, showSystem
   }
 
   useEffect(() => {
-    if (isBottom)
-      scrollToBottom()
-  }, [history])
+    if (!chatRef.current) {
+      console.log("chatRef.current is null")
+      return
+    }
+    const t = chatRef.current
+    const bottom = Math.abs(t.scrollHeight - (t.scrollTop + t.clientHeight)) <= 50;
+    setIsBottom(bottom)
+  })
 
+  // scroll to bottom when new messages are added
+  useEffect(() => scrollToBottom(), [history])
+
+  // scroll to bottom when window is resized
   useEffect(() => {
-    window.addEventListener("resize", () => scrollToBottom())
-    return () => window.removeEventListener("resize", () => scrollToBottom())
+    window.addEventListener("resize", () => {
+      scrollToBottom()
+    })
+    return () => window.removeEventListener("resize", () => { })
   }, [])
 
 
@@ -329,16 +372,17 @@ const Chat = ({ history, onSend, onCancel, isConnected, isGenerating, showSystem
 
   return (
     <div
-    className="w-full h-full px-2 flex flex-col overflow-y-scroll"
-    onScroll={onScroll}
+      className="w-full h-full px-2 flex flex-col overflow-y-scroll"
+      ref={chatRef}
+      onScroll={onScroll}
     >
-      
+
 
       <div className='flex-initial h-screen flex flex-col'>
         <Card className='my-10 p-3 self-center max-w-lg bg-default/50 backdrop-saturate-200 shadow-md'>
           <CardHeader className='justify-center'>
             <ChatAvatar className='mr-3' role='assistant' />
-            <h1 className='text-2xl text-primary/100'>
+            <h1 className='text-2xl text-primary/100 font-serif'>
               Welcome to ChatJustus!
             </h1>
           </CardHeader>
@@ -356,7 +400,7 @@ Do you have any legal questions? I can help you with:
             </MD>
           </CardBody>
           <CardFooter className='justify-center'>
-            <p className='text-xs text-primary/100'>Made with <FaHeart className='inline-block align-text-bottom' /> by Team 4A1G</p>
+            <p className='text-xs text-primary/100 font-sans'>Made with <FaHeart className='inline-block' /> by Team 4A1G</p>
           </CardFooter>
         </Card>
       </div>
@@ -377,7 +421,7 @@ Do you have any legal questions? I can help you with:
           <div className="relative">
             <button
               className='absolute bottom-3 left-1/2 -translate-x-1/2 w-12 h-8 rounded-full text-tiny text-default-600 border border-default-600 flex items-center justify-center backdrop-blur-sm bg-default-50/10 hover:bg-primary hover:scale-125 transition shadow-lg'
-              onClick={() => { scrollToBottom("smooth") }}
+              onClick={() => { scrollToBottom("smooth", true) }}
             >
               <FaAnglesDown />
             </button>
@@ -397,7 +441,7 @@ Do you have any legal questions? I can help you with:
               <Card className='bg-danger rounded-3xl shadow-md backdrop-blur-sm'>
                 <CardBody className='flex flex-row gap-5 items-center'>
                   <Spinner color='default' />
-                  <p className='text-danger-foreground'>Reconnecting to the server...</p>
+                  <p className='text-danger-foreground'>Connecting to the server...</p>
                 </CardBody>
               </Card>
             )
