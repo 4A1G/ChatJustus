@@ -13,7 +13,6 @@ class FirstContactSummary(BaseModel):
     """
     This schema determines how the FORM will be displayed on the frontend
     """
-
     name: str
     email: str
     case: str

@@ -11,6 +11,7 @@ from gpt_wrapper.messages import msg
 from backend.assistant.first_contact import FirstContactBot
 from backend.assistant.follow_up_qa import FollowUpBot
 from .sync import Connection
+from .utils import get_ip, open_qr
 
 
 # connections
@@ -96,4 +97,5 @@ def start():
 
 def expose():
     import uvicorn
+    open_qr(f"http://{get_ip()}:42069", 512)
     uvicorn.run("backend.server.server:app", port=42069, host="0.0.0.0")
