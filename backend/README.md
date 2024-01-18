@@ -38,6 +38,13 @@ Finally, we also need to setup the `.env` file. Find the `.env.example` file and
 
 
 ### Running the server
+Running in locally in your browser:
 ```bash
 poetry run server
 ```
+
+Running it exposed to your local network:
+```bash
+poetry run expose
+```
+This will open a QR code you can scan with your phone to use the app.
