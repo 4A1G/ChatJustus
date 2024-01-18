@@ -9,10 +9,10 @@ import { toast } from "sonner"
 import { useState } from 'react'
 
 interface LoadChatProps {
-  gpt: any
+  messages: any
 }
 
-const LoadChat = ({ gpt }: LoadChatProps) => {
+const LoadChat = ({ messages }: LoadChatProps) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
@@ -48,10 +48,10 @@ const LoadChat = ({ gpt }: LoadChatProps) => {
                   const json = e.target?.result
                   if (json) {
                     try {
-                      gpt.syncHistory(JSON.parse(json as string))
+                      messages.syncHistory(JSON.parse(json as string))
                       toast.success("Chat loaded!")
                     } catch (e) {
-                      toast.error("Invalid JSON!")
+                      toast.error(`Error loading chat: ${e}`)
                     } finally {
                       setIsOpen(false)
                     }
@@ -153,7 +153,7 @@ const DebugSidebar = ({ gpt, messages, showSystem, setShowSystem, className }: D
             >
               <FaFileArrowDown className='flex-none' /> Save Chat
             </Button>
-            <LoadChat gpt={gpt} />
+            <LoadChat messages={messages} />
 
           </div>
 
