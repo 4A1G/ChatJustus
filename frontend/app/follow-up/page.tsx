@@ -62,7 +62,9 @@ export default function Home() {
                     meetingData.meetings.map(({ timestamp, title, summary }: any) => (
                       <>
                         <div className='flex flex-col bg-default-50 rounded-lg p-3'>
-                          <div className='text-xs text-default-700'>{timestamp}</div>
+                          <div className='text-xs text-default-700'>
+                            {new Date(timestamp*1000).toDateString()}
+                            </div>
                           <div className='font-serif'>{title}</div>
                         </div>
                       </>
