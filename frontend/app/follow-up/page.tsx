@@ -36,7 +36,7 @@ export default function Home() {
 
   // other synced data
   const meetingData = useSynced("FOLLOW_UP", {
-    meetings: {} as any
+    meetings: [] as any[]
   })
 
 
@@ -59,24 +59,19 @@ export default function Home() {
               listContent={
                 <>
                   {
-                    [
-                      ['1st Meeting on 02.10.2023', 'Your first meeting with Sofia'],
-                      ['2nd Meeting on 17.10.2023', 'Agreeing on the terms of the divorce'],
-                      ['3rd Meeting on 01.11.2023', 'Finalizing the divorce papers'],
-                      ['4th Meeting on 15.11.2023', 'Emergency meeting with Sofia'],
-                    ].map(([title, summary]) => (
+                    meetingData.meetings.map(({timestamp, title, summary}: any) => (
                       <>
                         <div className='flex flex-col bg-default-50 rounded-lg p-3'>
-                          <div className='text-xs text-default-700'>{title}</div>
-                          <div className='font-serif'>{summary}</div>
+                          <div className='text-xs text-default-700'>{timestamp}</div>
+                          <div className='font-serif'>{title}</div>
                         </div>
                       </>
                     ))
                   }
-                  <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3 -m-1'>
+                  {/* <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3 -m-1'>
                     <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
                     <div className='text-primary/100 font-serif font-bold'>Signing the papers</div>
-                  </div>
+                  </div> */}
                 </>
               }
               gpt={gpt}
