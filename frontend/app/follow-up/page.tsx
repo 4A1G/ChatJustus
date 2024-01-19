@@ -59,7 +59,7 @@ export default function Home() {
               listContent={
                 <>
                   {
-                    meetingData.meetings.map(({timestamp, title, summary}: any) => (
+                    meetingData.meetings.map(({ timestamp, title, summary }: any) => (
                       <>
                         <div className='flex flex-col bg-default-50 rounded-lg p-3'>
                           <div className='text-xs text-default-700'>{timestamp}</div>
@@ -90,6 +90,8 @@ export default function Home() {
       >
 
         <Chat
+          introTitle='hey yo'
+          introContent='whatsup'
           history={
             messages.partial
               ? [...messages.history, messages.partial]
