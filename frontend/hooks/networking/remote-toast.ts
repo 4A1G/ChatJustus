@@ -1,34 +1,32 @@
 import { useContext, useEffect } from "react"
 import { toast } from "sonner"
-import { ConnectionContext } from "./connection"
+import { Connection, DefaultConnectionContext } from "./connection"
 
 // remote toast handler
-export const useRemoteToast = () => {
-  const connection = useContext(ConnectionContext)
-  
+export const useRemoteToast = (connection: Connection | null, prefix: string = "") => {  
   useEffect(() => {
     connection?.registerEvent("_TOAST", ({ message, type }) => {
       switch (type) {
         case 'default':
-          toast(message)
+          toast(prefix+message)
           break
         case 'message':
-          toast.message(message)
+          toast.message(prefix+message)
           break
         case 'success':
-          toast.success(message)
+          toast.success(prefix+message)
           break
         case 'info':
-          toast.info(message)
+          toast.info(prefix+message)
           break
         case 'warning':
-          toast.warning(message)
+          toast.warning(prefix+message)
           break
         case 'error':
-          toast.error(message)
+          toast.error(prefix+message)
           break
         default:
-          toast(message)
+          toast(prefix+message)
       }
     })
     return () => connection?.deregisterEvent("_TOAST")
