@@ -47,8 +47,8 @@ class LegalDBToolkit(Toolkit):
         Args:
             keyword: search keywords used to extract relevant information from a meeting conversation
         '''
-        d1_result = self.dialog_db1.query(top=3, content=keyword)
-        d2_result = self.dialog_db2.query(top=3, content=keyword)
+        d1_result = self.dialog_db1.query(top=5, content=keyword)
+        d2_result = self.dialog_db2.query(top=5, content=keyword)
         return   format_query_result(d1_result + d2_result)
 
     
@@ -72,12 +72,14 @@ class FollowUpBot(SyncedGPT):
                 Interact with Marco directly, meaning calling his name. Say like "Hello Marco, " in the start of the conversation.
                 Start the conversation by actively asking relevant questions about Marco's feedback to understand his situation and needs.
                 Answer the client with the "query_legal_text", "query_meeting" tools.
+                You are ChatJustus, an AI chatbot.
+                When the client mention lawyer, usually it refers to Justicius.
                 If information is inadequate to answer the question, inform the client that you unfortunately cannot give an answer and you will forward the question to the lawyer.
 
                 Staying on Topic: If a user begins to share unrelated personal details or veers off-topic, gently guide them back.
                 Handling Off-Topic Conversations: If the user continues to stray from the topic after two reminders, politely apologize and end the conversation by calling the "end_chat" function tool.
                 Handling Aggressive Language: If the user seems aggressive or impatient, politely apologize and soothe their emotion. Politely ask for their patience
-                """)
+                """.strip())
         ])
 
         super().__init__(
