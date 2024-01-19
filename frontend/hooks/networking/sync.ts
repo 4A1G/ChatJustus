@@ -1,6 +1,6 @@
 import { useState, useReducer, useContext, useEffect, useMemo } from "react"
 import { applyPatch, applyReducer, compare, deepClone } from "fast-json-patch"
-import { ConnectionContext } from "./connection"
+import { Connection, DefaultConnectionContext } from "./connection"
 import { castImmutable, produceWithPatches, enablePatches } from "immer"
 enablePatches()
 
@@ -35,9 +35,10 @@ export function useSyncedReducer<S>(
   key: string,
   syncedReducer: SyncedReducer<S> | undefined,
   initialState: S,
+  overrideConnection: Connection | null = null,
   sendOnInit = false
 ): [any, (action: Action) => void] {
-  const connection = useContext(ConnectionContext)
+  const connection = overrideConnection ?? useContext(DefaultConnectionContext)
 
   // Syncing: Local -> Remote
   const sendState = (newState: S) => {
@@ -188,8 +189,9 @@ export function useSyncedReducer<S>(
 export function useSynced<S>(
   key: string,
   initialState: S,
+  overrideConnection: Connection | null = null,
   sendOnInit = false
 ) {
-  const [stateWithSync, dispatch] = useSyncedReducer(key, undefined, initialState, sendOnInit)
+  const [stateWithSync, dispatch] = useSyncedReducer(key, undefined, initialState, overrideConnection, sendOnInit)
   return stateWithSync
 }

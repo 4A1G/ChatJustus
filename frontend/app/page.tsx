@@ -1,19 +1,5 @@
 'use client'
 
-import { useState, useRef, useEffect, useContext, createContext } from 'react'
-import { useSynced, useSyncedReducer } from '@/hooks/networking/sync'
-import { ConnectionContext } from '@/hooks/networking/connection'
-
-import { Allotment, LayoutPriority } from 'allotment'
-import 'allotment/dist/style.css'
-
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa6"
-import { Button } from '@nextui-org/button'
-import { Switch, Slider, ScrollShadow } from "@nextui-org/react"
-import { Expander, ExpanderItem } from '@/components/base/expander'
-import { SingleSelect } from '@/components/base/single-select'
-import { ThemeSwitch } from "@/components/theme-switch"
-import { Chat, Messages, initialMessages } from '@/components/chat'
 import Image from 'next/image'
 import Link from 'next/link'
 

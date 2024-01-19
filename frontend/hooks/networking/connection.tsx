@@ -1,22 +1,58 @@
-import { createContext, useMemo, useEffect } from 'react'
+import { useIsClient, useLocalStorage, useSessionStorage } from '@uidotdev/usehooks'
+import { createContext, useMemo, useEffect, Context } from 'react'
 import { toast } from 'sonner'
+import { v4 as uuid } from 'uuid'
 
-export const ConnectionContext = createContext<Connection | null>(null)
 
-export const ConnectionProvider = ({ url, children }: { url: string, children: React.ReactNode }) => {
-  const defaultConnection = useMemo(() => new Connection(url), [url])
+export const DefaultConnectionContext = createContext<Connection | null>(null)
 
-  // cleanup on unmount
-  useEffect(() => {
-    return () => {
-      defaultConnection.disconnect()
-    }
-  }, [url, defaultConnection])
+
+interface ConnectionProviderProps {
+  url: string
+  children: React.ReactNode
+  context: Context<Connection | null>
+  autoconnect?: boolean
+  wsAuth?: boolean
+}
+
+export const ConnectionProvider = ({ url, children, context, autoconnect, wsAuth }: ConnectionProviderProps) => {
+  const connection = useMemo(() => new Connection(url), [url])
+
+  if (wsAuth) {
+    const [userId, setUserId] = useLocalStorage<string | null>(`_USER_ID:${url}`, null)
+    const [sessionId, setSessionId] = useSessionStorage<string | null>(`_SESSION_ID:${url}`, null)
+
+    useEffect(() => {
+      connection?.registerEvent("_REQUEST_USER_SESSION", () => {
+        let u = userId, s = sessionId
+        if (userId === null) {
+          u = uuid()
+          setUserId(u)
+          console.log("generated new user id", u)
+        }
+        if (sessionId === null) {
+          s = uuid()
+          setSessionId(s)
+          console.log("generated new session id", s)
+        }
+        connection.send("_USER_SESSION", { user: u, session: s })
+      })
+
+      return () => {
+        connection?.deregisterEvent("_REQUEST_USER_SESSION")
+      }
+    }, [url])
+  }
+
+  if (autoconnect)
+    useEffect(() => {
+      return connection.connect()
+    }, [url])
 
   return (
-    <ConnectionContext.Provider value={defaultConnection}>
+    <context.Provider value={connection}>
       {children}
-    </ConnectionContext.Provider>
+    </context.Provider>
   )
 }
 
@@ -33,6 +69,7 @@ export class Connection {
 
   private eventHandlers: { [event: string]: (data: any) => void } = {};
   private initHandlers: { [key: string]: (() => void) } = {};
+  private binaryHandler: ((data: any) => void) | null = null;
   private retryTimeout: NodeJS.Timeout | null = null; // scheduled retry
   private autoReconnect: boolean = true;
 
@@ -69,11 +106,25 @@ export class Connection {
     delete this.initHandlers[key]
   }
 
-  send(event: string, data: any) {
-    if (!this.isConnected)
-      return
+  registerBinary(callback: (data: any) => void) {
+    if (this.binaryHandler !== null)
+      throw new Error(`already registered`)
+    this.binaryHandler = callback
+  }
 
-    this.ws!.send(JSON.stringify({
+  deregisterBinary() {
+    if (this.binaryHandler === null)
+      throw new Error(`not registered`)
+    this.binaryHandler = null
+  }
+
+  send(event: string, data: any) {
+    if (this.ws?.readyState !== WebSocket.OPEN) {
+      toast.error(`Sending while not connected!`)
+      return
+    }
+
+    this.ws?.send(JSON.stringify({
       type: event,
       data: data,
     }))
@@ -100,8 +151,8 @@ export class Connection {
       if (this.onConnectionChange)
         this.onConnectionChange(this.isConnected)
       if (this.autoReconnect) {
-          toast.warning(`Disconnected from server: Retrying in ${this.retryInterval / 1000} seconds...`)
-          this.retryTimeout = setTimeout(() => {
+        toast.warning(`Disconnected from server: Retrying in ${this.retryInterval / 1000} seconds...`)
+        this.retryTimeout = setTimeout(() => {
           // skip if we've already reconnected or deleted
           if (this !== null && this.url && !this.isConnected) {
             console.log('reconnecting')
@@ -150,14 +201,22 @@ export class Connection {
   }
 
   handleReceiveEvent(e: MessageEvent) {
-    const event = JSON.parse(e.data)
-    // console.log(event)
-    // console.log(this.eventHandlers)
-    if (event.type in this.eventHandlers) {
-      this.eventHandlers[event.type](event.data)
+    if (typeof e.data === 'string') {
+      // json message
+      const event = JSON.parse(e.data)
+      if (event.type in this.eventHandlers) {
+        this.eventHandlers[event.type](event.data)
+      }
+      else {
+        console.log(`unhandled event: ${event.type}`)
+      }
     }
     else {
-      console.log(`unhandled event: ${event.type}`)
+      // binary message
+      if (this.binaryHandler !== null)
+        this.binaryHandler(e.data)
+      else
+        console.log(`unhandled binary message`)
     }
   }
 }

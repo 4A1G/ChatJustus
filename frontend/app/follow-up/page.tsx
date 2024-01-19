@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useContext, createContext } from 'react'
 import { useSynced, useSyncedReducer } from '@/hooks/networking/sync'
-import { ConnectionContext } from '@/hooks/networking/connection'
+import { DefaultConnectionContext } from '@/hooks/networking/connection'
 
 import 'allotment/dist/style.css'
 
@@ -20,9 +20,9 @@ export default function Home() {
   const [showSystem, setShowSystem] = useState(false)
 
   // connection
-  const connection = useContext(ConnectionContext)
+  const connection = useContext(DefaultConnectionContext)
   const [isConnected, setIsConnected] = useState<boolean>(false)
-  useRemoteToast()
+  useRemoteToast(connection)
 
   // assistant settings
   const gpt = useSynced("GPT", {
