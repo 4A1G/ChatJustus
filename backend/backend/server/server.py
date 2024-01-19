@@ -1,4 +1,5 @@
 from dotenv import load_dotenv
+from fastapi.responses import FileResponse
 load_dotenv(override=True)
 
 import asyncio
@@ -84,6 +85,14 @@ async def websocket_endpoint(ws: WebSocket, assistant_type: str):
             pass
 
 
+# override the endpoints to include .html
+@app.get("/first-contact")
+async def first_contact():
+    return FileResponse("webapp_static/first-contact.html")
+
+@app.get("/follow-up")
+async def follow_up():
+    return FileResponse("webapp_static/follow-up.html")
 
 # it's important this is mounted after the websocket route
 app.mount(

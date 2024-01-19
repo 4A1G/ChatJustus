@@ -380,7 +380,7 @@ const Chat = ({ history, onSend, onCancel, isConnected, isGenerating, showSystem
         <Card className='my-10 p-3 self-center max-w-lg bg-default/50 backdrop-saturate-200 shadow-md'>
           <CardHeader className='justify-center'>
             <ChatAvatar className='mr-3' role='assistant' />
-            <h1 className='text-2xl text-primary/100 font-serif'>
+            <h1 className='text-2xl text-primary/100 font-serif font-bold'>
               Welcome to ChatJustus!
             </h1>
           </CardHeader>
