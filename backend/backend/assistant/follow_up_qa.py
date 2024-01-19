@@ -31,11 +31,11 @@ class LegalDBToolkit(Toolkit):
 
 
         '''
-        bgb_result = format_query_result(self.bgb_db.query(top=3, content=keyword))
-        famfg_result = format_query_result(self.famfg_db.query(top=3, content=keyword))
-        zpo_result = format_query_result(self.zpo_db.query(top=3, content=keyword))
+        bgb_result = self.bgb_db.query(top=3, content=keyword)
+        famfg_result = self.famfg_db.query(top=3, content=keyword)
+        zpo_result = self.zpo_db.query(top=3, content=keyword)
 
-        return bgb_result + famfg_result + zpo_result
+        return format_query_result(bgb_result + famfg_result + zpo_result)
     
     @function_tool()
     async def query_dialog(self, keyword: str):
@@ -45,9 +45,9 @@ class LegalDBToolkit(Toolkit):
         Args:
             keyword: search keywords used to extract relevant information from a meeting conversation
         '''
-        d1_result = format_query_result(self.dialog_db1.query(top=3, content=keyword))
-        d2_result = format_query_result(self.dialog_db2.query(top=3, content=keyword))
-        return   d1_result + d2_result
+        d1_result = self.dialog_db1.query(top=3, content=keyword)
+        d2_result = self.dialog_db2.query(top=3, content=keyword)
+        return   format_query_result(d1_result + d2_result)
 
     
     @function_tool(name = "end_chat")
