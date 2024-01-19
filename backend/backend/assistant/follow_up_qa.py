@@ -4,20 +4,38 @@ from .chatgpt import SyncedGPT, SyncedHistory
 from backend.assistant.util import format_query_result, format_query_result_speaker
 from backend.database.__init__ import get_dialog_db, get_legal_text_db, get_meeting_db, Dialog
 
+from backend.server.sync import Sync
 
 class LegalDBToolkit(Toolkit):
     def __init__(self):
         super().__init__()
+
+        # state
         self.summary = {}
-        case_id = 'JUSTICIUS-MARCO'
-        meeting_timestamp1 = '2023-11-13'
-        meeting_timestamp2 = '2023-11-27'
         self.chatEnded = False
-        self.dialog_db1 = get_dialog_db(case_id, meeting_timestamp1)
-        self.dialog_db2 = get_dialog_db(case_id, meeting_timestamp2)
+
+        # databases
+        case_id = 'JUSTICIUS-MARCO'
+        meeting_timestamps = ['2023-11-13', '2023-11-27']
+
+        self.meetings_db = get_meeting_db(case_id)
+        self.dialog_dbs = [get_dialog_db(case_id, t) for t in meeting_timestamps]
         self.bgb_db = get_legal_text_db("BGB")
         self.famfg_db = get_legal_text_db("FamFG")
         self.zpo_db = get_legal_text_db("ZPO")
+        
+
+        self.sync = Sync(
+            "FOLLOW_UP",
+            self,
+            # meeting_timestamps = meeting_timestamps,
+            meetings=...,
+        )
+
+    @property
+    def meetings(self):
+        return [meeting.model_dump() for meeting in self.meetings_db]
+
 
     @function_tool()
     @fail_with_message("ERROR:")

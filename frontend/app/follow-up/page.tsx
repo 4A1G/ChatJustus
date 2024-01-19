@@ -35,8 +35,8 @@ export default function Home() {
   const messages = useSynced<Messages>("MESSAGES", initialMessages)
 
   // other synced data
-  const data = useSynced("DATA", {
-    firstContactSummarySchema: {} as any
+  const meetingData = useSynced("FOLLOW_UP", {
+    meetings: {} as any
   })
 
 
@@ -49,7 +49,7 @@ export default function Home() {
 
 
   return (
-    <DataContext.Provider value={data}>
+    <DataContext.Provider value={meetingData}>
       <SidebarLayout
         leftSidebar={
           <div className='flex flex-col content-between h-full'>
