@@ -1,7 +1,7 @@
 from gpt_wrapper.messages import msg
 from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with_message
 from .chatgpt import SyncedGPT, SyncedHistory
-from backend.assistant.util import format_query_result, format_query_result_speaker
+from backend.assistant.util import format_query_result, format_query_result_law
 from backend.database.__init__ import get_dialog_db, get_legal_text_db, get_meeting_db, Dialog
 
 from backend.server.sync import Sync
@@ -54,7 +54,7 @@ class LegalDBToolkit(Toolkit):
         famfg_result = self.famfg_db.query(top=3, content=keyword)
         zpo_result = self.zpo_db.query(top=3, content=keyword)
 
-        return format_query_result(bgb_result + famfg_result + zpo_result)
+        return format_query_result_law(bgb_result + famfg_result + zpo_result)
     
     @function_tool()
     @fail_with_message("ERROR:")
@@ -65,8 +65,8 @@ class LegalDBToolkit(Toolkit):
         Args:
             keyword: search keywords used to extract relevant information from a meeting conversation
         '''
-        d1_result = self.dialog_db1.query(top=5, content=keyword)
-        d2_result = self.dialog_db2.query(top=5, content=keyword)
+        d1_result = self.dialog_dbs[0].query(top=5, content=keyword)
+        d2_result = self.dialog_dbs[1].query(top=5, content=keyword)
         return   format_query_result(d1_result + d2_result)
 
     
@@ -93,6 +93,7 @@ class FollowUpBot(SyncedGPT):
                 You are ChatJustus, an AI chatbot.
                 When the client mention lawyer, usually it refers to Justicius.
                 If information is inadequate to answer the question, inform the client that you unfortunately cannot give an answer and you will forward the question to the lawyer.
+                Whenever you reference the result from a database query, make a citatiion by appending the respective "[^i]" according to the query result marking. 
 
                 Staying on Topic: If a user begins to share unrelated personal details or veers off-topic, gently guide them back.
                 Handling Off-Topic Conversations: If the user continues to stray from the topic after two reminders, politely apologize and end the conversation by calling the "end_chat" function tool.
