@@ -34,7 +34,7 @@ class LegalDBToolkit(Toolkit):
 
     @property
     def meetings(self):
-        return [meeting.model_dump() for meeting in self.meetings_db]
+        return sorted([meeting.model_dump() for meeting in self.meetings_db], key=lambda x: x["timestamp"])
 
 
     @function_tool()
