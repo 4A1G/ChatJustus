@@ -6,7 +6,7 @@ import { SingleSelect } from "../base/single-select"
 import { FaFileArrowDown, FaFileArrowUp, FaRecycle } from "react-icons/fa6"
 import { ConfirmButton, PopTooltip } from "../base/confirm-button"
 import { toast } from "sonner"
-import { useState } from 'react'
+import React, { ReactNode, useState } from 'react'
 
 interface LoadChatProps {
   messages: any
@@ -69,6 +69,8 @@ const LoadChat = ({ messages }: LoadChatProps) => {
 
 
 interface DebugSidebarProps {
+  listTitle?: string
+  listContent?: ReactNode
   gpt: any
   messages: any
   showSystem: boolean
@@ -76,18 +78,19 @@ interface DebugSidebarProps {
   className?: string
 }
 
-const DebugSidebar = ({ gpt, messages, showSystem, setShowSystem, className }: DebugSidebarProps) => {
+const DebugSidebar = ({listTitle = 'ChatJustus', listContent, gpt, messages, showSystem, setShowSystem, className }: DebugSidebarProps) => {
   return (
     <div className={`flex flex-col min-h-0 h-full${className || ''}`}>
 
       <div className='p-4 text-xl text-primary/100 font-bold font-serif'>
-        Your Case Timeline
+        {listTitle}
       </div>
 
       <div className='w-full h-full flex flex-col overflow-auto'>
         <ScrollShadow>
           <div className='flex flex-col gap-3 m-3 mt-0'>
-            {
+            {listContent}
+            {/* {
               [
                 ['1st Meeting on 02.10.2023', 'Your first meeting with Sofia'],
                 ['2nd Meeting on 17.10.2023', 'Agreeing on the terms of the divorce'],
@@ -105,7 +108,7 @@ const DebugSidebar = ({ gpt, messages, showSystem, setShowSystem, className }: D
             <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3 -m-1'>
               <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
               <div className='text-primary/100 font-serif font-bold'>Signing the papers</div>
-            </div>
+            </div> */}
           </div>
         </ScrollShadow>
       </div>
