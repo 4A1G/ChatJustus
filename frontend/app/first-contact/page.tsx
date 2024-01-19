@@ -70,6 +70,16 @@ export default function Home() {
       >
 
         <Chat
+          introTitle='Welcome to ChatJustus!'
+          introContent={`
+Do you have any legal questions? I can help you with:
+- Answering your questions about the law
+- Your legal situation
+- Finding Lawyers at *Sterling Legal Associates*, specialized for your case
+- Forwarding your case to the lawyer
+
+*For your privacy, this conversation will **not be saved**, and only the final inquiry you send will be forwarded to the lawyer.*
+              `}
           history={
             messages.partial
               ? [...messages.history, messages.partial]

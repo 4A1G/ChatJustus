@@ -34,9 +34,10 @@ export default function Home() {
   // assistant state
   const messages = useSynced<Messages>("MESSAGES", initialMessages)
 
-  // other synced data
+  // meeting data
+  const [selectedMeeting, setSelectedMeeting] = useState<number | null>(null)
   const meetingData = useSynced("FOLLOW_UP", {
-    meetings: {} as any
+    meetings: [] as any[]
   })
 
 
@@ -55,6 +56,30 @@ export default function Home() {
           <div className='flex flex-col content-between h-full'>
 
             <DebugSidebar
+              listTitle='Your Case Timeline'
+              listContent={
+                <>
+                  {
+                    meetingData.meetings.map(({ timestamp, title, summary }: any) => (
+                      <>
+                        <button
+                          className='flex flex-col bg-default-50 rounded-lg p-3 hover:scale-105 transition-all duration-200 ease-in-out'
+                          onClick={() => setSelectedMeeting(timestamp)}
+                        >
+                          <div className={`text-xs ${timestamp == selectedMeeting ? 'text-primary/100' : 'text-default-700'}`}>
+                            {new Date(timestamp*1000).toLocaleDateString()}
+                            </div>
+                          <div className={`font-serif ${timestamp == selectedMeeting ? 'text-primary/100 font-bold' : 'text-default-700'}`}>{title}</div>
+                        </button>
+                      </>
+                    ))
+                  }
+                  {/* <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3 -m-1'>
+                    <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
+                    <div className='text-primary/100 font-serif font-bold'>Signing the papers</div>
+                  </div> */}
+                </>
+              }
               gpt={gpt}
               messages={messages}
               showSystem={showSystem}
@@ -71,6 +96,11 @@ export default function Home() {
       >
 
         <Chat
+          introTitle='Welcome back to ChatJustus!'
+          introContent={
+            // meetingData.meetings.filter(({ timestamp, title, summary }: any) => 
+'hi'
+          }
           history={
             messages.partial
               ? [...messages.history, messages.partial]

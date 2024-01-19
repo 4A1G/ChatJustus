@@ -278,6 +278,8 @@ const ChatInput = ({ onSend, onCancel, isGenerating, className }: ChatInputProps
 
 // main chat view
 type ChatProps = {
+  introTitle: string
+  introContent: string
   history: Message[]
   onSend: (message: string) => void
   onCancel: () => void
@@ -286,7 +288,7 @@ type ChatProps = {
   showSystem: boolean
 }
 
-const Chat = ({ history, onSend, onCancel, isConnected, isGenerating, showSystem }: ChatProps) => {
+const Chat = ({ introTitle, introContent, history, onSend, onCancel, isConnected, isGenerating, showSystem }: ChatProps) => {
   const chatRef = useRef<HTMLDivElement>(null)
   const chatBottomRef = useRef<HTMLDivElement>(null)
   const [isBottom, setIsBottom] = useState(true)
@@ -381,20 +383,12 @@ const Chat = ({ history, onSend, onCancel, isConnected, isGenerating, showSystem
           <CardHeader className='justify-center'>
             <ChatAvatar className='mr-3' role='assistant' />
             <h1 className='text-2xl text-primary/100 font-serif font-bold'>
-              Welcome to ChatJustus!
+              {introTitle}
             </h1>
           </CardHeader>
           <CardBody>
             <MD className='leading-5'>
-              {`
-Do you have any legal questions? I can help you with:
-- Answering your questions about the law
-- Your legal situation
-- Finding Lawyers at *Sterling Legal Associates*, specialized for your case
-- Forwarding your case to the lawyer
-
-*For your privacy, this conversation will **not be saved**, and only the final inquiry you send will be forwarded to the lawyer.*
-              `}
+              {introContent}
             </MD>
           </CardBody>
           <CardFooter className='justify-center'>

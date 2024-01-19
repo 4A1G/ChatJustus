@@ -14,7 +14,7 @@ interface SidebarLayoutProps {
 }
 
 const SidebarLayout = ({ leftSidebar, children }: SidebarLayoutProps) => {
-  const [sidebarVisible, setSidebarVisible] = useState(false)
+  const [sidebarVisible, setSidebarVisible] = useState(true)
   const [isMobile, setIsMobile] = useState(true)
 
   function handleResize() {
