@@ -33,7 +33,10 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<head />
+			<head>
+				{/* <meta name="viewport" content="user-scalable=no" /> */}
+				<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+			</head>
 			<body
 				className={clsx(
 					"min-h-[calc(100dvh)] bg-background font-sans antialiased",

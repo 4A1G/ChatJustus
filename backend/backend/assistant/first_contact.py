@@ -2,7 +2,7 @@ import asyncio
 from pydantic import BaseModel
 
 from gpt_wrapper.messages import msg
-from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool
+from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with_message
 
 from .chatgpt import SyncedGPT, SyncedHistory
 from backend.server.sync import Sync
@@ -39,6 +39,7 @@ class FirstContactToolkit(Toolkit):
         )
 
     @function_tool
+    @fail_with_message("ERROR:")
     async def summarize_first_contact(self, case: str, lawyer: str):
         """
         Summarize potential client's contact and case details for the lawyer and ask for potential's client permission to send
@@ -53,6 +54,7 @@ class FirstContactToolkit(Toolkit):
         return "Success"
 
     @function_tool
+    @fail_with_message("ERROR:")
     async def end_chat(self):
         """
         Immediately end the chat session: Your next message will be the last message of the chat session, be sure to thank and say goodbye to the user!
