@@ -49,7 +49,7 @@ class LegalDBToolkit(Toolkit):
         '''
         d1_result = self.dialog_db1.query(top=3, content=keyword)
         d2_result = self.dialog_db2.query(top=3, content=keyword)
-        return   format_query_result(d1_result + d2_result)
+        return format_query_result(d1_result + d2_result)
 
     
     @function_tool(name = "end_chat")
