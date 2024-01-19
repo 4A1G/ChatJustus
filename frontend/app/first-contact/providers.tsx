@@ -1,17 +1,32 @@
 "use client";
 
-import * as React from "react";
-import { ConnectionProvider } from '@/components/networking/connection'
+import { ReactNode, useEffect, useState } from "react";
+import { ConnectionProvider } from '@/hooks/networking/connection'
+import { WSAuthProvider } from '@/hooks/networking/ws-auth'
 
 
 export interface ProvidersProps {
-	children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function Providers({ children }: ProvidersProps) {
-	return (
-		<ConnectionProvider url={"ws://localhost:42069/ws/first_contact/default_session"}>
-			{children}
-		</ConnectionProvider>
-	);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    // Set isClient to true once the component is mounted on the client
+    setIsClient(true);
+  }, []);
+
+  return (
+    <>
+      {isClient && (
+        <ConnectionProvider url={`ws://${window.location.hostname}:42069/ws/first_contact`}>
+          <WSAuthProvider>
+            {children}
+          </WSAuthProvider>
+        </ConnectionProvider>
+      )}
+      {!isClient && children}
+    </>
+  );
 }

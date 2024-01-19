@@ -11,11 +11,11 @@ from gpt_wrapper.messages import msg
 from backend.assistant.first_contact import FirstContactBot
 from backend.assistant.follow_up_qa import FollowUpBot
 from .sync import Connection
-from .synced_data import ExposeData
+from .utils import get_ip, open_qr
 
 
 # connections
-users = {} # {session_id: (connection, assistant)}
+users = {} # {assistant_type/session_id: (connection, assistant)}
 
 
 assistant_factory = {
@@ -29,24 +29,47 @@ async def new_session(assistant_type: str, session_id: str):
             raise Exception(f"Assistant type {assistant_type} not found")
         
         assistant = assistant_factory[assistant_type]()
-        # if we have tools, initialize them here
+        # if we have tools that need to be initialized, initialize them here
         # await assistant.default_tools.initialize()
 
-        # other exposed data
-        exposed_data = ExposeData()
-
-        users[session_id] = (connection, assistant, exposed_data)
+        users[f"{assistant_type}/{session_id}"] = (connection, assistant)
+        print(f"New session: {assistant_type}/{session_id}")
 
 # websocket endpoint
 app = FastAPI()
 
-@app.websocket("/ws/{assistant_type}/{session_id}")
-async def websocket_endpoint(ws: WebSocket, assistant_type: str, session_id: str):
-    print(f"New websocket connection: {assistant_type} {session_id}")
+async def ws_auth(ws: WebSocket) -> str | None:
+    try:
+        await ws.send_json({"type": "_REQUEST_USER_SESSION"})
+        msg = await ws.receive_json()
+        if msg["type"] != "_USER_SESSION":
+            raise Exception("Client sent wrong message type")
+        user = msg["data"]["user"]
+        session = msg["data"]["session"]
+
+        if not user or not session:
+            raise Exception("Client sent invalid user or session")
+        
+        return f"{user}/{session}"
+    except:
+        try:
+            await ws.close()
+        finally:
+            return None
+
+@app.websocket("/ws/{assistant_type}")
+async def websocket_endpoint(ws: WebSocket, assistant_type: str):
     await ws.accept()
-    if session_id not in users:
+
+    session_id = await ws_auth(ws)
+    if not session_id:
+        print("Failed to authenticate")
+        return
+
+    id = f"{assistant_type}/{session_id}"
+    if id not in users:
         await new_session(assistant_type, session_id)
-    connection = users[session_id][0]
+    connection = users[id][0]
 
     try:
         await connection.new_connection(ws)
@@ -72,6 +95,7 @@ def start():
     import uvicorn
     uvicorn.run("backend.server.server:app", port=42069)
 
-def dev():
+def expose():
     import uvicorn
-    uvicorn.run("backend.server.server:app", port=42069, reload=True)
+    open_qr(f"http://{get_ip()}:42069", 512)
+    uvicorn.run("backend.server.server:app", port=42069, host="0.0.0.0")

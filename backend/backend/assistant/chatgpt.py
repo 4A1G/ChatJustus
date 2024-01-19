@@ -26,6 +26,10 @@ class SyncedHistory(MessageHistory):
     def history(self):
         return self._history
     
+    @history.setter
+    def history(self, value):
+        self._history = value
+    
     async def append(self, message):
         # called by the assistant
         message = self.ensure_dict(message)
