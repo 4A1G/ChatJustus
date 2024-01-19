@@ -17,6 +17,9 @@ class LegalDBToolkit(Toolkit):
         # databases
         case_id = 'JUSTICIUS-MARCO'
         meeting_timestamps = ['2023-11-13', '2023-11-27']
+        self.client = 'Marco'
+        self.lawyer = 'Justicius'
+    
 
         self.meetings_db = get_meeting_db(case_id)
         self.dialog_dbs = [get_dialog_db(case_id, t) for t in meeting_timestamps]
@@ -65,9 +68,10 @@ class LegalDBToolkit(Toolkit):
         Args:
             keyword: search keywords used to extract relevant information from a meeting conversation
         '''
-        d1_result = self.dialog_dbs[0].query(top=5, content=keyword)
-        d2_result = self.dialog_dbs[1].query(top=5, content=keyword)
-        return   format_query_result(d1_result + d2_result)
+        answer = []
+        for db in self.dialog_dbs:
+            answer += db.query(top=5, content=keyword)
+        return   format_query_result(answer)
 
     
     @function_tool(name = "end_chat")
@@ -85,9 +89,9 @@ class FollowUpBot(SyncedGPT):
     def __init__(self):
         initial_messages = SyncedHistory([
             msg(system="""You are a professional lawyer assistant for the law firm "Sterling Legal Associates". Your firm is dealing with German law.
-                You already know one of your lawyers Justicius is having a client name is Marco with his divorce case. This is a situation where Justicius and Marco had their meeting and your primary role is to assist the Marco of their questions and follow-ups about the meeting,  legal phrases and status with your database. 
+                You already know one of your lawyers {self.lawyer} is having a client name {self.client} with his case . This is a situation where Justicius and Marco had their meeting and your primary role is to assist the Marco of their questions and follow-ups about the meeting,  legal phrases and status with your database. 
                 You should always follow the following rules: 
-                Interact with Marco directly, meaning calling his name. Say like "Hello Marco, " in the start of the conversation.
+                Interact with Marco directly, meaning calling his name. Say like "Hello {self.client}, " in the start of the conversation.
                 Start the conversation by actively asking relevant questions about Marco's feedback to understand his situation and needs.
                 Answer the client with the "query_legal_text", "query_meeting" tools.
                 You are ChatJustus, an AI chatbot.
