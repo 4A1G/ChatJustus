@@ -76,7 +76,7 @@ const SummaryTool = ({ tool_call, i }: ToolProps) => {
           readonly={chatEnded}
           onChange={(e) => setSummary(e.formData)}
           onSubmit={(e) => {
-            sendAction({type: "SUMMARY_SUBMITTED", ...e.formData})
+            sendAction({ type: "SUMMARY_SUBMITTED", ...e.formData })
             toast.info("Sending legal inquiry...")
           }}
         >
@@ -116,15 +116,27 @@ const toolRenderers = (tool_name: string) => {
   }
 }
 
+const toolFootnotes = (tool_call: any) => {
+  const n = tool_call.function.name
+  switch (n) {
+    case 'query_legal_text':
+    case 'query_dialog':
+      return [tool_call.result]
+    default:
+      return []
+  }
+}
+
 const ToolCalls = ({ message }: { message: Message }) => {
   return (<Expander
     defaultExpandedKeys={
-      // message.tool_calls!.filter((m) => !m.result).map((m, i) => String(i))
-      message.tool_calls!.reduce((keys, m, i) => {
-        // if (!m.result) keys.push(String(i))
-        keys.push(String(i))
-        return keys
-      }, [] as string[])
+      []
+      // // message.tool_calls!.filter((m) => !m.result).map((m, i) => String(i))
+      // message.tool_calls!.reduce((keys, m, i) => {
+      //   // if (!m.result) keys.push(String(i))
+      //   keys.push(String(i))
+      //   return keys
+      // }, [] as string[])
     }
     showDivider
     variant='bordered'
@@ -189,6 +201,16 @@ const ChatMessage = ({ messageGroup, className }: ChatMessageProps) => {
   const cls = style[messageGroup[0].role]
   const d = dstyle[messageGroup[0].role]
 
+  // some tools need to inject footnotes into the message
+  const footnotes: string[] = [];
+  for (const message of messageGroup) {
+    if (message.tool_calls) {
+      for (const tool_call of message.tool_calls) {
+        footnotes.push(...toolFootnotes(tool_call));
+      }
+    }
+  }
+
   return (
     <motion.div
       className={`rounded-3xl ${d}`}
@@ -196,6 +218,7 @@ const ChatMessage = ({ messageGroup, className }: ChatMessageProps) => {
       animate={{ opacity: 1, y: 0 }}
       initial={{ opacity: 0, y: 50 }}
     >
+      {/* {JSON.stringify(footnotes)} */}
       <Card className={`rounded-3xl ${cls} shadow-md ${className ?? ''}`}>
         <CardBody className='flex flex-row p-0'>
           <ChatAvatar className='flex-none m-3 ' role={messageGroup[0].role} />
@@ -204,7 +227,17 @@ const ChatMessage = ({ messageGroup, className }: ChatMessageProps) => {
               messageGroup.map((message, i) => (
                 <>
                   <MD>
-                    {message.content?.replaceAll('\n', '  \n')}
+                    {
+                      message.content &&
+                      message.content.replaceAll('\n', '  \n')
+                      + (footnotes.length > 0 ? '\n\n---\n**Sources**\n\n' + footnotes.join('\n\n') : '')
+//                       + `
+// <details>
+// <summary>Summary</summary>
+// ${footnotes.join('\n\n')}
+// </details>
+//                       `
+                    }
                   </MD>
                   {
                     (message.tool_calls?.length ?? 0) > 0
