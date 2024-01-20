@@ -28,6 +28,14 @@ class CaseRecord(EmbedData):
     content: str = EmbedField()
 
 
+class User(EmbedData):
+    user_id: str
+    email: str
+    case_id: str
+
+
+def get_user_info(name, email, case_id):
+    return VectorDB(f"User_{name}", User)
 
 def get_dialogs(case_id, meeting_timestamp):
     dialogs_by_case = {
@@ -110,14 +118,11 @@ def get_meeting_summary(case_id, meeting_timestamp):
     
     return meeting_by_case.get(key, [])
 
-def get_legal_text(book): 
-    legal_text_by_book = {
-        'BGB': BGB,
-        'ZPO': ZPO, 
-        'FamFG': FamFG
-    }
+def get_legal_text(book):
+    BGB, ZPO, FamFG = None, None, None  
+
     with open('BJNR001950896_output.json', 'r') as f:
-        BGB = json.load(f)
+        BGB_data = json.load(f)
         BGB = [
             LawArticle(
                 book=article['jurabk'],
@@ -125,7 +130,7 @@ def get_legal_text(book):
                 title=article['titel'],
                 content=article['content']
             )
-            for article in BGB
+            for article in BGB_data
             if article['jurabk'] == 'BGB'
             and article.get('enbez')
             and article.get('titel')
@@ -133,7 +138,7 @@ def get_legal_text(book):
         ]
 
     with open('BJNR005330950_output.json', 'r') as f:
-        ZPO = json.load(f)
+        ZPO_data = json.load(f)
         ZPO = [
             LawArticle(
                 book=article['jurabk'],
@@ -141,7 +146,7 @@ def get_legal_text(book):
                 title=article['titel'],
                 content=article['content']
             )
-            for article in ZPO
+            for article in ZPO_data
             if article['jurabk'] == 'ZPO'
             and article.get('enbez')
             and article.get('titel')
@@ -149,7 +154,7 @@ def get_legal_text(book):
         ]
     
     with open('BJNR258700008_output.json', 'r') as f:
-        FamFG = json.load(f)
+        FamFG_data = json.load(f)
         FamFG = [
             LawArticle(
                 book=article['jurabk'],
@@ -157,11 +162,17 @@ def get_legal_text(book):
                 title=article['titel'],
                 content=article['content']
             )
-            for article in FamFG
+            for article in FamFG_data
             if article['jurabk'] == 'FamFG'
             and article.get('enbez')
             and article.get('titel')
             and article.get('content')
         ]
+
+    legal_text_by_book = {
+        'BGB': BGB,
+        'ZPO': ZPO, 
+        'FamFG': FamFG
+    }
 
     return legal_text_by_book.get(book, [])

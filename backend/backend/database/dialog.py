@@ -1,26 +1,12 @@
 from backend.database.embedding import MockEmbedding, OpenAIEmbedding
 from backend.database.vector_db import VectorDB, EmbedData, Field, EmbedField
+from legal_db import Dialog, Meeting
 import json
 
 from gpt_wrapper.api import openai_chat
 from gpt_wrapper.assistants import ChatGPT
 from gpt_wrapper.messages import SimpleHistory, msg
 from gpt_wrapper.tools import function_tool
-
-
-class Dialog(EmbedData):
-    speaker: str
-    content: str = EmbedField()
-
-class Meeting(EmbedData):
-    timestamp: int # unix timestamp, serves as id
-    
-    # AI-generated
-    title: str # shown on the sidebar
-    summary: str = EmbedField() # shown at the beginning of after-meeting 
-
-
-
 
 
 async def create_mocked_dialogs(name, lawyer, case_id, meeting_timestamp, case):
@@ -65,10 +51,9 @@ async def create_mocked_dialogs(name, lawyer, case_id, meeting_timestamp, case):
     meeting_timestamp = meeting_timestamp
     dialogs_db = VectorDB(f"Dialog_{case_id}_{meeting_timestamp}", Dialog)
     dialogs_db.reset()
-    dialogs_db.add(mocked_dialogs)  
+    dialogs_db.add(mocked_dialogs, list(i for i in range(len(mocked_dialogs)))) 
 
     return mocked_dialogs
-
 
 async def create_meeting_from_dialogs(name, lawyer, case_id, meeting_timestamp, dialogs: list[Dialog]):
     formatted_dialog = format_dialogs(dialogs)

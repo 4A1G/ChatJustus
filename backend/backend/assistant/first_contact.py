@@ -8,6 +8,7 @@ from .chatgpt import SyncedGPT, SyncedHistory
 from backend.server.sync import Sync
 from backend.server.mail import is_valid_email, send_email
 from backend.database.dialog import create_mocked_dialogs, create_meeting_from_dialogs
+from legal_db import get_user_info
 
 from datetime import datetime
 
@@ -117,6 +118,7 @@ Sterling Legal Associates
 
         case_id = f"{lawyer}-{name}"
         meeting_timestamp = datetime.now().strftime('%Y-%m-%d')
+        await get_user_info(name, email, case_id)
         dialogs = await create_mocked_dialogs(name, lawyer, case_id, meeting_timestamp, case)
         await create_meeting_from_dialogs(name, lawyer, case_id, meeting_timestamp, dialogs)
 
