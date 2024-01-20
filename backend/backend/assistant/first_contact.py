@@ -7,6 +7,9 @@ from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with
 from .chatgpt import SyncedGPT, SyncedHistory
 from backend.server.sync import Sync
 from backend.server.mail import is_valid_email, send_email
+from backend.database.dialog import create_mocked_dialogs
+
+from datetime import datetime
 
 
 class FirstContactSummary(BaseModel):
@@ -98,6 +101,7 @@ Sterling Legal Associates
         ))
         print(f"Send Email to {email}:\n{contents}")
 
+
         self.summary = {
             "name": name,
             "email": email,
@@ -110,6 +114,8 @@ Sterling Legal Associates
             f"Thank you, {lawyer or 'your lawyer'} will contact you soon!",
             type="success",
         )
+
+        await create_mocked_dialogs(name, datetime.now().strftime('%Y-%m-%d'), case, lawyer)
 
 
 class FirstContactBot(SyncedGPT):
