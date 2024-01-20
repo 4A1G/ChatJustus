@@ -23,7 +23,7 @@ class Meeting(EmbedData):
 
 
 
-async def create_mocked_dialogs(name, meeting_timestamp, case, lawyer):
+async def create_mocked_dialogs(name, case_id, meeting_timestamp, case, lawyer):
     # Step 2: dialog generator
     # response = await openai_chat(
     #     model="gpt-3.5-turbo-1106",
@@ -62,8 +62,38 @@ async def create_mocked_dialogs(name, meeting_timestamp, case, lawyer):
     # at this point, mocked_dialogs is filled with the generated dialogs
 
     # Step 3: Generate an object for the database
-    case_id = f"{lawyer}-{name}" 
     meeting_timestamp = meeting_timestamp
     dialogs_db = VectorDB(f"Dialog_{case_id}_{meeting_timestamp}", Dialog)
     dialogs_db.reset()
     dialogs_db.add(mocked_dialogs)  
+
+    return mocked_dialogs
+
+
+async def create_meeting_from_dialogs(dialogs: list[Dialog], case_id, meeting_timestamp):
+    formatted_dialog = format_dialogs(dialogs)
+
+    # Step 1: Summarize
+    summarizer = ChatGPT(messages=SimpleHistory(), model="gpt-4-1106-preview")
+    summary = await summarizer(f"""
+The following is a full trasncript of a legal meeting between the lawyer Justicius and his client Marco.
+Please summarize for the client Marco, the 3 most important points of the meeting to be reminded about.
+You MUST address Marco directly in your summary! Start the summary with "In your last meeting..." and end by 1 sentence asking if he has any questions about the meeting.
+Use markdown formatting and bullet points.
+
+[Trascript]:
+{formatted_dialog}""".strip(), temperature=0.5)
+
+    # Step 2: Generate a title
+    titlizer = ChatGPT(messages=SimpleHistory(), model="gpt-4-1106-preview")
+    title = await titlizer(f"Please generate a short title (<10 words) for the given meeting summary:\n\n{summary}", temperature=0.5)
+
+    # Add to meetings DB
+    meeting_db = VectorDB(f"Meetings_{case_id}", Meeting)
+    meeting_db.reset() # reset if exists
+    meeting = Meeting(timestamp=meeting_timestamp, title=title, summary=summary)
+    meeting_db.add(meeting) 
+
+
+def format_dialogs(dialogs: list[Dialog]):
+    return "\n".join([f"{d.speaker}: {d.content}" for d in dialogs])

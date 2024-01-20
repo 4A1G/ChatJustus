@@ -7,7 +7,7 @@ from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with
 from .chatgpt import SyncedGPT, SyncedHistory
 from backend.server.sync import Sync
 from backend.server.mail import is_valid_email, send_email
-from backend.database.dialog import create_mocked_dialogs
+from backend.database.dialog import create_mocked_dialogs, create_meeting_from_dialogs
 
 from datetime import datetime
 
@@ -115,7 +115,10 @@ Sterling Legal Associates
             type="success",
         )
 
-        await create_mocked_dialogs(name, datetime.now().strftime('%Y-%m-%d'), case, lawyer)
+        case_id = f"{lawyer}-{name}"
+        meeting_timestamp = datetime.now().strftime('%Y-%m-%d')
+        dialogs = await create_mocked_dialogs(name, case_id, meeting_timestamp, case, lawyer)
+        await create_meeting_from_dialogs(dialogs, case_id, meeting_timestamp)
 
 
 class FirstContactBot(SyncedGPT):
