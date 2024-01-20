@@ -231,12 +231,12 @@ const ChatMessage = ({ messageGroup, className }: ChatMessageProps) => {
                       message.content &&
                       message.content.replaceAll('\n', '  \n')
                       + (footnotes.length > 0 ? '\n\n---\n**Sources**\n\n' + footnotes.join('\n\n') : '')
-//                       + `
-// <details>
-// <summary>Summary</summary>
-// ${footnotes.join('\n\n')}
-// </details>
-//                       `
+                      //                       + `
+                      // <details>
+                      // <summary>Summary</summary>
+                      // ${footnotes.join('\n\n')}
+                      // </details>
+                      //                       `
                     }
                   </MD>
                   {
@@ -318,10 +318,11 @@ type ChatProps = {
   onCancel: () => void
   isConnected: boolean
   isGenerating: boolean
+  isDisabled?: boolean | string
   showSystem: boolean
 }
 
-const Chat = ({ introTitle, introContent, history, onSend, onCancel, isConnected, isGenerating, showSystem }: ChatProps) => {
+const Chat = ({ introTitle, introContent, history, onSend, onCancel, isConnected, isGenerating, isDisabled, showSystem }: ChatProps) => {
   const chatRef = useRef<HTMLDivElement>(null)
   const chatBottomRef = useRef<HTMLDivElement>(null)
   const [isBottom, setIsBottom] = useState(true)
@@ -453,23 +454,29 @@ const Chat = ({ introTitle, introContent, history, onSend, onCancel, isConnected
           </div>
         }
         {
-          isConnected ? (
-            <ChatInput
-              onSend={(m) => {
-                setIsBottom(true)
-                onSend(m)
-              }}
-              onCancel={onCancel}
-              isGenerating={isGenerating} />
-          )
-            : (
+          isDisabled ?
+            <Card className='bg-default rounded-3xl shadow-md backdrop-blur-sm'>
+              <CardBody className='flex flex-row gap-5 items-center'>
+                <FaUser className='text-3xl' />
+                <p className='text-default-600'>{typeof isDisabled == 'string' ? isDisabled : 'Chat Finished'}</p>
+              </CardBody>
+            </Card>
+            : isConnected ?
+              <ChatInput
+                onSend={(m) => {
+                  setIsBottom(true)
+                  onSend(m)
+                }}
+                onCancel={onCancel}
+                isGenerating={isGenerating} />
+              :
               <Card className='bg-danger rounded-3xl shadow-md backdrop-blur-sm'>
                 <CardBody className='flex flex-row gap-5 items-center'>
                   <Spinner color='default' />
                   <p className='text-danger-foreground'>Connecting to the server...</p>
                 </CardBody>
               </Card>
-            )
+
         }
       </div>
       <div ref={chatBottomRef} className='h-0 invisible'></div>

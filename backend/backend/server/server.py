@@ -21,7 +21,7 @@ users = {} # {assistant_type/session_id: (connection, assistant)}
 
 assistant_factory = {
     "first_contact": FirstContactBot,
-    "follow_up": FollowUpBot,
+    "follow_up": lambda: FollowUpBot("Marco", "Justicius", "JUSTICIUS-MARCO", '2023-11-27', ['2023-11-13', '2023-11-27']),
 }
 
 async def new_session(assistant_type: str, session_id: str):
@@ -106,5 +106,5 @@ def start():
 
 def expose():
     import uvicorn
-    open_qr(f"http://{get_ip()}:42069", 512)
+    open_qr(f"http://{get_ip()}:42069", 256)
     uvicorn.run("backend.server.server:app", port=42069, host="0.0.0.0")
