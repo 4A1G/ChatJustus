@@ -23,7 +23,7 @@ class Meeting(EmbedData):
 
 
 
-async def create_mocked_dialogs(name, case_id, meeting_timestamp, case, lawyer):
+async def create_mocked_dialogs(name, lawyer, case_id, meeting_timestamp, case):
     # Step 2: dialog generator
     # response = await openai_chat(
     #     model="gpt-3.5-turbo-1106",
@@ -70,15 +70,15 @@ async def create_mocked_dialogs(name, case_id, meeting_timestamp, case, lawyer):
     return mocked_dialogs
 
 
-async def create_meeting_from_dialogs(dialogs: list[Dialog], case_id, meeting_timestamp):
+async def create_meeting_from_dialogs(name, lawyer, case_id, meeting_timestamp, dialogs: list[Dialog]):
     formatted_dialog = format_dialogs(dialogs)
 
     # Step 1: Summarize
     summarizer = ChatGPT(messages=SimpleHistory(), model="gpt-4-1106-preview")
     summary = await summarizer(f"""
-The following is a full trasncript of a legal meeting between the lawyer Justicius and his client Marco.
-Please summarize for the client Marco, the 3 most important points of the meeting to be reminded about.
-You MUST address Marco directly in your summary! Start the summary with "In your last meeting..." and end by 1 sentence asking if he has any questions about the meeting.
+The following is a full trasncript of a legal meeting between the lawyer {lawyer} and the client {name}.
+Please summarize for the client {name}, the 3 most important points of the meeting to be reminded about.
+You MUST address {name} directly in your summary! Start the summary with "In your last meeting..." and end by 1 sentence asking if {name} has any questions about the meeting.
 Use markdown formatting and bullet points.
 
 [Trascript]:

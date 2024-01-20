@@ -117,8 +117,8 @@ Sterling Legal Associates
 
         case_id = f"{lawyer}-{name}"
         meeting_timestamp = datetime.now().strftime('%Y-%m-%d')
-        dialogs = await create_mocked_dialogs(name, case_id, meeting_timestamp, case, lawyer)
-        await create_meeting_from_dialogs(dialogs, case_id, meeting_timestamp)
+        dialogs = await create_mocked_dialogs(name, lawyer, case_id, meeting_timestamp, case)
+        await create_meeting_from_dialogs(name, lawyer, case_id, meeting_timestamp, dialogs)
 
 
 class FirstContactBot(SyncedGPT):
