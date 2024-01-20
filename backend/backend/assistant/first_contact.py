@@ -1,4 +1,5 @@
 import asyncio
+from enum import Enum
 from pydantic import BaseModel
 
 from gpt_wrapper.messages import msg
@@ -12,6 +13,11 @@ from backend.database.dialog import create_mocked_dialogs, create_meeting_from_d
 from datetime import datetime
 
 
+class Lawyers(str, Enum):
+    Sofia_Sterling = "Sofia Sterling"
+    Justicius = "Justicius"
+    David_Chambers = "David Chambers"
+
 class FirstContactSummary(BaseModel):
     """
     This schema determines how the FORM will be displayed on the frontend
@@ -19,7 +25,7 @@ class FirstContactSummary(BaseModel):
     name: str
     email: str
     case: str
-    lawyer: str
+    lawyer: Lawyers
 
 
 class FirstContactToolkit(Toolkit):
@@ -43,13 +49,13 @@ class FirstContactToolkit(Toolkit):
 
     @function_tool
     @fail_with_message("ERROR:")
-    async def summarize_first_contact(self, case: str, lawyer: str):
+    async def summarize_first_contact(self, case: str, lawyer: Lawyers):
         """
         Summarize potential client's contact and case details for the lawyer and ask for potential's client permission to send
 
         Args:
             case: summary of the legal situation of the client
-            lawyer: suitable lawyer for the case
+            lawyer: suitable lawyer for the case, check the [Lawyers Information] section for their introduction
 
         """
         self.summary["case"] = case
@@ -60,7 +66,7 @@ class FirstContactToolkit(Toolkit):
     @fail_with_message("ERROR:")
     async def end_chat(self):
         """
-        Immediately end the chat session: Your next message will be the last message of the chat session, be sure to thank and say goodbye to the user!
+        Immediately end the chat session: Your next message will be the last message of the chat session, be sure to thank and say goodbye to the user! Call this if the user goes too far off-topic even after two reminders, or if we don't have a suitable lawyer for their case, or if everything is done after the summary is submitted.
         """
         self.chatEnded = True
         await self.sync()
@@ -124,9 +130,7 @@ Sterling Legal Associates
 class FirstContactBot(SyncedGPT):
     def __init__(self):
         initial_messages = SyncedHistory(
-            [
-                msg(
-                    system="""
+            system="""
 You are ChatJustus, a professional lawyer assistant for the lawfirm "Sterling Legal Associates". Your primary role is to assist the potential legal client by:
 1. Start the conversation by actively asking relevant questions about the user's legal problems to understand their situation and needs.
 2. Determine if our law firm can address their legal needs.
@@ -140,7 +144,7 @@ Inform the user clearly whether we have a suitable lawyer for their case. If not
 Use clear, concise language to make it easy for users to provide the necessary information.
 
 
-Lawyers Information: 
+[Lawyers Information]: 
 
 1. Sofia Sterling
 - Specialization: Mergers & Acquisitions (M&A)
@@ -156,9 +160,8 @@ Lawyers Information:
 - Specialization: Civil Law
 - Introduction: As the head of the civil law division, David Chambers brings a wealth of experience in handling a diverse range of civil cases. His expertise spans contract disputes, personal injury claims, and other civil matters. David is known for his meticulous approach and dedication to achieving favorable outcomes for his clients.
 - Practice Areas: Contract disputes, Personal injury litigation, Real estate disputes, Employment law matters
-                """.strip()
-                )
-            ]
+            """.strip(),
+            history = [],
         )
 
         super().__init__(

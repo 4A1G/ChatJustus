@@ -1,5 +1,6 @@
 import asyncio
-from gpt_wrapper.assistants import ChatGPT, MessageHistory, Tools
+from gpt_wrapper.assistants import ChatGPT, Tools
+from gpt_wrapper.messages import MessageHistory, msg
 
 from backend.server.sync import Sync
 
@@ -8,7 +9,9 @@ class SyncedHistory(MessageHistory):
     '''
     Synced message history and currently generating partial messeage
     '''
-    def __init__(self, history: list[dict]):
+    def __init__(self, system: str = "You are a helpful assistant.", history: list[dict] = []):
+        # system message
+        self.system = system
         # already generated messages
         self._history = history
         # the currently generating partial message (not yet added to history)
@@ -24,7 +27,7 @@ class SyncedHistory(MessageHistory):
     
     @property
     def history(self):
-        return self._history
+        return [msg(system=self.system)] + self._history
     
     @history.setter
     def history(self, value):
