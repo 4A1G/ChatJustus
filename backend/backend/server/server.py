@@ -11,6 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from gpt_wrapper.messages import msg
 from backend.assistant.first_contact import FirstContactBot
 from backend.assistant.follow_up_qa import FollowUpBot
+from backend.database.schemas import cases_db, meetings_db
 from .sync import Connection
 from .utils import get_ip, open_qr
 
@@ -21,7 +22,10 @@ users = {} # {assistant_type/session_id: (connection, assistant)}
 
 assistant_factory = {
     "first_contact": FirstContactBot,
-    "follow_up": lambda: FollowUpBot("Marco", "Justicius", "JUSTICIUS-MARCO", '2023-11-27', ['2023-11-13', '2023-11-27']),
+    "follow_up": lambda: FollowUpBot(
+        case=cases_db().retrieve(["JUSTICIUS-MARCO"])[0],
+        meeting=meetings_db("JUSTICIUS-MARCO").retrieve([1630200000])[0],
+    )
 }
 
 async def new_session(assistant_type: str, session_id: str):

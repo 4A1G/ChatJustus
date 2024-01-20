@@ -85,13 +85,14 @@ class VectorDB:
     global_client = QdrantClient(path="storage/qdrant")
 
 
-    def __init__(self, name: str, data_model: Type[EmbedData], client=None):
+    def __init__(self, name: str, data_model: Type[EmbedData], client=None, validate=True):
         self.name = name
         self.data_model = data_model
         self.field_embedder = data_model.field_embedder()
         self.client = client or VectorDB.global_client
 
-        self._validate_vector_fields()
+        if validate:
+            self._validate_vector_fields()
 
         # ensure collection exists
         if self.name not in [c.name for c in self.client.get_collections().collections]:

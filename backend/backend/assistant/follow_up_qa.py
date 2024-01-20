@@ -1,13 +1,14 @@
 from gpt_wrapper.messages import msg
 from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with_message
 from .chatgpt import SyncedGPT, SyncedHistory
-from backend.assistant.util import format_query_result, format_query_result_law
-from backend.database.__init__ import get_dialog_db, get_legal_text_db, get_meeting_db, Dialog
+from .utils import format_query_result, format_query_result_law
+
+from backend.database import Case, Meeting, meetings_db, dialogs_db, law_book_db
 
 from backend.server.sync import Sync
 
 class LegalDBToolkit(Toolkit):
-    def __init__(self, client: str, lawyer: str, case_id: str, current_meeting: str, meeting_timestamps: list[str]):
+    def __init__(self, case: Case, meeting: Meeting):
         super().__init__()
 
         # state
@@ -15,18 +16,15 @@ class LegalDBToolkit(Toolkit):
         self.chatEnded = False
 
         # case information
-        self.client = client
-        self.lawyer = lawyer
-        self.case_id = case_id
-        self.current_meeting = current_meeting
-        self.meeting_timestamps = meeting_timestamps
+        self.case = case
+        self.meeting = meeting
 
         # databases
-        self.meetings_db = get_meeting_db(case_id)
-        self.dialog_dbs = [get_dialog_db(case_id, t) for t in meeting_timestamps]
-        self.bgb_db = get_legal_text_db("BGB")
-        self.famfg_db = get_legal_text_db("FamFG")
-        self.zpo_db = get_legal_text_db("ZPO")
+        self.meetings_db = meetings_db(case.case_id)
+        self.dialog_dbs = [dialogs_db(case.case_id, m.timestamp) for m in self.meetings_db]
+        self.bgb_db = law_book_db("BGB")
+        self.famfg_db = law_book_db("FamFG")
+        self.zpo_db = law_book_db("ZPO")
         
 
         self.sync = Sync(
@@ -84,23 +82,20 @@ class LegalDBToolkit(Toolkit):
 
 
 class FollowUpBot(SyncedGPT):
-    def __init__(self, client: str, lawyer: str, case_id: str, current_meeting: str, meeting_timestamps: list[str]):
-        self.client = client
-        self.lawyer = lawyer
-        self.case_id = case_id
-        self.current_meeting = current_meeting
-        self.meeting_timestamps = meeting_timestamps
+    def __init__(self, case: Case, meeting: Meeting):
+        self.case = case
+        self.meeting = meeting
 
         initial_messages = SyncedHistory(
             system=f"""
 You are a professional lawyer assistant for the law firm "Sterling Legal Associates". Your firm is dealing with German law.
-You already know one of your lawyers {self.lawyer} is having a client name {self.client} with his case . This is a situation where {self.lawyer} and {self.client} had their meeting and your primary role is to assist the {self.client} of their questions and follow-ups about the meeting,  legal phrases and status with your database. 
+You already know one of your lawyers {case.lawyer} is having a client name {case.client} with his case . This is a situation where {case.lawyer} and {case.client} had their meeting and your primary role is to assist the {case.client} of their questions and follow-ups about the meeting,  legal phrases and status with your database. 
 You should always follow the following rules: 
-1. Interact with {self.client} directly, meaning calling his name. Say like "Hello {self.client}, " in the start of the conversation.
-2. Start the conversation by actively asking relevant questions about {self.client}'s feedback to understand his situation and needs.
+1. Interact with {case.client} directly, meaning calling his name. Say like "Hello {case.client}, " in the start of the conversation.
+2. Start the conversation by actively asking relevant questions about {case.client}'s feedback to understand his situation and needs.
 3. Answer the client with the "query_legal_text", "query_meeting" tools.
 4. You are ChatJustus, an AI chatbot.
-5. When the client mention lawyer, usually it refers to {self.lawyer}.
+5. When the client mention lawyer, usually it refers to {case.lawyer}.
 If information is inadequate to answer the question, inform the client that you unfortunately cannot give an answer and you will forward the question to the lawyer.
 Whenever you reference the result from a database query, make a citatiion by appending the respective "[^i]" according to the query result marking. 
 
@@ -114,7 +109,7 @@ Handling Aggressive Language: If the user seems aggressive or impatient, politel
         super().__init__(
             messages=initial_messages,
             model="gpt-4-1106-preview",
-            tools=LegalDBToolkit(client, lawyer, case_id, current_meeting, meeting_timestamps),
+            tools=LegalDBToolkit(case, meeting),
         )
 
 
