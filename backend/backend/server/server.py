@@ -17,23 +17,34 @@ from .utils import get_ip, open_qr
 
 
 # connections
-users = {} # {assistant_type/session_id: (connection, assistant)}
+users = {} # {user_id: (connection, assistant)}}
 
 
-assistant_factory = {
-    "first_contact": FirstContactBot,
-    "follow_up": lambda: FollowUpBot(
-        case=cases_db().retrieve(["JUSTICIUS-MARCO"])[0],
-        meeting=meetings_db("JUSTICIUS-MARCO").retrieve([1630200000])[0],
-    )
-}
+def assistant_factory(assistant_type:str, user_id: str):
+    match assistant_type:
+        case "first_contact":
+            return FirstContactBot(user_id),
+        
+        case "follow_up":
+            case_id = user_id
+            cases = cases_db()
+            user_case = cases.retrieve([case_id])
+            if len(user_case) == 0:
+                print(f"Case {case_id} not found")
+                # create a demo
+                case_id = "JUSTICIUS-MARCO"
+                user_case = [c for c in cases if c.case_id == case_id]
+            return FollowUpBot(
+                case=user_case[0],
+                meeting=next(iter(meetings_db(case_id))),
+            )
+        
+        case _:
+            raise Exception(f"Assistant type {assistant_type} not found")
 
 async def new_session(assistant_type: str, session_id: str):
     with Connection() as connection:
-        if assistant_type not in assistant_factory:
-            raise Exception(f"Assistant type {assistant_type} not found")
-        
-        assistant = assistant_factory[assistant_type]()
+        assistant = assistant_factory(assistant_type, session_id)
         # if we have tools that need to be initialized, initialize them here
         # await assistant.default_tools.initialize()
 
@@ -55,7 +66,7 @@ async def ws_auth(ws: WebSocket) -> str | None:
         if not user or not session:
             raise Exception("Client sent invalid user or session")
         
-        return f"{user}/{session}"
+        return f"{session}"
     except:
         try:
             await ws.close()

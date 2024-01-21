@@ -97,6 +97,7 @@ Do you have any legal questions? I can help you with:
           }
           isConnected={isConnected}
           isGenerating={gpt.runningTasks.includes("PROMPT")}
+          isDisabled={firstContact.chatEnded}
           showSystem={showSystem}
         />
 

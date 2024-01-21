@@ -1,7 +1,7 @@
 import asyncio
+from time import time
 from enum import StrEnum
 from pydantic import BaseModel
-from datetime import datetime
 
 from gpt_wrapper.messages import msg
 from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with_message
@@ -34,8 +34,10 @@ class FirstContactSummary(BaseModel):
 
 
 class FirstContactToolkit(Toolkit):
-    def __init__(self):
+    def __init__(self, user_id: str):
         super().__init__()
+
+        self.user_id = user_id
 
         self.summary = {}
         self.chatEnded = False
@@ -130,7 +132,7 @@ Sterling Legal Associates
         )
 
         # Create Case and save to DB
-        case_id = f"{lawyer}-{name}"
+        case_id = self.user_id
         new_case = Case(
             case_id=case_id,
             client=name,
@@ -141,23 +143,23 @@ Sterling Legal Associates
         cases_db().add([new_case], [case_id])
 
         # Generate mocked dialogs and save to DB
-        meeting_timestamp = datetime.now().strftime('%Y-%m-%d')
+        meeting_timestamp = int(time())
         dialogs = await generate_mocked_dialog(new_case)
-        dialog_db = dialogs_db(case.case_id, meeting_timestamp)
+        dialog_db = dialogs_db(case_id, meeting_timestamp)
         dialog_db.add(dialogs, list(range(len(dialogs))))
 
         # Generate meeting title and summary and save to DB
-        title, summary = await generate_meeting_title_summary(case, dialogs)
+        title, summary = await generate_meeting_title_summary(new_case, dialogs)
         meeting = Meeting(
             timestamp=meeting_timestamp,
             title=title,
             summary=summary,
         )
-        meetings_db(case.case_id).add([meeting])
+        meetings_db(case_id).add([meeting], [meeting_timestamp])
 
 
 class FirstContactBot(SyncedGPT):
-    def __init__(self):
+    def __init__(self, user_id: str):
         initial_messages = SyncedHistory(
             system=f"""
 You are ChatJustus, a professional lawyer assistant for the lawfirm "Sterling Legal Associates". Your primary role is to assist the potential legal client by:
@@ -183,5 +185,5 @@ Use clear, concise language to make it easy for users to provide the necessary i
         super().__init__(
             messages=initial_messages,
             model="gpt-3.5-turbo-1106",
-            tools=FirstContactToolkit(),
+            tools=FirstContactToolkit(user_id),
         )

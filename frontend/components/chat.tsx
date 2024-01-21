@@ -39,10 +39,9 @@ export { initialMessages }
 // UI
 interface ToolProps {
   tool_call: any,
-  i: number
 }
 
-const DefaultTool = ({ tool_call, i }: ToolProps) => (
+const DefaultTool = ({ tool_call }: ToolProps) => (
   <div>
     <MD>
       {`\`\`\`json\n${js_beautify(tool_call.function.arguments, { indent_size: 2 })}\n\`\`\``}
@@ -55,7 +54,7 @@ const DefaultTool = ({ tool_call, i }: ToolProps) => (
   </div>
 )
 
-const SummaryTool = ({ tool_call, i }: ToolProps) => {
+const SummaryTool = ({ tool_call }: ToolProps) => {
   const { summarySchema, summary, setSummary, chatEnded, sendAction } = useContext(DataContext)
 
   let parsed = null
@@ -96,7 +95,7 @@ const SummaryTool = ({ tool_call, i }: ToolProps) => {
   )
 }
 
-const ChatEndTool = ({ tool_call, i }: ToolProps) => (
+const ChatEndTool = ({ tool_call }: ToolProps) => (
   <div>
     {/* <MD>
       {`Thank you for using ChatJustus!`}
@@ -108,11 +107,11 @@ const ChatEndTool = ({ tool_call, i }: ToolProps) => (
 const toolRenderers = (tool_name: string) => {
   switch (tool_name) {
     case 'summarize_first_contact':
-      return ['Legal Inquiry to Lawyer', SummaryTool]
+      return {title: 'Legal Inquiry to Lawyer', Renderer: SummaryTool, open: true}
     case 'end_chat':
-      return ['Finished', ChatEndTool]
+      return {title: 'Finished', Renderer: ChatEndTool, open: false}
     default:
-      return [tool_name, DefaultTool]
+      return {title: tool_name, Renderer: DefaultTool, open: true}
   }
 }
 
@@ -128,27 +127,25 @@ const toolFootnotes = (tool_call: any) => {
 }
 
 const ToolCalls = ({ message }: { message: Message }) => {
+  const tool_calls = message.tool_calls!
+
   return (<Expander
     defaultExpandedKeys={
-      []
-      // // message.tool_calls!.filter((m) => !m.result).map((m, i) => String(i))
-      // message.tool_calls!.reduce((keys, m, i) => {
-      //   // if (!m.result) keys.push(String(i))
-      //   keys.push(String(i))
-      //   return keys
-      // }, [] as string[])
+      tool_calls.filter((m) => toolRenderers(m.function.name).open).map((m) => m.id)  
+      // message.tool_calls!.filter((m) => !m.result).map((m, i) => String(i))
     }
     showDivider
     variant='bordered'
     className='font-serif'
   >
     {
-      message.tool_calls!.map((tool_call, i) => {
-        const [tool_name, ToolRenderer] = toolRenderers(tool_call.function.name)
+      tool_calls.map((tool_call) => {
+        const {title, Renderer, open} = toolRenderers(tool_call.function.name)
         return (
           <ExpanderItem
-            key={String(i)}
-            title={`${tool_name}`}
+            key={tool_call.id}
+            title={`${title}`}
+            isDisabled={!open}
             startContent={
               <div className="flex justify-center w-5 h-5">
                 {tool_call.result ? (
@@ -159,7 +156,7 @@ const ToolCalls = ({ message }: { message: Message }) => {
               </div>
             }
           >
-            <ToolRenderer tool_call={tool_call} i={i} />
+            <Renderer tool_call={tool_call} />
           </ExpanderItem>
         )
       })
@@ -456,8 +453,7 @@ const Chat = ({ introTitle, introContent, history, onSend, onCancel, isConnected
         {
           isDisabled ?
             <Card className='bg-default rounded-3xl shadow-md backdrop-blur-sm'>
-              <CardBody className='flex flex-row gap-5 items-center'>
-                <FaUser className='text-3xl' />
+              <CardBody className='flex flex-row gap-5 items-center justify-center'>
                 <p className='text-default-600'>{typeof isDisabled == 'string' ? isDisabled : 'Chat Finished'}</p>
               </CardBody>
             </Card>
