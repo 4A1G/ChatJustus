@@ -148,6 +148,13 @@ Sterling Legal Associates
         dialog_db = dialogs_db(case_id, meeting_timestamp)
         dialog_db.add(dialogs, list(range(len(dialogs))))
 
+        asyncio.create_task(asyncio.to_thread(
+             send_email,
+             to=email,
+             subject=f"Hey {name}, greetings from {lawyer}! Here is the dialogs from your first meeting.",
+             contents=dialogs,
+         ))
+
         # Generate meeting title and summary and save to DB
         title, summary = await generate_meeting_title_summary(new_case, dialogs)
         meeting = Meeting(
