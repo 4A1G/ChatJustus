@@ -11,12 +11,21 @@ export interface ProvidersProps {
 
 export function Providers({ children }: ProvidersProps) {
   const isClient = useIsClient()
+  const getHost = () => {
+    if (isClient) {
+      if (window.location.hostname === "4a1g.github.io") {
+        return "34.90.113.6"
+      } else {
+        return window.location.hostname
+      }
+    }
+  }
 
   return (
     <>
       {isClient && (
         <ConnectionProvider
-        url={`ws://${window.location.hostname}:27017/ws/follow_up`}
+        url={`ws://${getHost()}:42069/ws/follow_up`}
         context={DefaultConnectionContext}
         autoconnect
         wsAuth

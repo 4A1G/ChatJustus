@@ -234,7 +234,7 @@ const ChatAvatar = ({ role, className }: { role: string, className?: string }) =
     case 'user':
       return <Avatar className={`${className} text-primary/100`} showFallback />
     case 'assistant':
-      return <Avatar className={className} src='/avatar_bg_none.png' />
+      return <Avatar className={className} src='/ChatJustus/avatar_bg_none.png' />
     case 'system':
       return <Avatar className={className} name='S' />
     default:

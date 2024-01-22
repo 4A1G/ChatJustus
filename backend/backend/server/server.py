@@ -91,13 +91,13 @@ async def websocket_endpoint(ws: WebSocket, assistant_type: str):
 
 
 # override the endpoints to include .html
-@app.get("/first-contact")
+@app.get("/ChatJustus/first-contact")
 async def first_contact():
-    return FileResponse("webapp_static/first-contact.html")
+    return FileResponse("webapp_static/ChatJustus/first-contact.html")
 
-@app.get("/follow-up")
+@app.get("/ChatJustus/follow-up")
 async def follow_up():
-    return FileResponse("webapp_static/follow-up.html")
+    return FileResponse("webapp_static/ChatJustus/follow-up.html")
 
 # it's important this is mounted after the websocket route
 app.mount(
@@ -107,13 +107,13 @@ app.mount(
 
 def start():
     import uvicorn
-    uvicorn.run("backend.server.server:app", port=27017)
+    uvicorn.run("backend.server.server:app", port=42069)
 
 def expose():
     import uvicorn
-    open_qr(f"http://{get_ip()}:42069", 256)
-    uvicorn.run("backend.server.server:app", port=27017, host="0.0.0.0")
+    open_qr(f"http://{get_ip()}:42069/ChatJustus", 256)
+    uvicorn.run("backend.server.server:app", port=42069, host="0.0.0.0")
 
 def expose_no_qr():
     import uvicorn
-    uvicorn.run("backend.server.server:app", port=27017, host="0.0.0.0")
+    uvicorn.run("backend.server.server:app", port=42069, host="0.0.0.0")
