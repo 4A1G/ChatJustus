@@ -176,7 +176,7 @@ const toolRenderers = (tool_name: string) => {
 const toolFootnotes = (tool_call: any) => {
   const n = tool_call.function.name
   switch (n) {
-    case 'query_legal_text':
+    case 'query_law_articles':
     case 'query_dialog':
       return [tool_call.result]
     default:
