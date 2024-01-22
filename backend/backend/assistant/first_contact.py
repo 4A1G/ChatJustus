@@ -180,7 +180,7 @@ Here's a summary of today's meeting:
 {markdown(summary)}
 
 Do you have any lingering questions? Ask ChatJustus!
-<a href="http://localhost:42069/ChatJustus/follow-up">Open ChatJustus</a>
+<a href="http://34.90.113.6:42069/ChatJustus/follow-up">Open ChatJustus</a>
 
 Best regards,
 {lawyer}
