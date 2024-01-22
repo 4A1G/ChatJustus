@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, useContext } from 'react'
+import { useState, useRef, useEffect, useMemo, useContext, ReactNode } from 'react'
 import { produce } from 'immer'
 import { motion, useAnimate, usePresence } from 'framer-motion'
 
@@ -373,7 +373,7 @@ type ChatProps = {
   onCancel: () => void
   isConnected: boolean
   isGenerating: boolean
-  isDisabled?: boolean | string
+  isDisabled?: boolean | ReactNode
   showSystem: boolean
 }
 
@@ -511,8 +511,8 @@ const Chat = ({ introTitle, introContent, history, onSend, onCancel, isConnected
         {
           isDisabled ?
             <Card className='bg-default rounded-3xl shadow-md backdrop-blur-sm'>
-              <CardBody className='flex flex-row gap-5 items-center justify-center'>
-                <p className='text-default-600'>{typeof isDisabled == 'string' ? isDisabled : 'Chat Finished'}</p>
+              <CardBody className=''>
+                {typeof isDisabled == 'boolean' ? <p className='text-center text-default-600'>Chat Finished</p> : isDisabled}
               </CardBody>
             </Card>
             : isConnected ?
@@ -530,7 +530,6 @@ const Chat = ({ introTitle, introContent, history, onSend, onCancel, isConnected
                   <p className='text-danger-foreground'>Connecting to the server...</p>
                 </CardBody>
               </Card>
-
         }
       </div>
       <div ref={chatBottomRef} className='h-0 invisible'></div>

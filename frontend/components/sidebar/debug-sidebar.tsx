@@ -78,7 +78,7 @@ interface DebugSidebarProps {
   className?: string
 }
 
-const DebugSidebar = ({listTitle = 'ChatJustus', listContent, gpt, messages, showSystem, setShowSystem, className }: DebugSidebarProps) => {
+const DebugSidebar = ({ listTitle = 'ChatJustus', listContent, gpt, messages, showSystem, setShowSystem, className }: DebugSidebarProps) => {
   return (
     <div className={`flex flex-col min-h-0 h-full${className || ''}`}>
 
@@ -90,31 +90,15 @@ const DebugSidebar = ({listTitle = 'ChatJustus', listContent, gpt, messages, sho
         <ScrollShadow>
           <div className='flex flex-col gap-3 m-3 mt-0'>
             {listContent}
-            {/* {
-              [
-                ['1st Meeting on 02.10.2023', 'Your first meeting with Sofia'],
-                ['2nd Meeting on 17.10.2023', 'Agreeing on the terms of the divorce'],
-                ['3rd Meeting on 01.11.2023', 'Finalizing the divorce papers'],
-                ['4th Meeting on 15.11.2023', 'Emergency meeting with Sofia'],
-              ].map(([title, summary]) => (
-                <>
-                  <div className='flex flex-col bg-default-50 rounded-lg p-3'>
-                    <div className='text-xs text-default-700'>{title}</div>
-                    <div className='font-serif'>{summary}</div>
-                  </div>
-                </>
-              ))
-            }
-            <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3 -m-1'>
-              <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
-              <div className='text-primary/100 font-serif font-bold'>Signing the papers</div>
-            </div> */}
           </div>
         </ScrollShadow>
       </div>
 
 
-      <Expander variant='light' defaultExpandedKeys={['1', '2']}>
+      <Expander
+        variant='light'
+        // defaultExpandedKeys={['1', '2']}
+      >
 
         <ExpanderItem title='Model Options' key='1'>
 

@@ -12,6 +12,9 @@ import { DataContext } from './contexts'
 import { DebugSidebar } from '@/components/sidebar/debug-sidebar'
 import { SidebarLayout } from '@/components/sidebar/layout'
 import { useRemoteToast } from '@/hooks/networking/remote-toast'
+import { Button } from '@nextui-org/button'
+import { FaCircleCheck, FaHeart } from 'react-icons/fa6'
+import { ConfirmButton } from '@/components/base/confirm-button'
 
 
 
@@ -97,7 +100,22 @@ Do you have any legal questions? I can help you with:
           }
           isConnected={isConnected}
           isGenerating={gpt.runningTasks.includes("PROMPT")}
-          isDisabled={firstContact.chatEnded}
+          isDisabled={
+            firstContact.chatEnded
+              ? <div className='flex justify-between items-center'>
+                <p className='font-bold'><FaCircleCheck className='text-xl inline m-1' /> Thank you, please check your email to proceed!</p>
+                <ConfirmButton
+                tooltip='Reset your conversation and start over'
+                onConfirm={() => {
+                  messages.sendAction({ type: "RESET_CHAT" })
+                  firstContact.syncChatEnded(false)
+                }}
+                >
+                  {`No, I'd like to start over instead`}
+                </ConfirmButton>
+              </div>
+              : false
+          }
           showSystem={showSystem}
         />
 

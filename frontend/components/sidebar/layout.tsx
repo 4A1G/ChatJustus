@@ -9,11 +9,12 @@ import { Modal, ModalBody, ModalContent, ScrollShadow } from "@nextui-org/react"
 
 interface SidebarLayoutProps {
   leftSidebar?: React.ReactNode
+  sidebarDefaultVisible?: boolean
   children: React.ReactNode
 }
 
-const SidebarLayout = ({ leftSidebar, children }: SidebarLayoutProps) => {
-  const [sidebarVisible, setSidebarVisible] = useState(true)
+const SidebarLayout = ({ leftSidebar, sidebarDefaultVisible = false, children }: SidebarLayoutProps) => {
+  const [sidebarVisible, setSidebarVisible] = useState(sidebarDefaultVisible)
   const [isMobile, setIsMobile] = useState(true)
 
   function handleResize() {
