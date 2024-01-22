@@ -89,10 +89,6 @@ export default function Home() {
                       </>
                     ))
                   }
-                  {/* <div className='flex flex-col bg-default-50 border-primary border-4 rounded-lg p-3 -m-1'>
-                    <div className='text-xs text-primary-700/100'>5th Meeting Today</div>
-                    <div className='text-primary/100 font-serif font-bold'>Signing the papers</div>
-                  </div> */}
                 </>
               }
               gpt={gpt}
@@ -134,7 +130,7 @@ export default function Home() {
           }
           isConnected={isConnected}
           isGenerating={gpt.runningTasks.includes("PROMPT")}
-          isDisabled={selectedMeeting && selectedMeeting != meetings[meetings.length-1].timestamp}
+          isDisabled={!selectedMeeting || selectedMeeting != meetings[meetings.length-1].timestamp}
           showSystem={showSystem}
         />
 

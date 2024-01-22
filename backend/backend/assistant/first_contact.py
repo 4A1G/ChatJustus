@@ -112,13 +112,13 @@ Sterling Legal Associates
 (Of course, this is just a demo! But you get the idea, right?)
         """.strip()
 
-        asyncio.create_task(asyncio.to_thread(
-            send_email,
-            to=email,
-            subject=f"Hey {name}, greetings from {lawyer}!",
-            contents=contents,
-        ))
-        print(f"Send Email to {email}:\n{contents}")
+        # asyncio.create_task(asyncio.to_thread(
+        #     send_email,
+        #     to=email,
+        #     subject=f"Hey {name}, greetings from {lawyer}!",
+        #     contents=contents,
+        # ))
+        # print(f"Send Email to {email}:\n{contents}")
 
         # Update state and sync
         self.summary = {
