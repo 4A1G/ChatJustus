@@ -223,6 +223,7 @@ Use clear, concise language to make it easy for users to provide the necessary i
 
         super().__init__(
             messages=initial_messages,
-            model="gpt-3.5-turbo-1106",
+            # model="gpt-3.5-turbo-1106",
+            model="gpt-4-1106-preview",
             tools=FirstContactToolkit(user_id),
         )
