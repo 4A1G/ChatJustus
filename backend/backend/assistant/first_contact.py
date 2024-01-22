@@ -59,23 +59,23 @@ class FirstContactToolkit(Toolkit):
     @fail_with_message("ERROR:")
     async def summarize_first_contact(self, case: str, lawyer: Lawyers):
         """
-        Summarize potential client's contact and case details for the lawyer and ask for potential's client permission to send
+        Summarize potential client's legal case details for the lawyer and ask for potential's client permission to send. ONLY call this once you have enough information from the user to create a summary of their case. The summary should be around 1 paragraph long, but it MUST include all important details of the case.
+        Remind user to FILL IN the form and PRESS 'Send' HIMSELF/HERSELF
 
         Args:
             case: summary of the legal situation of the client
             lawyer: suitable lawyer for the case, check the [Lawyers Information] section for their introduction
-
         """
         self.summary["case"] = case
         self.summary["lawyer"] = lawyer
-        return "Success"
+        return "Success: contact form created. Now, instruct the user to fill out the form and press the 'Send' button."
 
 
     @function_tool
     @fail_with_message("ERROR:")
     async def end_chat(self):
         """
-        Immediately end the chat session: Your next message will be the last message of the chat session, be sure to thank and say goodbye to the user! Call this if the user goes too far off-topic even after two reminders, or if we don't have a suitable lawyer for their case, or if everything is done after the summary is submitted.
+        Immediately end the chat session: Your next message will be the last message of the chat session, be sure to thank and say goodbye to the user! Call this if the user goes too far off-topic even after two reminders, or if we don't have a suitable lawyer for their case.
         """
         self.chatEnded = True
         await self.sync()
@@ -86,6 +86,9 @@ class FirstContactToolkit(Toolkit):
         """
         Send the summary to the lawyer and the potential client
         """
+        if not name.strip():
+            await self.sync.toast("Please enter your name!", type="error")
+            return
         if not is_valid_email(email):
             await self.sync.toast("Please enter a valid email address!", type="error")
             return
@@ -132,37 +135,37 @@ Sterling Legal Associates
         )
 
         # Create Case and save to DB
-        case_id = self.user_id
-        new_case = Case(
-            case_id=case_id,
-            client=name,
-            email=email,
-            lawyer=lawyer,
-            summary=case,
-        )
-        cases_db().add([new_case], [case_id])
+        # case_id = self.user_id
+        # new_case = Case(
+        #     case_id=case_id,
+        #     client=name,
+        #     email=email,
+        #     lawyer=lawyer,
+        #     summary=case,
+        # )
+        # cases_db().add([new_case], [case_id])
 
-        # Generate mocked dialogs and save to DB
-        meeting_timestamp = int(time())
-        dialogs = await generate_mocked_dialog(new_case)
-        dialog_db = dialogs_db(case_id, meeting_timestamp)
-        dialog_db.add(dialogs, list(range(len(dialogs))))
+        # # Generate mocked dialogs and save to DB
+        # meeting_timestamp = int(time())
+        # dialogs = await generate_mocked_dialog(new_case)
+        # dialog_db = dialogs_db(case_id, meeting_timestamp)
+        # dialog_db.add(dialogs, list(range(len(dialogs))))
 
-        asyncio.create_task(asyncio.to_thread(
-             send_email,
-             to=email,
-             subject=f"Hey {name}, greetings from {lawyer}! Here is the dialogs from your first meeting.",
-             contents=format_dialogs(dialogs),
-         ))
+        # asyncio.create_task(asyncio.to_thread(
+        #      send_email,
+        #      to=email,
+        #      subject=f"Hey {name}, greetings from {lawyer}! Here is the dialogs from your first meeting.",
+        #      contents=format_dialogs(dialogs),
+        #  ))
 
-        # Generate meeting title and summary and save to DB
-        title, summary = await generate_meeting_title_summary(new_case, dialogs)
-        meeting = Meeting(
-            timestamp=meeting_timestamp,
-            title=title,
-            summary=summary,
-        )
-        meetings_db(case_id).add([meeting], [meeting_timestamp])
+        # # Generate meeting title and summary and save to DB
+        # title, summary = await generate_meeting_title_summary(new_case, dialogs)
+        # meeting = Meeting(
+        #     timestamp=meeting_timestamp,
+        #     title=title,
+        #     summary=summary,
+        # )
+        # meetings_db(case_id).add([meeting], [meeting_timestamp])
 
         contents_summary = f"""
 Dear {name},

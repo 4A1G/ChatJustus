@@ -4,7 +4,7 @@ from gpt_wrapper.messages import SimpleHistory, msg
 from gpt_wrapper.tools import function_tool
 
 from .schemas import Dialog, Case
-from .utils import format_dialogs
+from .utils import format_dialogs, format_summaries
 
 
 async def generate_mocked_dialog(case: Case) -> list[Dialog]:
@@ -35,6 +35,39 @@ Generate a LONG imaginary dialog (around 20 messages!) between the lawyer {case.
 It should be the first interaction of the lawyer and client. Usually, talk about general things about the case, the lawyer's strategy, and the fee. The conversation always starts with the lawyer speaking first, then taking turns. Come up with creative and interesting details, instead of generic dialog. The legal case of the client should be memorable and interesting.
 
 Case Summary: {case.summary}""")
+
+    # at this point, mocked_dialogs is filled with the generated dialogs
+    return mocked_dialogs
+
+async def generate_2nd_mocked_dialog(case: Case, summaries: list[str]) -> list[Dialog]:
+    # TODO: fix this and simplify
+    mocked_dialogs = None
+    formatted_summaries = format_summaries(summaries)
+
+    @function_tool(require_doc=False)
+    async def generate_dialogs(dialogs: list[Dialog]):
+        nonlocal mocked_dialogs
+        mocked_dialogs = [Dialog(**d) for d in dialogs]
+    
+    print(generate_dialogs.schema)
+
+    class DialogGenerator(ChatGPT):
+        def __init__(self):
+            super().__init__(SimpleHistory(), generate_dialogs, "gpt-3.5-turbo-1106")
+        
+        async def first_tool_call(self, prompt: str):
+            async for event in self.response_events(prompt):
+                match event:
+                    case self.ToolResultEvent():
+                        return
+
+    dialogger = DialogGenerator()
+    await dialogger.first_tool_call(f"""
+Generate a LONG imaginary dialog (around 20 messages!) between the lawyer {case.lawyer} and the client {case.client} based on the summary of multiple meetings below.
+
+The lawyer and client have already met more than once. Usually, talk about the progress about the case and the next steps. The conversation always starts with the lawyer speaking first, then taking turns. Come up with creative and interesting details, instead of generic dialog. The legal case of the client should be memorable and interesting.
+
+Case Summary: {formatted_summaries}""")
 
     # at this point, mocked_dialogs is filled with the generated dialogs
     return mocked_dialogs
