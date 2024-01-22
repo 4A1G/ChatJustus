@@ -1,7 +1,6 @@
 import { Allotment, LayoutPriority } from "allotment"
 import { use, useEffect, useState } from "react"
 
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import { ThemeSwitch } from "../theme-switch"
 import { FaBars, FaChevronLeft, FaChevronRight } from "react-icons/fa6"
 import { Button } from "@nextui-org/button"
