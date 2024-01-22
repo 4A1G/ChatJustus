@@ -4,11 +4,10 @@ from .chatgpt import SyncedGPT, SyncedHistory
 from .utils import format_query_result, format_query_result_law
 
 from backend.database import Case, Meeting, meetings_db, dialogs_db, law_book_db
-
 from backend.server.sync import Sync
 
 class LegalDBToolkit(Toolkit):
-    def __init__(self, case: Case, meeting: Meeting):
+    def __init__(self, case: Case, meetings: list[Meeting]):
         super().__init__()
 
         # state
@@ -17,36 +16,23 @@ class LegalDBToolkit(Toolkit):
 
         # case information
         self.case = case
-        self.meeting = meeting
+        self.meetings = meetings
 
         # databases
-        self.meetings_db = meetings_db(case.case_id)
-        self.dialog_dbs = [dialogs_db(case.case_id, m.timestamp) for m in self.meetings_db]
+        self.dialog_dbs = [dialogs_db(case.case_id, m.timestamp) for m in self.meetings]
         self.bgb_db = law_book_db("BGB")
         self.famfg_db = law_book_db("FamFG")
         self.zpo_db = law_book_db("ZPO")
-        
-
-        self.sync = Sync(
-            "FOLLOW_UP",
-            self,
-            # meeting_timestamps = meeting_timestamps,
-            meetings=...,
-        )
-
-    @property
-    def meetings(self):
-        return sorted([meeting.model_dump() for meeting in self.meetings_db], key=lambda x: x["timestamp"])
 
 
     @function_tool()
     @fail_with_message("ERROR:")
-    async def query_legal_text(self, keyword: str):
+    async def query_law_articles(self, keyword: str):
         '''
-        Search for relevant legal text based on provided keywords
+        Search for relevant law articles based on provided keywords and query. The query should be in German.
 
         Args:
-            keyword: keyword for search related legal text
+            keyword: keyword in German for searching relevant law articles
         '''
         bgb_result = self.bgb_db.query(top=3, content=keyword)
         famfg_result = self.famfg_db.query(top=3, content=keyword)
@@ -58,7 +44,7 @@ class LegalDBToolkit(Toolkit):
     @fail_with_message("ERROR:")
     async def query_dialog(self, keyword: str):
         '''
-        Search for relevant cotent from a dialog database
+        Search for relevant dialogs from previous meeting transcriptions between the client and the lawyer.
 
         Args:
             keyword: search keywords used to extract relevant information from a meeting conversation
@@ -68,23 +54,37 @@ class LegalDBToolkit(Toolkit):
             answer += db.query(top=5, content=keyword)
         return format_query_result(answer)
 
-    
     @function_tool
     @fail_with_message("ERROR:")
-    async def end_chat(self):
+    async def schedule_meeting(self, year: int, month: int, day: int, hour: int, minute: int):
         """
-        Immediately end the chat session: Your next message will be the last message of the chat session, be sure to thank and say goodbye to the user!
+        Schedule a meeting with the lawyer
+
+        Args:
+            year: year of the meeting
+            month: month of the meeting
+            day: day of the meeting
+            hour: hour of the meeting
+            minute: minute of the meeting
         """
-        self.chatEnded = True
-        await self.sync()
-        return "Chat Ended"
+        return f"Meeting Scheduled on {year}-{month}-{day} {hour}:{minute}"
+    
+    # @function_tool
+    # @fail_with_message("ERROR:")
+    # async def end_chat(self):
+    #     """
+    #     Immediately end the chat session: Your next message will be the last message of the chat session, be sure to thank and say goodbye to the user!
+    #     """
+    #     self.chatEnded = True
+    #     await self.sync()
+    #     return "Chat Ended"
 
 
 
 class FollowUpBot(SyncedGPT):
-    def __init__(self, case: Case, meeting: Meeting):
+    def __init__(self, case: Case, meetings: list[Meeting]):
         self.case = case
-        self.meeting = meeting
+        self.meetings = meetings
 
         initial_messages = SyncedHistory(
             system=f"""
@@ -109,7 +109,7 @@ Handling Aggressive Language: If the user seems aggressive or impatient, politel
         super().__init__(
             messages=initial_messages,
             model="gpt-4-1106-preview",
-            tools=LegalDBToolkit(case, meeting),
+            tools=LegalDBToolkit(case, meetings),
         )
 
 

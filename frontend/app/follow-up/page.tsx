@@ -14,6 +14,21 @@ import { SidebarLayout } from '@/components/sidebar/layout'
 import { useRemoteToast } from '@/hooks/networking/remote-toast'
 
 
+function nth(i: number) {
+  let j = i % 10,
+      k = i % 100;
+  if (j === 1 && k !== 11) {
+      return i + "st";
+  }
+  if (j === 2 && k !== 12) {
+      return i + "nd";
+  }
+  if (j === 3 && k !== 13) {
+      return i + "rd";
+  }
+  return i + "th";
+}
+
 
 export default function Home() {
   // UI
@@ -35,9 +50,9 @@ export default function Home() {
   const messages = useSynced<Messages>("MESSAGES", initialMessages)
 
   // meeting data
-  const [selectedMeeting, setSelectedMeeting] = useState<number | null>(null)
-  const meetingData = useSynced("FOLLOW_UP", {
-    meetings: [] as any[]
+  const {meetings, selectedMeeting, setSelectedMeeting} = useSynced("MEETINGS", {
+    meetings: [] as any[],
+    selectedMeeting: null as number | null
   })
 
 
@@ -50,7 +65,6 @@ export default function Home() {
 
 
   return (
-    <DataContext.Provider value={meetingData}>
       <SidebarLayout
         leftSidebar={
           <div className='flex flex-col content-between h-full'>
@@ -60,16 +74,16 @@ export default function Home() {
               listContent={
                 <>
                   {
-                    meetingData.meetings.map(({ timestamp, title, summary }: any) => (
+                    meetings.map(({ timestamp, title }: any, i: number) => (
                       <>
                         <button
                           className='flex flex-col bg-default-50 rounded-lg p-3 hover:scale-105 transition-all duration-200 ease-in-out'
                           onClick={() => setSelectedMeeting(timestamp)}
                         >
                           <div className={`text-xs ${timestamp == selectedMeeting ? 'text-primary/100' : 'text-default-700'}`}>
-                            {new Date(timestamp*1000).toLocaleDateString()}
+                            {`${nth(i+1)} Meeting on ${new Date(timestamp*1000).toLocaleDateString()}`}
                             </div>
-                          <div className={`font-serif ${timestamp == selectedMeeting ? 'text-primary/100 font-bold' : 'text-default-700'}`}>{title}</div>
+                          <div className={`font-serif text-left ${timestamp == selectedMeeting ? 'text-primary/100 font-bold' : 'text-default-700'}`}>{title}</div>
                         </button>
                       </>
                     ))
@@ -98,8 +112,9 @@ export default function Home() {
         <Chat
           introTitle='Welcome back to ChatJustus!'
           introContent={
-            // meetingData.meetings.filter(({ timestamp, title, summary }: any) => 
-'hi'
+            selectedMeeting ?
+              meetings.find(({ timestamp }: any) => timestamp == selectedMeeting).summary
+              : "*Select a meeting on your case timeline!*"
           }
           history={
             messages.partial
@@ -118,10 +133,10 @@ export default function Home() {
           }
           isConnected={isConnected}
           isGenerating={gpt.runningTasks.includes("PROMPT")}
+          isDisabled={selectedMeeting && selectedMeeting != meetings[meetings.length-1].timestamp}
           showSystem={showSystem}
         />
 
       </SidebarLayout>
-    </DataContext.Provider>
   )
 }

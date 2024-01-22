@@ -68,6 +68,9 @@ class Connection:
             await self.ws.close()
         self.ws = ws
 
+        await self.init()
+    
+    async def init(self):
         for handler in self.init_handlers:
             await nonblock_call(handler)
                 
@@ -262,6 +265,19 @@ class Sync:
             self.connection.register_event(task_start_event(self.key), self.on_task_start)
         if self.on_task_cancel:
             self.connection.register_event(task_cancel_event(self.key), self.on_task_cancel)
+    
+    def _deregister(self):
+        self.connection.deregister_event(get_event(self.key))
+        self.connection.deregister_event(set_event(self.key))
+        self.connection.deregister_event(patch_event(self.key))
+        if self.send_on_init:
+            self.connection.init_handlers.remove(self._send_state)
+        if self.on_action:
+            self.connection.deregister_event(action_event(self.key))
+        if self.on_task_start:
+            self.connection.deregister_event(task_start_event(self.key))
+        if self.on_task_cancel:
+            self.connection.deregister_event(task_cancel_event(self.key))
 
     async def _send_state(self, _ = None):
         self.state_snapshot = self._snapshot()

@@ -45,7 +45,8 @@ class Meeting(EmbedData):
     
     # AI-generated
     title: str # shown on the sidebar
-    summary: str = EmbedField() # shown at the beginning of after-meeting 
+    summary: str = EmbedField() # shown at the beginning of after-meeting
+    chat: list[dict] | None = None # for after-meeting chat, only saved after conclusion
 
 def meetings_db(case_id: str):
     return VectorDB(f"Meetings_{case_id}", Meeting)

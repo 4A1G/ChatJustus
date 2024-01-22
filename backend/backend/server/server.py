@@ -13,6 +13,7 @@ from backend.assistant.first_contact import FirstContactBot
 from backend.assistant.follow_up_qa import FollowUpBot
 from backend.database.schemas import cases_db, meetings_db
 from .sync import Connection
+from .case_manager import CaseManager
 from .utils import get_ip, open_qr
 
 
@@ -23,21 +24,10 @@ users = {} # {user_id: (connection, assistant)}}
 def assistant_factory(assistant_type:str, user_id: str):
     match assistant_type:
         case "first_contact":
-            return FirstContactBot(user_id),
+            return FirstContactBot(user_id)
         
         case "follow_up":
-            case_id = user_id
-            cases = cases_db()
-            user_case = cases.retrieve([case_id])
-            if len(user_case) == 0:
-                print(f"Case {case_id} not found")
-                # create a demo
-                case_id = "JUSTICIUS-MARCO"
-                user_case = [c for c in cases if c.case_id == case_id]
-            return FollowUpBot(
-                case=user_case[0],
-                meeting=next(iter(meetings_db(case_id))),
-            )
+            return CaseManager(user_id)
         
         case _:
             raise Exception(f"Assistant type {assistant_type} not found")
