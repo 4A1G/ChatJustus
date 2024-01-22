@@ -1,7 +1,7 @@
 from gpt_wrapper.messages import msg
 from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with_message
 from .chatgpt import SyncedGPT, SyncedHistory
-from .utils import format_query_result, format_query_result_law
+from .utils import format_query_dialog, format_query_law
 
 from backend.database import Case, Meeting, meetings_db, dialogs_db, law_book_db
 from backend.server.sync import Sync
@@ -11,8 +11,7 @@ class LegalDBToolkit(Toolkit):
         super().__init__()
 
         # state
-        self.summary = {}
-        self.chatEnded = False
+        # self.chatEnded = False
 
         # case information
         self.case = case
@@ -23,6 +22,11 @@ class LegalDBToolkit(Toolkit):
         self.bgb_db = law_book_db("BGB")
         self.famfg_db = law_book_db("FamFG")
         self.zpo_db = law_book_db("ZPO")
+
+        # sync
+        # self.sync = Sync("FOLLOW_UP", self,
+            
+        # )
 
 
     @function_tool()
@@ -38,7 +42,7 @@ class LegalDBToolkit(Toolkit):
         famfg_result = self.famfg_db.query(top=3, content=keyword)
         zpo_result = self.zpo_db.query(top=3, content=keyword)
 
-        return format_query_result_law(bgb_result + famfg_result + zpo_result)
+        return format_query_law(bgb_result + famfg_result + zpo_result)
     
     @function_tool()
     @fail_with_message("ERROR:")
@@ -52,7 +56,18 @@ class LegalDBToolkit(Toolkit):
         answer = []
         for db in self.dialog_dbs:
             answer += db.query(top=5, content=keyword)
-        return format_query_result(answer)
+        return format_query_dialog(answer)
+    
+    @function_tool
+    @fail_with_message("ERROR:")
+    async def message_lawyer(self, message: str):
+        """
+        Send a message to the lawyer, for important questions that you cannot/should not answer, or when the client requests you to do so.
+
+        Args:
+            message: message to send to the lawyer
+        """
+        return f"Success: Message sent to the lawyer"
 
     @function_tool
     @fail_with_message("ERROR:")

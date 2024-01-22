@@ -13,6 +13,8 @@ import { Expander, ExpanderItem } from '@/components/base/expander'
 import { MD } from '@/components/base/md'
 import { DataContext } from '@/app/first-contact/contexts'
 import { toast } from 'sonner'
+import { DayPicker } from 'react-day-picker'
+import 'react-day-picker/dist/style.css';
 
 
 // define messages state object and its reducer
@@ -104,14 +106,70 @@ const ChatEndTool = ({ tool_call }: ToolProps) => (
 
 )
 
+const ScheduleMeetingTool = ({ tool_call }: ToolProps) => {
+  let parsed = undefined
+  try {
+    parsed = JSON.parse(tool_call.function.arguments)
+    const { year, month, day, hour, minute } = parsed
+    parsed = new Date(year, month, day, hour, minute)
+  } catch (e) {
+    parsed = undefined
+  }
+
+  const [selected, setSelected] = useState<Date | undefined>(undefined)
+
+  const current = selected || parsed
+  return (
+    <div>
+      {
+        parsed &&
+        <DayPicker
+          className='bg-default/50 rounded-xl min-w-min max-w-min p-3'
+          style={{ margin: '0px' }}
+          mode="single"
+          selected={current}
+          onSelect={setSelected}
+          footer={
+            current &&
+            <div className='flex flex-col justify-center'>
+              <p className='text-primary/100 font-bold text-center my-3'>Your meeting will be on {current.toLocaleDateString()}.</p>
+              <Button
+                color='primary'
+                onClick={() => {
+                  toast.info("Scheduling meeting...")
+                  setTimeout(() => {
+                    toast.success(`Meeting scheduled on ${current.toLocaleDateString()}!`)
+                  }, 2000)
+                }}
+              >
+                Schedule Meeting
+              </Button>
+            </div>
+          }
+        />
+      }
+    </div>
+  )
+}
+
 const toolRenderers = (tool_name: string) => {
   switch (tool_name) {
+    // First Contact
     case 'summarize_first_contact':
-      return {title: 'Legal Inquiry to Lawyer', Renderer: SummaryTool, open: true}
+      return { title: 'Legal Inquiry to Lawyer', Renderer: SummaryTool, open: true }
     case 'end_chat':
-      return {title: 'Finished', Renderer: ChatEndTool, open: false}
+      return { title: 'Chat Finished', Renderer: ChatEndTool, open: false }
+    // Follow Up
+    case 'query_dialog':
+      return { title: 'Searching Meeting Dialog', Renderer: DefaultTool, open: false }
+    case 'query_law_articles':
+      return { title: 'Searching Law Books', Renderer: DefaultTool, open: false }
+    case 'message_lawyer':
+      return { title: 'Message Lawyer', Renderer: DefaultTool, open: false }
+    case 'schedule_meeting':
+      return { title: 'Schedule a Meeting', Renderer: ScheduleMeetingTool, open: true }
     default:
-      return {title: tool_name, Renderer: DefaultTool, open: true}
+      return { title: tool_name, Renderer: DefaultTool, open: true }
   }
 }
 
@@ -131,7 +189,7 @@ const ToolCalls = ({ message }: { message: Message }) => {
 
   return (<Expander
     defaultExpandedKeys={
-      tool_calls.filter((m) => toolRenderers(m.function.name).open).map((m) => m.id)  
+      tool_calls.filter((m) => toolRenderers(m.function.name).open).map((m) => m.id)
       // message.tool_calls!.filter((m) => !m.result).map((m, i) => String(i))
     }
     showDivider
@@ -140,12 +198,12 @@ const ToolCalls = ({ message }: { message: Message }) => {
   >
     {
       tool_calls.map((tool_call) => {
-        const {title, Renderer, open} = toolRenderers(tool_call.function.name)
+        const { title, Renderer, open } = toolRenderers(tool_call.function.name)
         return (
           <ExpanderItem
             key={tool_call.id}
             title={`${title}`}
-            isDisabled={!open}
+            // isDisabled={!open}
             startContent={
               <div className="flex justify-center w-5 h-5">
                 {tool_call.result ? (

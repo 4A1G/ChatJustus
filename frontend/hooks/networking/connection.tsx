@@ -19,8 +19,8 @@ export const ConnectionProvider = ({ url, children, context, autoconnect, wsAuth
   const connection = useMemo(() => new Connection(url), [url])
 
   if (wsAuth) {
-    const [userId, setUserId] = useLocalStorage<string | null>(`_USER_ID:${url}`, null)
-    const [sessionId, setSessionId] = useSessionStorage<string | null>(`_SESSION_ID:${url}`, null)
+    const [userId, setUserId] = useLocalStorage<string | null>(`_USER_ID`, null)
+    const [sessionId, setSessionId] = useSessionStorage<string | null>(`_SESSION_ID`, null)
 
     useEffect(() => {
       connection?.registerEvent("_REQUEST_USER_SESSION", () => {
@@ -172,7 +172,7 @@ export class Connection {
         "Closing socket"
       )
       toast.error(`Socket Error: ${err}`)
-      this.ws!.close()
+      this.ws?.close()
     }
 
     this.ws.onmessage = (e) => { this.handleReceiveEvent(e) }

@@ -12,7 +12,7 @@ from backend.server.sync import Sync
 from backend.server.mail import is_valid_email, send_email
 
 from backend.database import Case, Meeting, lawyers_db, cases_db, dialogs_db, meetings_db
-from backend.database.utils import format_all_lawyers
+from backend.database.utils import format_all_lawyers, format_dialogs
 from backend.database.generate import generate_mocked_dialog, generate_meeting_title_summary
 
 
@@ -152,7 +152,7 @@ Sterling Legal Associates
              send_email,
              to=email,
              subject=f"Hey {name}, greetings from {lawyer}! Here is the dialogs from your first meeting.",
-             contents=dialogs,
+             contents=format_dialogs(dialogs),
          ))
 
         # Generate meeting title and summary and save to DB

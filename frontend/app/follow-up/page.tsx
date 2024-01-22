@@ -50,7 +50,8 @@ export default function Home() {
   const messages = useSynced<Messages>("MESSAGES", initialMessages)
 
   // meeting data
-  const {meetings, selectedMeeting, setSelectedMeeting} = useSynced("MEETINGS", {
+  const {caseData, meetings, selectedMeeting, setSelectedMeeting} = useSynced("MEETINGS", {
+    caseData: {} as any,
     meetings: [] as any[],
     selectedMeeting: null as number | null
   })
@@ -110,7 +111,7 @@ export default function Home() {
       >
 
         <Chat
-          introTitle='Welcome back to ChatJustus!'
+          introTitle={`Welcome back${caseData.client ? ", "+caseData.client : " to ChatJustus"}!`}
           introContent={
             selectedMeeting ?
               meetings.find(({ timestamp }: any) => timestamp == selectedMeeting).summary

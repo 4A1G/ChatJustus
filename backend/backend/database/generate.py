@@ -32,7 +32,7 @@ async def generate_mocked_dialog(case: Case) -> list[Dialog]:
     await dialogger.first_tool_call(f"""
 Generate a LONG imaginary dialog (around 20 messages!) between the lawyer {case.lawyer} and the client {case.client} based on the case summary below.
 
-It should be the first interaction of the lawyer and client. Usually, talk about general things about the case, the lawyer's strategy, and the fee. The conversation always starts with the lawyer speaking first.
+It should be the first interaction of the lawyer and client. Usually, talk about general things about the case, the lawyer's strategy, and the fee. The conversation always starts with the lawyer speaking first, then taking turns. Come up with creative and interesting details, instead of generic dialog. The legal case of the client should be memorable and interesting.
 
 Case Summary: {case.summary}""")
 
@@ -55,7 +55,8 @@ Use markdown formatting and bullet points.
 {formatted_dialog}""".strip(), temperature=0.5)
 
     # Step 2: Generate a title
-    titlizer = ChatGPT(messages=SimpleHistory(), model="gpt-4-1106-preview")
+    titlizer = ChatGPT(messages=SimpleHistory(), model="gpt-3.5-turbo-1106")
     title = await titlizer(f"Please generate a short title (<10 words) for the given meeting summary:\n\n{summary}", temperature=0.5)
+    title = title.replace('"', '').strip()
 
     return title, summary
