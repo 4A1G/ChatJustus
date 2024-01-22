@@ -73,7 +73,7 @@ class LegalDBToolkit(Toolkit):
     @fail_with_message("ERROR:")
     async def schedule_meeting(self, year: int, month: int, day: int, hour: int, minute: int):
         """
-        Schedule a meeting with the lawyer
+        Schedule a meeting with the lawyer. Instruct user to pick his/her desired meeting time on the calendor. Remind the user to confirm the meeting time with the 'Schedule' button.
 
         Args:
             year: year of the meeting

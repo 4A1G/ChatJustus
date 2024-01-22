@@ -60,6 +60,7 @@ class FirstContactToolkit(Toolkit):
     async def summarize_first_contact(self, case: str, lawyer: Lawyers):
         """
         Summarize potential client's legal case details for the lawyer and ask for potential's client permission to send. ONLY call this once you have enough information from the user to create a summary of their case. The summary should be around 1 paragraph long, but it MUST include all important details of the case.
+        Remind user to FILL IN the form and PRESS 'Send' HIMSELF/HERSELF
 
         Args:
             case: summary of the legal situation of the client
@@ -67,7 +68,7 @@ class FirstContactToolkit(Toolkit):
         """
         self.summary["case"] = case
         self.summary["lawyer"] = lawyer
-        return "Success: contact form created. Now, instruct the client to fill out the form and press the 'Send' button."
+        return "Success: contact form created. Now, instruct the user to fill out the form and press the 'Send' button."
 
 
     @function_tool
