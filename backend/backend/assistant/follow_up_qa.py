@@ -6,9 +6,13 @@ from .utils import format_query_dialog, format_query_law
 from backend.database import Case, Meeting, meetings_db, dialogs_db, law_book_db
 from backend.server.sync import Sync
 
+from datetime import datetime
+
 class LegalDBToolkit(Toolkit):
     def __init__(self, case: Case, meetings: list[Meeting]):
         super().__init__()
+        #time & date for system prompt
+        
 
         # state
         # self.chatEnded = False
@@ -100,6 +104,9 @@ class FollowUpBot(SyncedGPT):
     def __init__(self, case: Case, meetings: list[Meeting]):
         self.case = case
         self.meetings = meetings
+        date = datetime.now()
+        self.weekday = date.strftime("%A")
+        self.date = date.strftime("%Y-%m-%d, %H:%M:%S")
 
         initial_messages = SyncedHistory(
             system=f"""
@@ -113,6 +120,7 @@ You should always follow the following rules:
 5. When the client mention lawyer, usually it refers to {case.lawyer}.
 If information is inadequate to answer the question, inform the client that you unfortunately cannot give an answer and you will forward the question to the lawyer.
 Whenever you reference the result from a database query, make a citatiion by appending the respective "[^i]" according to the query result marking. 
+Date of today is {self.date}. Week of the day is {self.weekday}.
 
 Staying on Topic: If a user begins to share unrelated personal details or veers off-topic, gently guide them back.
 Handling Off-Topic Conversations: If the user continues to stray from the topic after two reminders, politely apologize and end the conversation by calling the "end_chat" function tool.
