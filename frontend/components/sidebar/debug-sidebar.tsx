@@ -78,7 +78,7 @@ interface DebugSidebarProps {
   className?: string
 }
 
-const DebugSidebar = ({listTitle = 'ChatJustus', listContent, gpt, messages, showSystem, setShowSystem, className }: DebugSidebarProps) => {
+const DebugSidebar = ({ listTitle = 'ChatJustus', listContent, gpt, messages, showSystem, setShowSystem, className }: DebugSidebarProps) => {
   return (
     <div className={`flex flex-col min-h-0 h-full${className || ''}`}>
 
@@ -95,7 +95,10 @@ const DebugSidebar = ({listTitle = 'ChatJustus', listContent, gpt, messages, sho
       </div>
 
 
-      <Expander variant='light' defaultExpandedKeys={['1', '2']}>
+      <Expander
+        variant='light'
+        // defaultExpandedKeys={['1', '2']}
+      >
 
         <ExpanderItem title='Model Options' key='1'>
 
