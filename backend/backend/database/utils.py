@@ -13,6 +13,9 @@ def format_dialogs(dialogs: list[Dialog]):
         for d in dialogs
     ])
 
+def format_summaries(summaries:list[str]):
+    return "\n\n".join([s for s in summaries])
+
 
 def format_lawyer(lawyer: Lawyer):
     return f"""
