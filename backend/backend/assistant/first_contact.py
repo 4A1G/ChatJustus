@@ -164,6 +164,31 @@ Sterling Legal Associates
         )
         meetings_db(case_id).add([meeting], [meeting_timestamp])
 
+        contents_summary = f"""
+Dear {name},
+
+I hope you are doing well!
+I have sumarized our first meeting in the following:
+
+"{summary}"
+
+Before our next touchpoint, you can use our chatbot ChatJustus for follow ups.
+Here is the link: 
+<http://34.90.113.6:42069/ChatJustus/follow-up>
+
+Best regards,
+{lawyer}
+Sterling Legal Associates
+
+        """.strip()
+        
+        asyncio.create_task(asyncio.to_thread(
+             send_email,
+             to=email,
+             subject=f"Summary from your first meeting with {lawyer}",
+             contents=contents_summary,
+         ))
+
 
 class FirstContactBot(SyncedGPT):
     def __init__(self, user_id: str):
