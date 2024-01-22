@@ -16,7 +16,7 @@ export function Providers({ children }: ProvidersProps) {
     <>
       {isClient && (
         <ConnectionProvider
-        url={`ws://${window.location.hostname}:42069/ws/follow_up`}
+        url={`ws://${window.location.hostname}:8501/ws/follow_up`}
         context={DefaultConnectionContext}
         autoconnect
         wsAuth

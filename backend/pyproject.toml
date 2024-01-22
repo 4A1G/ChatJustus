@@ -19,6 +19,7 @@ yagmail = "^0.15.293"
 [tool.poetry.scripts]
 server = "backend.server.server:start"
 expose = "backend.server.server:expose"
+expose_no_qr = "backend.server.server:expose_no_qr"
 
 [build-system]
 requires = ["poetry-core"]

@@ -107,9 +107,13 @@ app.mount(
 
 def start():
     import uvicorn
-    uvicorn.run("backend.server.server:app", port=42069)
+    uvicorn.run("backend.server.server:app", port=8501)
 
 def expose():
     import uvicorn
     open_qr(f"http://{get_ip()}:42069", 256)
-    uvicorn.run("backend.server.server:app", port=42069, host="0.0.0.0")
+    uvicorn.run("backend.server.server:app", port=8501, host="0.0.0.0")
+
+def expose_no_qr():
+    import uvicorn
+    uvicorn.run("backend.server.server:app", port=8501, host="0.0.0.0")
