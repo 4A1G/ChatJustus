@@ -2,6 +2,7 @@ import asyncio
 from time import time
 from enum import StrEnum
 from pydantic import BaseModel
+from markdown import markdown
 
 from gpt_wrapper.messages import msg
 from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with_message
@@ -86,6 +87,9 @@ class FirstContactToolkit(Toolkit):
         """
         Send the summary to the lawyer and the potential client
         """
+        # FIXME VIDEO
+        email = "joong.won.seo@gmail.com"
+
         if not name.strip():
             await self.sync.toast("Please enter your name!", type="error")
             return
@@ -112,13 +116,13 @@ Sterling Legal Associates
 (Of course, this is just a demo! But you get the idea, right?)
         """.strip()
 
-        # asyncio.create_task(asyncio.to_thread(
-        #     send_email,
-        #     to=email,
-        #     subject=f"Hey {name}, greetings from {lawyer}!",
-        #     contents=contents,
-        # ))
-        # print(f"Send Email to {email}:\n{contents}")
+        asyncio.create_task(asyncio.to_thread(
+            send_email,
+            to=email,
+            subject=f"Hey {name}, greetings from {lawyer}!",
+            contents=markdown(contents.replace("\n", "  \n")),
+        ))
+        print(f"Send Email to {email}:\n{contents}")
 
         # Update state and sync
         self.summary = {
@@ -135,49 +139,48 @@ Sterling Legal Associates
         )
 
         # Create Case and save to DB
-        # case_id = self.user_id
-        # new_case = Case(
-        #     case_id=case_id,
-        #     client=name,
-        #     email=email,
-        #     lawyer=lawyer,
-        #     summary=case,
-        # )
-        # cases_db().add([new_case], [case_id])
+        case_id = self.user_id
+        new_case = Case(
+            case_id=case_id,
+            client=name,
+            email=email,
+            lawyer=lawyer,
+            summary=case,
+        )
+        cases_db().add([new_case], [case_id])
 
-        # # Generate mocked dialogs and save to DB
-        # meeting_timestamp = int(time())
-        # dialogs = await generate_mocked_dialog(new_case)
-        # dialog_db = dialogs_db(case_id, meeting_timestamp)
-        # dialog_db.add(dialogs, list(range(len(dialogs))))
+        # Generate mocked dialogs and save to DB
+        meeting_timestamp = int(time())
+        dialogs = await generate_mocked_dialog(new_case)
+        dialog_db = dialogs_db(case_id, meeting_timestamp)
+        dialog_db.add(dialogs, list(range(len(dialogs))))
 
-        # asyncio.create_task(asyncio.to_thread(
-        #      send_email,
-        #      to=email,
-        #      subject=f"Hey {name}, greetings from {lawyer}! Here is the dialogs from your first meeting.",
-        #      contents=format_dialogs(dialogs),
-        #  ))
+        asyncio.create_task(asyncio.to_thread(
+             send_email,
+             to=email,
+             subject=f"Hey {name}, greetings from {lawyer}! Here is the dialogs from your first meeting.",
+             contents=format_dialogs(dialogs),
+         ))
 
-        # # Generate meeting title and summary and save to DB
-        # title, summary = await generate_meeting_title_summary(new_case, dialogs)
-        # meeting = Meeting(
-        #     timestamp=meeting_timestamp,
-        #     title=title,
-        #     summary=summary,
-        # )
-        # meetings_db(case_id).add([meeting], [meeting_timestamp])
+        # Generate meeting title and summary and save to DB
+        title, summary = await generate_meeting_title_summary(new_case, dialogs)
+        meeting = Meeting(
+            timestamp=meeting_timestamp,
+            title=title,
+            summary=summary,
+        )
+        meetings_db(case_id).add([meeting], [meeting_timestamp])
 
+        # Send after-meeting summary to client
         contents_summary = f"""
 Dear {name},
 
-I hope you are doing well!
-I have sumarized our first meeting in the following:
+Here's a summary of today's meeting:
 
-"{summary}"
+{markdown(summary)}
 
-Before our next touchpoint, you can use our chatbot ChatJustus for follow ups.
-Here is the link: 
-<http://34.90.113.6:42069/ChatJustus/follow-up>
+Do you have any lingering questions? Ask ChatJustus!
+<a href="http://localhost:42069/ChatJustus/follow-up">Open ChatJustus</a>
 
 Best regards,
 {lawyer}
