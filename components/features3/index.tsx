@@ -22,7 +22,8 @@ export const Features3 = () => {
                }}
             >
                <Text
-                  h3
+                  id = "usp"
+                  h2
                   css={{
                      textAlign: 'center',
                   }}
@@ -31,6 +32,7 @@ export const Features3 = () => {
                </Text>
             </Flex>
             <Flex
+               
                align={'center'}
                justify={'center'}
                wrap={'wrap'}
