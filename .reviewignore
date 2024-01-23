@@ -5,6 +5,7 @@
 backend/webapp_static
 frontend/public
 frontend/config
+*config.js
 *.yaml
 *.yml
 *.json

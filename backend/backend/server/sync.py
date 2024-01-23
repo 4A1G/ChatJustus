@@ -8,18 +8,6 @@ Concepts:
     - Get Event: Request the full value of the state
     - Patch Event: Apply a jsonpatch to the state, i.e. a list of operations
     - Action Event: Dispatch an action, can be handled however defined
-
-The most convinient way to use this module is to create an object of Connection, passing all the attributes that should be synced with the frontend, while defining their sync config:
-    self.connection = Connection(
-        obj = self,
-        state1 = sync(),
-        state2 = sync(key="state2_key"),
-        state3 = exposed(),
-        state4 = remote(),
-    )
-Then, whenever you want to sync, simply call self.connection.sync().
-
-For actions, you can subscribe to the action event by calling self.connection.subscribe(action_event(key), handler), and dispatch actions by calling self.connection.dispatch(action_event(key), action).
 '''
 
 import traceback
@@ -365,7 +353,6 @@ class Sync:
         '''
         Sync all registered attributes.
         '''
-        # await asyncio.sleep(0.5)
         await self.sync()
     
     async def send_action(self, action: dict[str, any]):
@@ -395,90 +382,3 @@ async def nonblock_call(func: Callable, *args, **kwargs):
     else:
         print("Warning: function is not async.")
         return await asyncio.to_thread(func, *args, **kwargs)
-
-
-# High-level API
-# # Decorator which is a pythonic version of useSyncedReducer in the frontend
-# def SyncedObject(cls):
-#     '''
-#     A decorator for the counterpart of useSyncedReducer in the frontend.
-#     Simply define the attributes in __init__ and implement async handle_action.
-#     If needed, you could use self.handle_action and 
-#     '''
-#     class SyncedObjectWrapper(cls):
-#         def __init__(self, *args, **kwargs):
-#             super().__init__(*args, **kwargs)
-#             self._connection = None
-#             self._key = None
-
-#         def register(self, connection: Connection, key: str, send_on_init=True):
-#             self._connection = connection
-#             self._key = key
-
-#             connection.register_event(action_event(key), self.handle_action)
-#             connection.register_event(set_event(key), self._set_state)
-#             connection.register_event(get_event(key), self._send_state)
-#             if send_on_init:
-#                 connection.register_init(self._send_state)
-
-#             return self # for convenience
-
-#         async def handle_action(self, action):
-#             '''
-#             ONLY call this explicitly if you want to apply an action without sending it to the frontend.
-#             You must implement this method to update the internal state of the object based on the action.
-#             '''
-#             if hasattr(super(), 'handle_action'):
-#                 return await super().handle_action(action)
-#             raise NotImplementedError("handle_action must be implemented by subclasses")
-
-#         @overload
-#         async def apply(self, action: dict[str, any]) -> None:
-#             '''Specify the raw action as a dict'''
-#             ...
-        
-#         @overload
-#         async def apply(self, type: str, **data) -> None:
-#             '''Specify the action as a type and data'''
-#             ...
-
-#         async def apply(self, action_or_type: dict[str, any] | str, **data):
-#             '''
-#             Usually, you should be using this method to apply actions to the state, since it also sends the action to the frontend.
-#             Only if you want to apply an action without sending it to the frontend, you should call self.handle_action directly.
-#             '''
-#             if isinstance(action_or_type, str):
-#                 action = {'type': action_or_type, **data}
-                
-#             await self.handle_action(action)
-#             await self._send_action(action)
-
-#         async def _set_state(self, new_state):
-#             for attr, value in new_state.items():
-#                 setattr(self, attr, value)
-
-#         @overload
-#         async def _send_action(self, action: dict[str, any]) -> None:
-#             '''Specify the raw action as a dict'''
-#             ...
-
-#         @overload
-#         async def _send_action(self, type: str, **data) -> None:
-#             '''Specify the action as a type and data'''
-#             ...
-
-#         async def _send_action(self, action_or_type: dict[str, any] | str, **data):
-#             if isinstance(action_or_type, str):
-#                 action = {'type': action_or_type, **data}
-#             else:
-#                 action = action_or_type
-#             if self._connection:
-#                 await self._connection.send(action_event(self._key), action)
-
-#         async def _send_state(self, _ = None):
-#             if self._connection:
-#                 state = {attr: getattr(self, attr) for attr in self.__dict__ if not attr.startswith('_')}
-#                 await self._connection.send(set_event(self._key), state)
-
-#     return SyncedObjectWrapper
-

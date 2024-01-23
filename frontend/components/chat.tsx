@@ -67,8 +67,6 @@ const SummaryTool = ({ tool_call }: ToolProps) => {
   }
   return (
     <div>
-      {/* {JSON.stringify(data)} */}
-      {/* {tool_call.function.arguments} */}
       {
         parsed && <Form
           schema={summarySchema}
@@ -190,7 +188,6 @@ const ToolCalls = ({ message }: { message: Message }) => {
   return (<Expander
     defaultExpandedKeys={
       tool_calls.filter((m) => toolRenderers(m.function.name).open).map((m) => m.id)
-      // message.tool_calls!.filter((m) => !m.result).map((m, i) => String(i))
     }
     showDivider
     variant='bordered'
@@ -273,7 +270,6 @@ const ChatMessage = ({ messageGroup, className }: ChatMessageProps) => {
       animate={{ opacity: 1, y: 0 }}
       initial={{ opacity: 0, y: 50 }}
     >
-      {/* {JSON.stringify(footnotes)} */}
       <Card className={`rounded-3xl ${cls} shadow-md ${className ?? ''}`}>
         <CardBody className='flex flex-row p-0'>
           <ChatAvatar className='flex-none m-3 ' role={messageGroup[0].role} />
@@ -286,12 +282,6 @@ const ChatMessage = ({ messageGroup, className }: ChatMessageProps) => {
                       message.content &&
                       message.content.replaceAll('\n', '  \n')
                       + (footnotes.length > 0 ? '\n\n---\n**Sources**\n\n' + footnotes.join('\n\n') : '')
-                      //                       + `
-                      // <details>
-                      // <summary>Summary</summary>
-                      // ${footnotes.join('\n\n')}
-                      // </details>
-                      //                       `
                     }
                   </MD>
                   {
