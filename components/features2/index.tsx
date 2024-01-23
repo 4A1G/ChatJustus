@@ -38,10 +38,7 @@ export const Features2 = () => {
                      color: '$accents8',
                   }}
                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  condimentum, nisl ut aliquam lacinia, nisl nisl aliquet nisl,
-                  nec tincidunt nisl lorem eu nunc. Sed euismod, nisl ut aliquam
-                  lacinia,
+                  In the meeting, Marco didn't jot down many notes and now worries about forgetting important stuff. Plus, he gets legal papers full of confusing jargon. To untangle it all, he turns to ChatJustus for help, hoping to clear up crucial meeting points and understand the tricky legal terms.
                </Text>
 
                <Flex
@@ -97,7 +94,7 @@ export const Features2 = () => {
                      <BoxIcon />
                      <Flex direction={'column'}>
                         <Text h4 weight={'medium'}>
-                           3. Schedule Additional Meetings for Legal Advice With The Lawyer
+                           3. Schedule Additional Meetings With The Lawyer
                         </Text>
                         <Text
                            span
