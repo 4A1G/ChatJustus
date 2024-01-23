@@ -13,10 +13,11 @@ export const metadata: Metadata = {
 	},
 	description: siteConfig.description,
 	icons: {
-		icon: "/favicon.ico",
-		shortcut: "/favicon-16x16.png",
-		apple: "/apple-touch-icon.png",
+		icon: "/ChatJustus/icon-192x192.png",
+		apple: "/ChatJustus/icon-192x192.png",
+		shortcut: "/ChatJustus/icon-192x192.png",
 	},
+	manifest: "/ChatJustus/manifest.webmanifest",
 }
 
 export const viewport: Viewport = {
@@ -24,6 +25,11 @@ export const viewport: Viewport = {
 		{ media: "(prefers-color-scheme: light)", color: "white" },
 		{ media: "(prefers-color-scheme: dark)", color: "black" },
 	],
+	width: "device-width",
+	initialScale: 1,
+	maximumScale: 1,
+	minimumScale: 1,
+	userScalable: false,
 };
 
 export default function RootLayout({
@@ -33,9 +39,6 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" suppressHydrationWarning>
-			<head>
-				<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-			</head>
 			<body
 				className={clsx(
 					"min-h-[calc(100dvh)] bg-background font-sans antialiased",
