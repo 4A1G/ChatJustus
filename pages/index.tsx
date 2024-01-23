@@ -20,6 +20,7 @@ const Home: NextPage = () => {
          <Nav />
          <Box as="main">
             <Hero />
+            <Faq/>
             <Features1 />
             <Features2 />
             <Features3 />
