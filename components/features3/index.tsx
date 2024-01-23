@@ -22,20 +22,7 @@ export const Features3 = () => {
                }}
             >
                <Text span css={{color: '$blue600'}}>
-                  Awesome Feature
-               </Text>
-               <Text h3>Your title here</Text>
-               <Text
-                  span
-                  css={{
-                     maxWidth: '800px',
-                     color: '$accents8',
-                     textAlign: 'center',
-                  }}
-               >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  condimentum, nisl ut aliquam lacinia, nisl nisl aliquet nisl,
-                  nec
+                  Unique Selling Point
                </Text>
             </Flex>
             <Flex
@@ -52,11 +39,8 @@ export const Features3 = () => {
                      <Flex css={{gap: '0.5rem'}}>
                         <BoxIcon />
                         <Flex direction={'column'}>
-                           <Text h5>Your Title</Text>
                            <Text span>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                              elit. Sed condimentum, nisl ut aliquam lacinia,
-                              nisl nisl aliquet nisl, nec
+                           ChatJustus can support the customer-lawyer experience throughout the entire legal communication journey
                            </Text>
                         </Flex>
                      </Flex>
@@ -67,11 +51,8 @@ export const Features3 = () => {
                      <Flex css={{gap: '0.5rem'}}>
                         <BoxIcon />
                         <Flex direction={'column'}>
-                           <Text h5>Your Title</Text>
                            <Text span>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                              elit. Sed condimentum, nisl ut aliquam lacinia,
-                              nisl nisl aliquet nisl, nec
+                           ChatJustus provides a seamless client-lawyer communication with 24 hour availability
                            </Text>
                         </Flex>
                      </Flex>
@@ -92,26 +73,8 @@ export const Features3 = () => {
                      <Flex css={{gap: '0.5rem'}}>
                         <BoxIcon />
                         <Flex direction={'column'}>
-                           <Text h5>Your Title</Text>
                            <Text span>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                              elit. Sed condimentum, nisl ut aliquam lacinia,
-                              nisl nisl aliquet nisl, nec
-                           </Text>
-                        </Flex>
-                     </Flex>
-                  </Card.Body>
-               </Card>
-               <Card css={{mw: '500px'}}>
-                  <Card.Body>
-                     <Flex css={{gap: '0.5rem'}}>
-                        <BoxIcon />
-                        <Flex direction={'column'}>
-                           <Text h5>Your Title</Text>
-                           <Text span>
-                              Lorem ipsum dolor sit amet, consectetur adipiscing
-                              elit. Sed condimentum, nisl ut aliquam lacinia,
-                              nisl nisl aliquet nisl, nec
+                           ChatJustus answers customer' and lawyers' inquires  based on the database, so that answers are based on specific cases instead of general knowledge 
                            </Text>
                         </Flex>
                      </Flex>
