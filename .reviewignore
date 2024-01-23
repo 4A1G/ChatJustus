@@ -1,0 +1,11 @@
+.eslintrc.js
+.github
+.prettierrc.js
+.vscode
+backend/webapp_static
+frontend/public
+frontend/config
+*.yaml
+*.yml
+*.json
+*.ipynb
