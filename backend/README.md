@@ -1,4 +1,4 @@
-# Backend
+# ChatJustus Backend
 
 ## Development Setup
 
@@ -37,7 +37,7 @@ poetry update
 Finally, we also need to setup the `.env` file. Find the `.env.example` file and copy it to `.env`. Then, fill in the values for the environment variables. You can go to our discord under `PROTOTYPE > #important` to find the values for the environment variables.
 
 
-### Running the server
+## Running the server
 Running in locally in your browser:
 ```bash
 poetry run server
