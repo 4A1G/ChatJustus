@@ -109,10 +109,10 @@ export const Features1 = () => {
                </Flex>
             </Flex>
             <Flex align={'center'}>
-            <video autoPlay muted loop width='750px'>
-               <source src="Demo_Part1.mp4" type="video/mp4"/>
+               <video autoPlay muted loop width='750px'>
+                  <source src="https://syncandshare.lrz.de/dl/fi8ApNDQusT3g7wPhPUjVV/Demo_Part1.mp4" type="video/mp4"/>
 
-            </video>
+               </video>
 
             </Flex>
          </Flex>

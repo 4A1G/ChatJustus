@@ -110,7 +110,9 @@ export const Features2 = () => {
                </Flex>
             </Flex>
             <Flex align={'center'}>
-               <FeatureIcon />
+               <video autoPlay muted loop width='750px'>
+                  <source src="https://syncandshare.lrz.de/dl/fiMwkc6RJpgksXs1MoWTED/Demo_Part2.mp4" type="video/mp4"/>
+               </video>
             </Flex>
          </Flex>
 

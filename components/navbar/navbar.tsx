@@ -40,7 +40,7 @@ export const Nav = () => {
                   pl: '6rem',
                }}
             >
-               <Navbar.Link href="#">Pricing</Navbar.Link>
+               <Navbar.Link href="#">USP</Navbar.Link>
                <Navbar.Link href="#teamid">Company</Navbar.Link>
             </Navbar.Content>
          </Navbar.Brand>
