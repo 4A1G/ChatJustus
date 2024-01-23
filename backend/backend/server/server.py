@@ -56,7 +56,7 @@ async def ws_auth(ws: WebSocket) -> str | None:
         if not user or not session:
             raise Exception("Client sent invalid user or session")
         
-        return f"{session}"
+        return f"{user}"
     except:
         try:
             await ws.close()

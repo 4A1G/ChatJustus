@@ -65,6 +65,7 @@ class Connection:
     async def new_connection(self, ws: WebSocket):
         if self.ws is not None:
             print("Warning: Overwriting existing websocket.")
+            await self.send("_DISCONNECT", None)
             await self.ws.close()
         self.ws = ws
 

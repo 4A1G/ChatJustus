@@ -14,7 +14,7 @@ from backend.server.mail import is_valid_email, send_email
 
 from backend.database import Case, Meeting, lawyers_db, cases_db, dialogs_db, meetings_db
 from backend.database.utils import format_all_lawyers, format_dialogs
-from backend.database.generate import generate_mocked_dialog, generate_meeting_title_summary
+from backend.database.generate import generate_first_meeting, generate_meeting_title_summary
 
 
 # Define Load all lawyer names from the database
@@ -68,7 +68,7 @@ class FirstContactToolkit(Toolkit):
         """
         self.summary["case"] = case
         self.summary["lawyer"] = lawyer
-        return "Success: contact form created. Now, instruct the user to fill out the form and press the 'Send' button."
+        return "Success: contact form created. Now, instruct the user to fill out the form and press the 'Send' button. However, DO NOT repeat the contents of the summary in your message, since the user can already see the summary in the form!"
 
 
     @function_tool
@@ -119,7 +119,7 @@ Sterling Legal Associates
             send_email,
             to=email,
             subject=f"Hey {name}, greetings from {lawyer}!",
-            contents=markdown(contents.replace("\n", "  \n")),
+            contents=contents,
         ))
         print(f"Send Email to {email}:\n{contents}")
 
@@ -150,14 +150,14 @@ Sterling Legal Associates
 
         # Generate mocked dialogs and save to DB
         meeting_timestamp = int(time())
-        dialogs = await generate_mocked_dialog(new_case)
+        dialogs = await generate_first_meeting(new_case)
         dialog_db = dialogs_db(case_id, meeting_timestamp)
         dialog_db.add(dialogs, list(range(len(dialogs))))
 
         asyncio.create_task(asyncio.to_thread(
              send_email,
              to=email,
-             subject=f"Hey {name}, greetings from {lawyer}! Here is the dialogs from your first meeting.",
+             subject=f"{name}, here's our first meeting transcript!",
              contents=format_dialogs(dialogs),
          ))
 
@@ -175,11 +175,8 @@ Sterling Legal Associates
 Dear {name},
 
 Here's a summary of today's meeting:
-
 {markdown(summary)}
-
-Do you have any lingering questions? Ask ChatJustus!
-<a href="http://34.90.113.6:42069/ChatJustus/follow-up">Open ChatJustus</a>
+<a href="http://34.90.113.6:42069/ChatJustus/follow-up">Ask ChatJustus</a>
 
 Best regards,
 {lawyer}
@@ -199,8 +196,8 @@ class FirstContactBot(SyncedGPT):
     def __init__(self, user_id: str):
         initial_messages = SyncedHistory(
             system=f"""
-You are ChatJustus, a professional lawyer assistant for the lawfirm "Sterling Legal Associates". Your primary role is to assist the potential legal client by:
-1. Start the conversation by actively asking relevant questions about the user's legal problems to understand their situation and needs.
+You are ChatJustus, a professional lawyer assistant for the law firm "Sterling Legal Associates". Your primary role is to assist the potential legal client by:
+1. Start the conversation by actively asking 2-3 relevant questions about the user's legal problems to understand their situation and needs.
 2. Determine if our law firm can address their legal needs.
 3. If so, suggest a suitable lawyer for the case, and write a summary of the case for the lawyer, which can be shown to the potential client for their approval, using the "summarize_first_contact" tool.
 

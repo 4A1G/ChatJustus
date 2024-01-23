@@ -204,6 +204,11 @@ export class Connection {
     if (typeof e.data === 'string') {
       // json message
       const event = JSON.parse(e.data)
+      if (event.type == "_DISCONNECT") {
+        this.disconnect()
+        toast.loading("Seems like you're logged in somewhere else. If this is a mistake, please refresh the page.", {duration: 10000000})
+        return
+      }
       if (event.type in this.eventHandlers) {
         this.eventHandlers[event.type](event.data)
       }
