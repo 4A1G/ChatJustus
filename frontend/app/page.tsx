@@ -7,7 +7,7 @@ import Link from 'next/link'
 
 export default function Home() {
   return (
-    <div className='w-full h-full flex flex-col justify-center items-center gap-5 m-3'>
+    <div className='w-full h-full flex flex-col justify-center items-center gap-5 p-3'>
       <p className='text-primary/100 text-3xl'>Welcome to ChatJustus!</p>
       <p className='text-foreground/100'>The proper landing page is coming soon. But you can already try out the bot. Make sure to use your real email!</p>
 

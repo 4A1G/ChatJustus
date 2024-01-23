@@ -342,6 +342,7 @@ const ChatInput = ({ onSend, onCancel, isGenerating, className }: ChatInputProps
         }}
         variant='underlined'
         className="ml-5"
+        style={{ fontSize: '1rem' }}
         placeholder="Type your message..."
         minRows={1}
         maxRows={15}
