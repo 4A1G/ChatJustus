@@ -44,7 +44,7 @@ export default function RootLayout({
 					fontSerif.variable
 				)}
 			>
-				<Providers themeProps={{ attribute: "class", defaultTheme: "system" }}>
+				<Providers themeProps={{ attribute: "class", defaultTheme: "light" }}>
 					<div className="relative flex flex-col w-full h-[calc(100dvh)] bg-gradient-to-bl from-[#9982DD] to-[#283E88] dark:from-blue-900 dark:to-orange-900">
 						{/* <Navbar /> */}
 						<main className="w-full h-full">

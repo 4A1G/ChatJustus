@@ -87,7 +87,7 @@ class FirstContactToolkit(Toolkit):
         Send the summary to the lawyer and the potential client
         """
         # FIXME VIDEO
-        email = "joong-won.seo@tum.de"
+        # email = "joong-won.seo@tum.de"
 
         if not name.strip():
             await self.sync.toast("Please enter your name!", type="error")
