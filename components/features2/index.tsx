@@ -30,7 +30,7 @@ export const Features2 = () => {
                <Text span css={{color: '$blue600'}}>
                   Show Case - Follow UPs
                </Text>
-               <Text h3>Marco's Divorce Case</Text>
+               <Text h2>Marco's Divorce Case</Text>
                <Text
                   span
                   css={{

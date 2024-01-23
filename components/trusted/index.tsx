@@ -53,12 +53,12 @@ export const Trusted = () => {
                </Grid>
                <Grid sm={3} justify="center">
                   <Flex align={'center'}>
-                  <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/first-contact">Example 1</Button>
+                  <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/first-contact">Example 2</Button>
                   </Flex>
                </Grid>
                <Grid sm={3} justify="center">
                   <Flex align={'center'}>
-                  <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/first-contact">Example 1</Button>
+                  <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/first-contact">Example 3</Button>
                   </Flex>
                </Grid>
                

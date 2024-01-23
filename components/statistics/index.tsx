@@ -15,7 +15,7 @@ export const Statistics = () => {
          >
             <Flex direction={'column'} align={'center'} id="teamid">
                <Text
-                  h3
+                  h2
                   css={{
                      textAlign: 'center',
                   }}
