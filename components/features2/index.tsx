@@ -17,8 +17,8 @@ export const Features2 = () => {
                'px': '$6',
 
                '@sm': {
-                  gap: '5rem',
-                  flexDirection: 'row-reverse',
+                  gap: '0.5rem',
+                  flexDirection: 'space-around',
                   px: '$16',
                },
                '@md': {
@@ -62,7 +62,7 @@ export const Features2 = () => {
                         <Text
                            span
                            css={{
-                              maxWidth: '325px',
+                              maxWidth: '400px',
                               color: '$accents8',
                            }}
                         >
@@ -84,7 +84,7 @@ export const Features2 = () => {
                         <Text
                            span
                            css={{
-                              maxWidth: '325px',
+                              maxWidth: '400px',
                               color: '$accents8',
                            }}
                         >
@@ -99,7 +99,7 @@ export const Features2 = () => {
                         <Text
                            span
                            css={{
-                              maxWidth: '325px',
+                              maxWidth: '400px',
                               color: '$accents8',
                            }}
                         >
@@ -119,7 +119,7 @@ export const Features2 = () => {
                            
 
          <Divider
-            css={{position: 'absolute', inset: '0p', left: '0', mt: '$5'}}
+            css={{position: 'absolute', inset: '0p', left: '0', mt: '$15'}}
          />
          
       
