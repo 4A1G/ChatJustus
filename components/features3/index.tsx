@@ -21,7 +21,12 @@ export const Features3 = () => {
                   pt: '$20',
                }}
             >
-               <Text span css={{color: '$blue600'}}>
+               <Text
+                  h3
+                  css={{
+                     textAlign: 'center',
+                  }}
+               >
                   Unique Selling Point
                </Text>
             </Flex>
@@ -40,7 +45,7 @@ export const Features3 = () => {
                         <BoxIcon />
                         <Flex direction={'column'}>
                            <Text span>
-                           ChatJustus can support the customer-lawyer experience throughout the entire legal communication journey
+                           Supports the customer-lawyer experience throughout the entire legal communication journey
                            </Text>
                         </Flex>
                      </Flex>
@@ -52,7 +57,7 @@ export const Features3 = () => {
                         <BoxIcon />
                         <Flex direction={'column'}>
                            <Text span>
-                           ChatJustus provides a seamless client-lawyer communication with 24 hour availability
+                           Provides a seamless client-lawyer communication with 24 hour availability
                            </Text>
                         </Flex>
                      </Flex>
@@ -74,7 +79,7 @@ export const Features3 = () => {
                         <BoxIcon />
                         <Flex direction={'column'}>
                            <Text span>
-                           ChatJustus answers customer' and lawyers' inquires  based on the database, so that answers are based on specific cases instead of general knowledge 
+                           Answers customer' and lawyers' inquires  based on the database, so that answers are based on specific cases instead of general knowledge 
                            </Text>
                         </Flex>
                      </Flex>
