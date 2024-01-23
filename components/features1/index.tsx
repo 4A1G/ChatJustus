@@ -38,8 +38,7 @@ export const Features1 = () => {
                      color: '$accents8',
                   }}
                >
-                  Exhausted from searching for a divorce lawyer, Marco hits a dead end. Waiting for replies adds frustration. 
-                  A silver lining appears when he discovers a website with ChatJustus. Searching a suitable lawyer to help him becomes effortlessly simple, infusing a fresh sense of ease as he navigates the complexities of his divorce concerns.
+                  Exhausted and frustrated from searching for a divorce lawyer and waiting for replies, Marco hits a dead end. However, a silver lining appears when he discovers a website with ChatJustus. Finding a suitable lawyer becomes effortlessly simple, infusing a fresh sense of ease as he navigates the complexities of his divorce concerns.
                </Text>
 
                <Flex
