@@ -28,9 +28,9 @@ export const Features2 = () => {
          >
             <Flex direction="column" align={'center'}>
                <Text span css={{color: '$blue600'}}>
-                  Awesome Feature
+                  Show Case - Follow UPs
                </Text>
-               <Text h3>Your title here</Text>
+               <Text h3>Marco's Divorce Case</Text>
                <Text
                   span
                   css={{
@@ -38,10 +38,7 @@ export const Features2 = () => {
                      color: '$accents8',
                   }}
                >
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-                  condimentum, nisl ut aliquam lacinia, nisl nisl aliquet nisl,
-                  nec tincidunt nisl lorem eu nunc. Sed euismod, nisl ut aliquam
-                  lacinia,
+                  In the meeting, Marco didn't jot down many notes and now worries about forgetting important stuff. Plus, he gets legal papers full of confusing jargon. To untangle it all, he turns to ChatJustus for help, hoping to clear up crucial meeting points and understand the tricky legal terms.
                </Text>
 
                <Flex
@@ -60,7 +57,7 @@ export const Features2 = () => {
                      <BoxIcon />
                      <Flex direction={'column'}>
                         <Text h4 weight={'medium'}>
-                           Your title here
+                           1. Post-Meeting Summary Email
                         </Text>
                         <Text
                            span
@@ -69,9 +66,7 @@ export const Features2 = () => {
                               color: '$accents8',
                            }}
                         >
-                           Lorem ipsum dolor sit amet, consectetur adipiscing
-                           elit. Sed condimentum, nisl ut aliquam lacinia, nisl
-                           nisl aliquet nisl,
+                           Marco will receive an email after the meeting, containing a summary of the discussion with the lawyer and a link to ChatJustus for follow-up questions.
                         </Text>
                      </Flex>
                   </Flex>
@@ -84,7 +79,7 @@ export const Features2 = () => {
                      <BoxIcon />
                      <Flex direction={'column'}>
                         <Text h4 weight={'medium'}>
-                           Your title here
+                           2. High Frequent Follow Ups on ChatJustus
                         </Text>
                         <Text
                            span
@@ -93,10 +88,23 @@ export const Features2 = () => {
                               color: '$accents8',
                            }}
                         >
-                           Lorem ipsum dolor sit amet, consectetur adipiscing
-                           elit. Sed condimentum, nisl ut aliquam lacinia, nisl
-                           nisl aliquet nisl,
+                           Marco can review key meeting points, pose questions, and seek clarification on legal terminology, with responses presented in bullet points and footnoted to reliable sources within the platform's law database.
                         </Text>
+                     </Flex>
+                     <BoxIcon />
+                     <Flex direction={'column'}>
+                        <Text h4 weight={'medium'}>
+                           3. Schedule Additional Meetings With The Lawyer
+                        </Text>
+                        <Text
+                           span
+                           css={{
+                              maxWidth: '325px',
+                              color: '$accents8',
+                           }}
+                        >
+                           If Marco has unresolved questions beyond ChatJustus, he has the option to schedule further meetings with the lawyer for more personalized assistance and actual legal advice.
+                           </Text>
                      </Flex>
                   </Flex>
                </Flex>
@@ -106,9 +114,15 @@ export const Features2 = () => {
             </Flex>
          </Flex>
 
+                           
+
          <Divider
             css={{position: 'absolute', inset: '0p', left: '0', mt: '$5'}}
          />
+         
+      
+
       </>
    );
 };
+

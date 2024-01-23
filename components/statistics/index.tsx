@@ -13,26 +13,16 @@ export const Statistics = () => {
                px: '$6',
             }}
          >
-            <Flex direction={'column'} align={'center'}>
+            <Flex direction={'column'} align={'center'} id="teamid">
                <Text
                   h3
                   css={{
                      textAlign: 'center',
                   }}
                >
-                  Over 8000+ projects completed
+                  Our Team
                </Text>
-               <Text
-                  span
-                  css={{
-                     maxWidth: '800px',
-                     textAlign: 'center',
-                  }}
-               >
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit.
-                  Iusto provident omnis deleniti temporibus pariatur corporis
-                  aperiam
-               </Text>
+               
             </Flex>
             <Flex
                direction={'row'}
@@ -47,37 +37,11 @@ export const Statistics = () => {
                }}
             >
                <Flex direction={'column'}>
-                  <Text h2 css={{color: '$blue600'}}>
-                     $500K+
-                  </Text>
-                  <Text span css={{textAlign: 'center'}} weight={'medium'}>
-                     Revenue
-                  </Text>
+               <img src="team.png" />
                </Flex>
-               <Flex direction={'column'}>
-                  <Text h2 css={{color: '$blue600'}}>
-                     10+
-                  </Text>
-                  <Text span css={{textAlign: 'center'}} weight={'medium'}>
-                     Products
-                  </Text>
-               </Flex>
-               <Flex direction={'column'}>
-                  <Text h2 css={{color: '$blue600'}}>
-                     $150+
-                  </Text>
-                  <Text span css={{textAlign: 'center'}} weight={'medium'}>
-                     Components
-                  </Text>
-               </Flex>
-               <Flex direction={'column'}>
-                  <Text h2 css={{color: '$blue600'}}>
-                     10+
-                  </Text>
-                  <Text span css={{textAlign: 'center'}} weight={'medium'}>
-                     Employees
-                  </Text>
-               </Flex>
+               
+               
+               
             </Flex>
          </Box>
 

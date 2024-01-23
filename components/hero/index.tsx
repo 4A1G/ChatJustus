@@ -65,7 +65,7 @@ export const Hero = () => {
                   }}
                   wrap={'wrap'}
                >
-                  <Button>Try Demo</Button>
+                  <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/first-contact">Try Demo</Button>
                </Flex>
             </Box>
             <Box

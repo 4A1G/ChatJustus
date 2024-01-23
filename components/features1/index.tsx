@@ -28,7 +28,7 @@ export const Features1 = () => {
          >
             <Flex direction="column">
                <Text span css={{color: '$blue600'}}>
-                  Show Case 
+                  Show Case - First Contact
                </Text>
                <Text h3>Marco's Divorce Case</Text>
                <Text
@@ -38,9 +38,7 @@ export const Features1 = () => {
                      color: '$accents8',
                   }}
                >
-                  Marco wants to find a lawyer to help him with his divorce issue. After spending hours searching for a lawyer, 
-                  he still could not find a suitable candidate. After hours of searching and waiting for other firms to reply, 
-                  he stubles upon a website that uses ChatJustus. 
+                  Exhausted and frustrated from searching for a divorce lawyer and waiting for replies, Marco hits a dead end. However, a silver lining appears when he discovers a website with ChatJustus. Finding a suitable lawyer becomes effortlessly simple, infusing a fresh sense of ease as he navigates the complexities of his divorce concerns.
                </Text>
 
                <Flex
@@ -52,7 +50,7 @@ export const Features1 = () => {
                   <BoxIcon />
                   <Flex direction={'column'}>
                      <Text h4 weight={'medium'}>
-                        Simple Client Lawyer Matching 
+                        1. Simple Communication
                      </Text>
                      <Text
                         span
@@ -61,7 +59,7 @@ export const Features1 = () => {
                            color: '$accents8',
                         }}
                      >
-                        text
+                        Marco initiates contact with ChatJustus to discuss his legal problem. The conversation is designed to be straightforward, allowing Marco to easily communicate his concerns without any complicated processes.
                      </Text>
                   </Flex>
                </Flex>
@@ -74,7 +72,7 @@ export const Features1 = () => {
                   <BoxIcon />
                   <Flex direction={'column'}>
                      <Text h4 weight={'medium'}>
-                        Your title here
+                     2. Efficient Inquiry Submission
                      </Text>
                      <Text
                         span
@@ -83,9 +81,7 @@ export const Features1 = () => {
                            color: '$accents8',
                         }}
                      >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Sed condimentum, nisl ut aliquam lacinia, nisl nisl
-                        aliquet nisl,
+                        Marco is required to provide his contact information after a brief understanding of his legal issue. This serves as a simplified contact form, allowing for an efficient submission of the legal inquiry without requiring extensive details at this initial stage.
                      </Text>
                   </Flex>
                </Flex>
@@ -98,7 +94,7 @@ export const Features1 = () => {
                   <BoxIcon />
                   <Flex direction={'column'}>
                      <Text h4 weight={'medium'}>
-                        Your title here
+                        3. Facilitated Lawyer Matching
                      </Text>
                      <Text
                         span
@@ -107,15 +103,17 @@ export const Features1 = () => {
                            color: '$accents8',
                         }}
                      >
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                        Sed condimentum, nisl ut aliquam lacinia, nisl nisl
-                        aliquet nisl,
+                        Once Marco discribed his problem, ChatJustus uses this data to match him with a suitable lawyer within the law firm. This process ensures that Marco is connected with the right legal professional who can address his specific needs, setting the stage for a subsequent meeting between Marco and the chosen lawyer.
                      </Text>
                   </Flex>
                </Flex>
             </Flex>
             <Flex align={'center'}>
-               <FeatureIcon />
+            <video autoPlay muted loop width='750px'>
+               <source src="Demo_Part1.mp4" type="video/mp4"/>
+
+            </video>
+
             </Flex>
          </Flex>
          <Divider
