@@ -154,11 +154,28 @@ Sterling Legal Associates
         dialog_db = dialogs_db(case_id, meeting_timestamp)
         dialog_db.add(dialogs, list(range(len(dialogs))))
 
+        contents_dialog = f"""
+Dear {name},
+
+Thank you for trying out our demo!
+The following will be a mocked transcript of what should happen after the client's first official meeting with the lawyer.
+Please use this dialog and the summary in the next email as a reference for the follow up questions.
+
+{format_dialogs(dialogs)}
+
+In the next email, you will receive a summary of the meeting, and a link to ChatJustus to continue. Have fun! :)
+Best regards,
+LegalRoad
+
+        """.strip()
+
+
+
         asyncio.create_task(asyncio.to_thread(
              send_email,
              to=email,
              subject=f"{name}, here's our first meeting transcript!",
-             contents=format_dialogs(dialogs),
+             contents= contents_dialog,
          ))
 
         # Generate meeting title and summary and save to DB
