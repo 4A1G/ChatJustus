@@ -23,8 +23,6 @@ const Home: NextPage = () => {
             <Features1 />
             <Features2 />
             <Features3 />
-            <Testimonials />
-            <Statistics />
          </Box>
       </Layout>
    );
