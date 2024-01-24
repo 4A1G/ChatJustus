@@ -1,4 +1,4 @@
-*TUM - Tech Challenge WS23/24 - Team 4A1G*
+*Team 4A1G — Tech Challenge WS23/24 — Technical University of Munich*
 
 # [ChatJustus](https://4a1g.github.io/ChatJustus/)
 
@@ -44,10 +44,21 @@ To install and run the ChatJustus backend server, you will need at least git and
     ```bash
     poetry install
     ```
-4. Create the Legal DB and populate it with data, by running the Jupyter Notebooks `create_legal_db.ipynb` and `create_lawyer_db.ipynb`. Simply press "Run All" in the Jupyter Notebook UI. Make sure to shutdown/restart the kernel after running each notebook, because the local database storage does not allow for concurrent access.
+4. Copy the `.env.example` file and rename it to `.env`. Then, fill in the OpenAI API key and the gmail account details for the email functionality.
 
-5. Start the backend server
+5. Create the Legal DB and populate it with data, by running the Jupyter Notebooks `create_legal_db.ipynb` and `create_lawyer_db.ipynb`. Simply press "Run All" in the Jupyter Notebook UI. Make sure to shutdown/restart the kernel after running each notebook, because the local database storage does not allow for concurrent access.
+
+6. Start the backend server
     ```bash
     poetry run expose
     ```
-    This will start the server, expose it to the local network, and automatically open a browser window with a QR code that you can scan to access the server from the same network. If you want to use it from the same device, just open the [URL](http://localhost:42069/ChatJustus/) in your browser.
+    This will start the server, expose it to the local network, and automatically open a browser window with a QR code that you can scan to access the server from the same network. You could also just open the [localhost URL](http://localhost:42069/ChatJustus/) in your browser.
+
+
+## Other
+
+### Landing Page
+The [landing page](https://4a1g.github.io/ChatJustus/) is also a react + next.js app, and can be found under the [landing branch](https://github.com/4A1G/ChatJustus/tree/landing?tab=readme-ov-file). It is deployed using GitHub Pages.
+
+### Demo Server
+We have a Google Cloud server running the demo, which is deployed by essentially running the same steps as in the Quick Start section.
