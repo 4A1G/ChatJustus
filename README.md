@@ -18,7 +18,7 @@ ChatJustus is an AI Chatbot to improve the Lawyer-Client UX by supporting the en
 - tailwindcss and NextUI interface
 
 ### Documentation
-[Here's](https://4a1g.github.io/ChatJustus/docs) a comprehensive documentation of each and every important file/folder in the project. Click on the `>` arrows to open the folders, and click on each summary box to switch between a **Short** summary and a **Long** description.  
+[Here's](https://4a1g.github.io/ChatJustus/docs) a comprehensive documentation of each and every important file/folder in the project. Click on the folder names to open them, and click on each summary box to switch between a **Short** summary and a **Long** description.  
 We have created it using our self-developed AI Recursive Summarizer tool, using the same underlying technology as ChatJustus itself!
 Using the tool, the entire documentation was generated in 10 minutes, what would have taken us 3-5 hours to write manually :)
 
