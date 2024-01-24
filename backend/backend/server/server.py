@@ -64,6 +64,10 @@ app = FastAPI()
 async def get_sessions():
     return list(sessions.keys())
 
+@app.get("/cases")
+async def get_cases():
+    return [(c.case_id, c.client, c.lawyer, c.summary) for c in cases_db()]
+
 async def ws_auth(ws: WebSocket) -> str | None:
     try:
         await ws.send_json({"type": "_REQUEST_USER_SESSION"})
