@@ -22,7 +22,7 @@ export const Nav = () => {
             '& .nextui-navbar-container': {
                // background: '$background',
                borderBottom: 'none',
-               zIndex: 100,
+               // zIndex: 100,
             },
          }}
       >

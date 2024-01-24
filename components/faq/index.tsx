@@ -26,6 +26,7 @@ export const Faq = () => {
                   h2
                   css={{
                      textAlign: 'center',
+                     fontFamily: 'serif',
                   }}
                >
                   Value Proposition

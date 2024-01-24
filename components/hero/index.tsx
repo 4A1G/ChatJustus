@@ -67,6 +67,18 @@ export const Hero = () => {
                   wrap={'wrap'}
                >
                   <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/first-contact">Try Demo</Button>
+                  <Button
+                     as="a"
+                     auto
+                     flat
+                     href="http://34.90.113.6:42069/ChatJustus/cases.html"
+                     css={{
+                        backgroundColor: '$gray500',
+                        color: '$white100',
+                     }}
+                  >
+                     See Example Cases
+                  </Button>
                </Flex>
             </Box>
             <Box

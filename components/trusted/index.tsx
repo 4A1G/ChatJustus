@@ -1,7 +1,7 @@
-import {Button, Divider, Grid, Text} from '@nextui-org/react';
+import { Button, Divider, Grid, Text } from '@nextui-org/react';
 import React from 'react';
-import {AcmeLogo} from '../navbar/logo';
-import {Flex} from '../styles/flex';
+import { AcmeLogo } from '../navbar/logo';
+import { Flex } from '../styles/flex';
 
 export const Trusted = () => {
    return (
@@ -17,8 +17,8 @@ export const Trusted = () => {
                },
             }}
          >
-            <Text h2 css={{textAlign: 'center'}}>
-               Sample Cases
+            <Text h2 css={{ textAlign: 'center', fontFamily: 'serif' }}>
+               Example Legal Cases
             </Text>
             <Text
                css={{
@@ -29,9 +29,9 @@ export const Trusted = () => {
                weight="normal"
                size={'$lg'}
             >
-               Take a look of our sample conversations between the clients and ChatJustus
+               Take a look of our example conversations between the clients and ChatJustus
             </Text>
-            
+
             <Grid.Container
                gap={6}
                alignItems="center"
@@ -48,25 +48,42 @@ export const Trusted = () => {
             >
                <Grid sm={3} justify="center">
                   <Flex align={'center'} justify={'center'}>
-                  <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/first-contact">Example 1</Button>
+                     <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/demo-first-contact?case_id=a93be7b7-20b2-49db-8c92-e083bc25f85b">Merger</Button>
                   </Flex>
                </Grid>
                <Grid sm={3} justify="center">
                   <Flex align={'center'}>
-                  <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/first-contact">Example 2</Button>
+                     <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/demo-first-contact?case_id=4be445c2-f6a9-49e8-afdf-d3c798538059">Loud Neighbors</Button>
                   </Flex>
                </Grid>
                <Grid sm={3} justify="center">
                   <Flex align={'center'}>
-                  <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/first-contact">Example 3</Button>
+                     <Button as="a" auto flat href="http://34.90.113.6:42069/ChatJustus/demo-first-contact?case_id=438f6b6d-1a92-483c-b020-7d4b668e4200">Teddy Bear</Button>
                   </Flex>
                </Grid>
-               
+
+               <Grid sm={3} justify="center">
+                  <Flex align={'center'}>
+                     <Button
+                        as="a"
+                        auto
+                        flat
+                        href="http://34.90.113.6:42069/ChatJustus/cases.html"
+                        css={{
+                           backgroundColor: '$gray500',
+                           color: '$white100',
+                        }}
+                     >
+                        See All
+                     </Button>
+                  </Flex>
+               </Grid>
+
             </Grid.Container>
          </Flex>
 
          <Divider
-            css={{position: 'absolute', inset: '0p', left: '0', mt: '$5'}}
+            css={{ position: 'absolute', inset: '0p', left: '0', mt: '$5' }}
          />
       </>
    );
