@@ -94,9 +94,8 @@ async def websocket_endpoint(ws: WebSocket, assistant_type: str, case_id: str):
         return
 
     id = f"demo/{assistant_type}/{session_id}"
-    if id not in sessions:
-        if not await new_session(assistant_type, case_id, id, ws):
-            return
+    if not await new_session(assistant_type, case_id, id, ws):
+        return
     connection = sessions[id][0]
 
     try:
