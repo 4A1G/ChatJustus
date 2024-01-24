@@ -1,8 +1,8 @@
-import {Button, Divider, Text} from '@nextui-org/react';
+import { Button, Divider, Text } from '@nextui-org/react';
 import React from 'react';
-import {BoxIcon} from '../icons/BoxIcon';
-import {FeatureIcon} from '../icons/FeatureIcon';
-import {Flex} from '../styles/flex';
+import { BoxIcon } from '../icons/BoxIcon';
+import { FeatureIcon } from '../icons/FeatureIcon';
+import { Flex } from '../styles/flex';
 
 export const Features2 = () => {
    return (
@@ -27,8 +27,8 @@ export const Features2 = () => {
             }}
          >
             <Flex direction="column" align={'center'}>
-               <Text span css={{color: '$blue600'}}>
-                  Show Case - Follow UPs
+               <Text span css={{ color: '$blue600' }}>
+                  Show Case - Follow Ups
                </Text>
                <Text h2>Marco's Divorce Case</Text>
                <Text
@@ -104,25 +104,27 @@ export const Features2 = () => {
                            }}
                         >
                            If Marco has unresolved questions beyond ChatJustus, he has the option to schedule further meetings with the lawyer for more personalized assistance and actual legal advice.
-                           </Text>
+                        </Text>
                      </Flex>
                   </Flex>
                </Flex>
             </Flex>
             <Flex align={'center'}>
-               <video autoPlay muted loop width='750px'>
-                  <source src="https://syncandshare.lrz.de/dl/fiMwkc6RJpgksXs1MoWTED/Demo_Part2.mp4" type="video/mp4"/>
-               </video>
+               <div style={{ overflow: 'clip', borderRadius: '20px' }}>
+                  <video autoPlay muted loop style={{ objectFit: 'cover', objectPosition: 'center', marginLeft: '-6%', marginRight: '-8%', marginBottom: '-2%', width: '114%' }}>
+                     <source src="https://syncandshare.lrz.de/dl/fiMwkc6RJpgksXs1MoWTED/Demo_Part2.mp4" type="video/mp4" />
+                  </video>
+               </div>
             </Flex>
          </Flex>
 
-                           
+
 
          <Divider
-            css={{position: 'absolute', inset: '0p', left: '0', mt: '$15'}}
+            css={{ position: 'absolute', inset: '0p', left: '0', mt: '$15' }}
          />
-         
-      
+
+
 
       </>
    );

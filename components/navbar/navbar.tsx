@@ -1,41 +1,39 @@
-import {Button, Dropdown, Link, Navbar, Switch, Text} from '@nextui-org/react';
+import { Button, Dropdown, Link, Navbar, Switch, Text } from '@nextui-org/react';
 import React from 'react';
-import {ModalLogin} from '../modal';
-import {icons} from './icons';
-import {AcmeLogo} from './logo';
-import {useTheme as useNextTheme} from 'next-themes';
-import {useTheme} from '@nextui-org/react';
-import {GithubIcon} from '../icons/GithubIcon';
+import { ModalLogin } from '../modal';
+import { icons } from './icons';
+import { AcmeLogo } from './logo';
+import { useTheme as useNextTheme } from 'next-themes';
+import { useTheme } from '@nextui-org/react';
+import { GithubIcon } from '../icons/GithubIcon';
 
 export const Nav = () => {
-   const {setTheme} = useNextTheme();
-   const {isDark, type} = useTheme();
+   const { setTheme } = useNextTheme();
+   const { isDark, type } = useTheme();
    const collapseItems = [
-      'Features',
-      'Customers',
-      'Pricing',
-      'Company',
-      'Legal',
+      ['USP', '#usp'],
+      ['Company', '#teamid'],
    ];
    return (
       <Navbar
+         variant='sticky'
          isBordered
          css={{
-            'overflow': 'hidden',
             '& .nextui-navbar-container': {
-               background: '$background',
+               // background: '$background',
                borderBottom: 'none',
+               zIndex: 100,
             },
          }}
       >
          <Navbar.Brand>
             <Navbar.Toggle aria-label="toggle navigation" showIn="xs" />
-            <img src="mock.png" width="50" height="50"/>
-            <Text b color="inherit" hideIn="xs">
+            <img src="icon-round.png" width="50" height="50" style={{margin: '10px'}} />
+            <Text b color="inherit" hideIn="xs" css={{fontFamily: 'serif'}}>
                LegalRoad
             </Text>
             <Navbar.Content
-               hideIn="sm"
+               hideIn="xs"
                css={{
                   pl: '6rem',
                }}
@@ -46,16 +44,16 @@ export const Nav = () => {
          </Navbar.Brand>
 
          <Navbar.Collapse>
-            {collapseItems.map((item, index) => (
+            {collapseItems.map(([title, item], index) => (
                <Navbar.CollapseItem key={item}>
                   <Link
                      color="inherit"
                      css={{
                         minWidth: '100%',
                      }}
-                     href="#"
+                     href={item}
                   >
-                     {item}
+                     {title}
                   </Link>
                </Navbar.CollapseItem>
             ))}

@@ -41,6 +41,7 @@ export const Hero = () => {
                      h1
                      css={{
                         display: 'inline',
+                        fontFamily: 'serif',
                      }}
                   >
                      ChatJustus

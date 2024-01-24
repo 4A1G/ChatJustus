@@ -1,9 +1,9 @@
-import {Divider, Grid, Text} from '@nextui-org/react';
+import { Divider, Grid, Text } from '@nextui-org/react';
 import React from 'react';
-import {BoxIcon} from '../icons/BoxIcon';
-import {FeatureIcon} from '../icons/FeatureIcon';
-import {Box} from '../styles/box';
-import {Flex} from '../styles/flex';
+import { BoxIcon } from '../icons/BoxIcon';
+import { FeatureIcon } from '../icons/FeatureIcon';
+import { Box } from '../styles/box';
+import { Flex } from '../styles/flex';
 
 export const Features1 = () => {
    return (
@@ -27,14 +27,15 @@ export const Features1 = () => {
             }}
          >
             <Flex direction="column">
-               <Text span css={{color: '$blue600'}}>
+
+               <Text span css={{ color: '$blue600' }}>
                   Show Case - First Contact
                </Text>
                <Text h2>Marco's Divorce Case</Text>
                <Text
                   span
                   css={{
-                     maxWidth: '400px',
+                     maxWidth: '1000px',
                      color: '$accents8',
                   }}
                >
@@ -72,7 +73,7 @@ export const Features1 = () => {
                   <BoxIcon />
                   <Flex direction={'column'}>
                      <Text h4 weight={'medium'}>
-                     2. Efficient Inquiry Submission
+                        2. Efficient Inquiry Submission
                      </Text>
                      <Text
                         span
@@ -107,17 +108,19 @@ export const Features1 = () => {
                      </Text>
                   </Flex>
                </Flex>
+
             </Flex>
+
             <Flex align={'center'}>
-               <video autoPlay muted loop width='750px'>
-                  <source src="https://syncandshare.lrz.de/dl/fi8ApNDQusT3g7wPhPUjVV/Demo_Part1.mp4" type="video/mp4"/>
-
-               </video>
-
-            </Flex>
+                  <div style={{ overflow: 'clip', borderRadius: '20px' }}>
+                     <video autoPlay muted loop style={{ objectFit: 'cover', objectPosition: 'center', marginLeft: '-20%', marginRight: '-20%', marginBottom: '-2%', width: '140%' }}>
+                        <source src="https://syncandshare.lrz.de/dl/fi8ApNDQusT3g7wPhPUjVV/Demo_Part1.mp4" type="video/mp4" />
+                     </video>
+                  </div>
+               </Flex>
          </Flex>
          <Divider
-            css={{position: 'absolute', inset: '0p', left: '0', mt: '$5'}}
+            css={{ position: 'absolute', inset: '0p', left: '0', mt: '$5' }}
          />
       </>
    );

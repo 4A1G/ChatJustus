@@ -37,7 +37,14 @@ export const Statistics = () => {
                }}
             >
                <Flex direction={'column'}>
-               <img src="team.png" />
+               <div
+                  style={{
+                     borderRadius: '15px',
+                     overflow: 'hidden',
+                  }}
+               >
+                  <img src="team.png" />
+               </div>
                </Flex>
                
                
