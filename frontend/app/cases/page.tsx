@@ -22,7 +22,7 @@ export default function Home() {
   const [cases, setCases] = useState([])
 
   useEffect(() => {
-    fetch(`${window.location.host}/cases`)
+    fetch(`${window.location.origin}/cases`)
       .then(response => response.json())
       .then(data => setCases(data))
       .catch(error => console.error(error))
@@ -45,7 +45,7 @@ export default function Home() {
               <TableCell>{lawyer}</TableCell>
               <TableCell>{summary}</TableCell>
               <TableCell>
-                <Button as='a' href={`${window.location.host}/ChatJustus/demo-first-contact?case_id=${case_id}`}>
+                <Button as='a' href={`${window.location.origin}/ChatJustus/demo-first-contact?case_id=${case_id}`}>
                   <FaEye />
                 </Button>
               </TableCell>
