@@ -105,13 +105,13 @@ Do you have any legal questions? I can help you with:
               ? <div className='flex justify-between items-center'>
                 <p className='font-bold'><FaCircleCheck className='text-xl inline m-1' /> Thank you, please check your email to proceed!</p>
                 <ConfirmButton
-                tooltip='Reset your conversation and start over'
+                tooltip='This will permanently reset your conversation!'
                 onConfirm={() => {
                   messages.sendAction({ type: "RESET_CHAT" })
                   firstContact.syncChatEnded(false)
                 }}
                 >
-                  {`No, I'd like to start over instead`}
+                  {`No, start over`}
                 </ConfirmButton>
               </div>
               : false

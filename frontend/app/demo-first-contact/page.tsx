@@ -103,10 +103,10 @@ Do you have any legal questions? I can help you with:
           isDisabled={
             <div className='flex justify-between items-center'>
               <p className='font-bold'>
-                <FaEye className='text-xl inline m-1' /> Example Legal Case - Read Only
+                <FaEye className='text-xl inline m-1' /> View-Only
               </p>
                 <Button as='a' href={window.location.href.replace("first-contact", "follow-up")}>
-                Go to Meeting Follow-Up <FaArrowRight />
+                Follow-Up<FaArrowRight />
               </Button>
             </div>
           }

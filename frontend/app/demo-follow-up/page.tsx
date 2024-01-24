@@ -140,10 +140,10 @@ export default function Home() {
           isDisabled={
             <div className='flex justify-between items-center'>
               <p className='font-bold'>
-                <FaEye className='text-xl inline m-1' /> Example Legal Case - Read Only
+                <FaEye className='text-xl inline m-1' /> View-Only
               </p>
-                <Button as='a' href={window.location.href.replace("follow-up", "first-contact")}>
-                <FaArrowLeft /> Back to First Contact 
+              <Button as='a' href={window.location.href.replace("follow-up", "first-contact")}>
+                <FaArrowLeft /> First Contact
               </Button>
             </div>
           }
