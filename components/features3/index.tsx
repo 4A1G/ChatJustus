@@ -26,6 +26,7 @@ export const Features3 = () => {
                   h2
                   css={{
                      textAlign: 'center',
+                     fontFamily: 'serif',
                   }}
                >
                   Unique Selling Point

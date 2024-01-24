@@ -18,6 +18,7 @@ export const Statistics = () => {
                   h2
                   css={{
                      textAlign: 'center',
+                     fontFamily: 'serif',
                   }}
                >
                   Our Team

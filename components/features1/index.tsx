@@ -31,7 +31,7 @@ export const Features1 = () => {
                <Text span css={{ color: '$blue600' }}>
                   Show Case - First Contact
                </Text>
-               <Text h2>Marco's Divorce Case</Text>
+               <Text h2 css={{ fontFamily: 'serif' }}>Marco's Divorce Case</Text>
                <Text
                   span
                   css={{
