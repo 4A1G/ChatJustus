@@ -50,7 +50,7 @@ async def generate_next_meeting(case: Case, summaries: list[str]) -> list[Dialog
         d = await dialog_generator(f"""
 Generate a LONG imaginary dialog (around 20 messages!) between the lawyer {case.lawyer} and the client {case.client} based on the summary of multiple meetings below.
 
-The lawyer and client have already met more than once. Usually, talk about the progress about the case and the next steps. The conversation always starts with the lawyer speaking first, then taking turns. Come up with creative and specific details, instead of generic dialog. The legal case of the client should be memorable and interesting.
+The lawyer and client have already met more than once. Usually, talk about the progress about the case and the next steps. The conversation always starts with the lawyer speaking first, then taking turns. Make up imaginary yet specific details, such that the lawyer answers the client's questions and actually makes PROGRESS on the legal case. For example, instead of saying "I will inform you about the fees", say something specific like "My fees are usually 200 euros per hour, but I offer a flat rate of 1000 euros for divorce cases.".
 
 Case Summary:
 {case.summary}

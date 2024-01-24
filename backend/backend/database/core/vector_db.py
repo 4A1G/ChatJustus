@@ -136,6 +136,17 @@ class VectorDB:
             wait=True
         )
         assert operation_info.status == 'completed'
+    
+
+    def overwrite(self, data: EmbedData, id: str | int):
+        operation_info = self.client.overwrite_payload(
+            collection_name=self.name,
+            points=[id],
+            payload=data.to_payload(),
+            wait=True
+        )
+        assert operation_info.status == 'completed'
+
 
 
     def query(self, top: int = 10, filter: Filter = None, **query_args) -> list[tuple[float, Type[EmbedData]]]:

@@ -1,3 +1,3 @@
 import { createContext } from "react";
 
-export const DataContext = createContext({} as any)
+export const FCContext = createContext({} as any)

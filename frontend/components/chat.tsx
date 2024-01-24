@@ -11,7 +11,8 @@ import { Form } from './json-forms'
 import { Button, Card, CardHeader, CardBody, CardFooter, Avatar, Textarea, Spinner, AvatarIcon } from "@nextui-org/react"
 import { Expander, ExpanderItem } from '@/components/base/expander'
 import { MD } from '@/components/base/md'
-import { DataContext } from '@/app/first-contact/contexts'
+import { FCContext } from '@/app/first-contact/contexts'
+import { FUContext } from '@/app/follow-up/contexts'
 import { toast } from 'sonner'
 import { DayPicker } from 'react-day-picker'
 import 'react-day-picker/dist/style.css';
@@ -57,7 +58,7 @@ const DefaultTool = ({ tool_call }: ToolProps) => (
 )
 
 const SummaryTool = ({ tool_call }: ToolProps) => {
-  const { summarySchema, summary, setSummary, chatEnded, sendAction } = useContext(DataContext)
+  const { summarySchema, summary, setSummary, chatEnded, sendAction } = useContext(FCContext)
 
   let parsed = null
   try {
@@ -105,39 +106,43 @@ const ChatEndTool = ({ tool_call }: ToolProps) => (
 )
 
 const ScheduleMeetingTool = ({ tool_call }: ToolProps) => {
+  const { selectedMeeting, meetings, chatEnded, sendAction } = useContext(FUContext)
+  const disabled = selectedMeeting != meetings[meetings.length - 1].timestamp || chatEnded
+
   let parsed = undefined
   try {
     parsed = JSON.parse(tool_call.function.arguments)
     const { year, month, day, hour, minute } = parsed
-    parsed = new Date(year, month, day, hour, minute)
+    parsed = new Date(year, month - 1, day, hour, minute)
   } catch (e) {
     parsed = undefined
   }
 
   const [selected, setSelected] = useState<Date | undefined>(undefined)
 
-  const current = selected || parsed
+  const current = disabled? parsed : selected || parsed
   return (
     <div>
       {
         parsed &&
         <DayPicker
+          key={selectedMeeting}
           className='bg-default/50 rounded-xl min-w-min max-w-min p-3'
           style={{ margin: '0px' }}
           mode="single"
           selected={current}
           onSelect={setSelected}
+          disabled={disabled}
           footer={
             current &&
             <div className='flex flex-col justify-center'>
               <p className='text-primary/100 font-bold text-center my-3'>Your meeting will be on {current.toLocaleDateString()}.</p>
               <Button
                 color='primary'
+                isDisabled={disabled}
                 onClick={() => {
+                  sendAction({ type: "SCHEDULE_MEETING", timestamp: current.getTime() / 1000 })
                   toast.info("Scheduling meeting...")
-                  setTimeout(() => {
-                    toast.success(`Meeting scheduled on ${current.toLocaleDateString()}!`)
-                  }, 2000)
                 }}
               >
                 Schedule Meeting

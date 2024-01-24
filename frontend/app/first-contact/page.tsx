@@ -8,7 +8,7 @@ import 'allotment/dist/style.css'
 
 import { ThemeSwitch } from "@/components/theme-switch"
 import { Chat, Messages, initialMessages } from '@/components/chat'
-import { DataContext } from './contexts'
+import { FCContext } from './contexts'
 import { DebugSidebar } from '@/components/sidebar/debug-sidebar'
 import { SidebarLayout } from '@/components/sidebar/layout'
 import { useRemoteToast } from '@/hooks/networking/remote-toast'
@@ -51,7 +51,7 @@ export default function Home() {
 
 
   return (
-    <DataContext.Provider value={firstContact}>
+    <FCContext.Provider value={firstContact}>
       <SidebarLayout
         leftSidebar={
           <div className='flex flex-col content-between h-full'>
@@ -120,6 +120,6 @@ Do you have any legal questions? I can help you with:
         />
 
       </SidebarLayout>
-    </DataContext.Provider>
+    </FCContext.Provider>
   )
 }

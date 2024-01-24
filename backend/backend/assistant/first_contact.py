@@ -42,7 +42,7 @@ class FirstContactToolkit(Toolkit):
         self._history = history
 
         self.summary = {}
-        self.chatEnded = False
+        self.chatEnded = cases_db().retrieve([user_id]) != []
         self.summarySchema = FirstContactSummary.model_json_schema()
 
         self.sync = Sync(

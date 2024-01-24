@@ -10,10 +10,9 @@ from fastapi.staticfiles import StaticFiles
 
 from gpt_wrapper.messages import msg
 from backend.assistant.first_contact import FirstContactBot
-from backend.assistant.follow_up_qa import FollowUpBot
+from backend.assistant.follow_up_qa import FollowUpBot, NoCaseException
 from backend.database.schemas import cases_db, meetings_db
 from .sync import Connection
-from .case_manager import CaseManager, NoCaseException
 from .utils import get_ip, open_qr
 
 
@@ -35,7 +34,7 @@ def assistant_factory(assistant_type:str, user_id: str):
                 print(f"Case {case_id} found")
             except:
                 raise NoCaseException(f"Case {case_id} not found")
-            return CaseManager(case)
+            return FollowUpBot(case)
         
         case _:
             raise Exception(f"Assistant type {assistant_type} not found")

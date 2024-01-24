@@ -1,6 +1,12 @@
+import asyncio
+from time import time
 from gpt_wrapper.messages import msg
 from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with_message
-from .chatgpt import SyncedGPT, SyncedHistory
+
+from backend.database.generate import generate_meeting_title_summary, generate_next_meeting
+from backend.database.utils import format_dialogs
+from backend.server.mail import send_email
+from .chatgpt import SyncedGPT, SyncedHistory, MessageHistory
 from .utils import format_query_dialog, format_query_law
 
 from backend.database import Case, Meeting, meetings_db, dialogs_db, law_book_db
@@ -8,16 +14,23 @@ from backend.server.sync import Sync
 
 from datetime import datetime
 
+
+class NoCaseException(Exception):
+    pass
+
+
 class LegalDBToolkit(Toolkit):
-    def __init__(self, case: Case, meetings: list[Meeting]):
+    def __init__(self, case: Case, history: MessageHistory):
         super().__init__()      
 
-        # state
-        # self.chatEnded = False
+        self._history = history
 
         # case information
         self.case = case
-        self.meetings = meetings
+        self.meetings_db = meetings_db(case.case_id)
+        self.meetings = sorted([meeting for meeting in self.meetings_db], key=lambda x: x.timestamp)
+        self.selected_meeting = self.meetings[-1].timestamp
+        self.chatEnded = False
 
         # databases
         self.dialog_dbs = [dialogs_db(case.case_id, m.timestamp) for m in self.meetings]
@@ -26,9 +39,24 @@ class LegalDBToolkit(Toolkit):
         self.zpo_db = law_book_db("ZPO")
 
         # sync
-        # self.sync = Sync("FOLLOW_UP", self,
-            
-        # )
+        self.sync = Sync("FOLLOW_UP", self,
+            on_action={
+                "SCHEDULE_MEETING": self.on_schedule,
+            },
+            caseData=...,
+            meetingsDict='meetings',
+            selected_meeting='selectedMeeting',
+            chatEnded=...,
+        )
+    
+    @property
+    def caseData(self):
+        return self.case.model_dump()
+    
+    @property
+    def meetingsDict(self):
+        return [m.model_dump() for m in self.meetings]
+        
 
 
     @function_tool()
@@ -84,24 +112,75 @@ class LegalDBToolkit(Toolkit):
             hour: hour of the meeting
             minute: minute of the meeting
         """
-        return f"Meeting Scheduled on {year}-{month}-{day} {hour}:{minute}"
+        return f"Success: schedule form created. Now, instruct the user to press the 'Schedule' button to confirm the meeting time."
     
-    # @function_tool
-    # @fail_with_message("ERROR:")
-    # async def end_chat(self):
-    #     """
-    #     Immediately end the chat session: Your next message will be the last message of the chat session, be sure to thank and say goodbye to the user!
-    #     """
-    #     self.chatEnded = True
-    #     await self.sync()
-    #     return "Chat Ended"
+    @function_tool
+    @fail_with_message("ERROR:")
+    async def end_chat(self):
+        """
+        Immediately end the chat session: Your next message will be the last message of the chat session, be sure to thank and say goodbye to the user!
+        """
+        self.chatEnded = True
+        await self.sync()
+        return "Chat Ended"
+
+    async def on_schedule(self, timestamp: int):
+        # save this chat to DB
+        m_db = meetings_db(self.case.case_id)
+        with_chat = self.meetings[-1]
+        with_chat.chat = self._history.history
+        m_db.overwrite(with_chat, self.meetings[-1].timestamp)
+
+        # generate mocked dialogs
+        dialogs = await generate_next_meeting(self.case, [m.summary for m in self.meetings])
+        dialog_db = dialogs_db(self.case.case_id, timestamp)
+        dialog_db.add(dialogs, list(range(len(dialogs))))
+
+        # Generate meeting title and summary and save to DB
+        title, summary = await generate_meeting_title_summary(self.case, dialogs)
+        meeting = Meeting(
+            timestamp=timestamp,
+            title=title,
+            summary=summary,
+        )
+        m_db.add([meeting], [timestamp])
+
+        contents = f"""
+Dear {self.case.client},
+
+We had a great meeting on {datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d (%A), %H:%M:%S")}. This is the transcript of our meeting:
+
+{format_dialogs(dialogs)}
+
+For any follow-up questions, <a href="http://34.90.113.6:42069/ChatJustus/follow-up">ask ChatJustus</a>.
+
+Best regards,
+{self.case.lawyer}
+Sterling Legal Associates
+        """.strip()
+
+        asyncio.create_task(asyncio.to_thread(
+             send_email,
+             to=self.case.email,
+             subject=f"{self.case.email}, here's our meeting transcript!",
+             contents= contents,
+         ))
+        
+
+        self.chatEnded = True
+        await self.sync()
+        await self.sync.toast(
+            f"Thank you, {self.case.lawyer or 'your lawyer'} will email you soon!",
+            type="success",
+        )
+
+
 
 
 
 class FollowUpBot(SyncedGPT):
-    def __init__(self, case: Case, meetings: list[Meeting]):
+    def __init__(self, case: Case):
         self.case = case
-        self.meetings = meetings
 
         initial_messages = SyncedHistory(
             system=f"""
@@ -127,7 +206,7 @@ Handling Aggressive Language: If the user seems aggressive or impatient, politel
         super().__init__(
             messages=initial_messages,
             model="gpt-4-1106-preview",
-            tools=LegalDBToolkit(case, meetings),
+            tools=LegalDBToolkit(case, initial_messages),
         )
 
 
