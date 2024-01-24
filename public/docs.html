@@ -1,0 +1,782 @@
+
+<html>
+  <head>
+    
+<style>
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+}
+
+.summary-toggle {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0px 1em;
+}
+
+.repo-header {
+    font-size: 2em;
+    font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 0.5em;
+    color: #333;
+}
+
+.repo-summary {
+    color: #666;
+}
+
+.directory, .file {
+    margin-left: 20px;
+    border-left: 2px solid #ddd;
+    padding-left: 15px;
+    position: relative;
+}
+
+.directory-header {
+    font-family: monospace;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 0.5em;
+    color: #333;
+}
+
+.directory-summary {
+    color: #666;
+    padding-bottom: 1em;
+}
+
+.directory-content {
+    margin-top: 10px;
+}
+
+.file {
+    padding-bottom: 5px;
+}
+
+.file-path {
+    font-family: monospace;
+    font-weight: bold;
+    margin-top: 0.5em;
+    color: #555;
+}
+
+.file-summary {
+    color: #666;
+    padding-bottom: 1em;
+}
+
+.toggle-arrow {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 5px 5px 0 5px;
+    border-color: #333 transparent transparent transparent;
+    position: absolute;
+    left: -20px;
+    top: 0%;
+    transform: translateY(100%);
+}
+
+.directory.closed .toggle-arrow {
+    border-width: 5px 0 5px 5px;
+    border-color: transparent transparent transparent #333;
+}
+
+details {
+}
+
+details > summary {
+  padding: 2px 6px;
+  border: none;
+  box-shadow: 3px 3px 4px black;
+  cursor: pointer;
+  list-style: none;
+}
+
+details > p {
+  border-radius: 0 0 10px 10px;
+  padding: 2px 20em;
+  margin: 0;
+}
+
+code {
+    color: #dd0000;
+    background-color: #eee;
+}
+
+#toggleAllSummaries {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000; /* ensures the button stays on top of other elements */
+}
+
+#toggleAllSummaries:hover {
+    background-color: #0056b3;
+}
+</style>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+
+  </head>
+  <body>
+
+<div class="warning" style='padding:0.1em; background-color:#E9D8FD; color:#69337A; border-radius: 20px;'>
+<span>
+<p style='text-align:center'>
+<b>Tip: Click the summary box to toggle between "Short" and "Detailed" explanations</b></p>
+</span>
+</div>
+<div class='repo'>
+  <div class='repo-header'>📕 ChatJustus</div>
+  <div class='repo-summary'>
+  <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The repository contains the code for ChatJustus, an AI chatbot aimed at improving the lawyer-client user experience. It includes a backend with AI assistants, a vector database, and a FastAPI and Uvicorn server, as well as a frontend with TypeScript and React code for the web application." data-long="The repository houses the code for ChatJustus, an AI chatbot tailored to enhance the lawyer-client user experience. The `backend` directory encompasses the backend logic, including AI assistants, a vector database, and a FastAPI and Uvicorn server for handling requests. It also provides instructions for setting up the development environment using conda, virtual environment, and poetry. On the other hand, the `frontend` directory contains the code and configuration files for the web application&#x27;s frontend. It incorporates TypeScript and React code for layout, context, and UI components, along with hooks for managing network connections and state synchronization. Overall, the repository serves as the foundation for the ChatJustus AI chatbot, encompassing both the backend and frontend components necessary for its operation.">**Short:** The repository contains the code for ChatJustus, an AI chatbot aimed at improving the lawyer-client user experience. It includes a backend with AI assistants, a vector database, and a FastAPI and Uvicorn server, as well as a frontend with TypeScript and React code for the web application.</div>
+  </div>
+  <p class=''>Contents:</p>
+  <div class='directory-content' style='display:block;'>
+  </div>
+</div>
+<div class='file'>
+  <div class='file-path'>📄 README.md</div>
+  <div class='file-summary'>
+  <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The file contains a brief description of ChatJustus, an AI chatbot designed to enhance the lawyer-client user experience." data-long="The content provides an overview of ChatJustus, an AI chatbot aimed at improving the lawyer-client interaction journey. It includes a link to the project&#x27;s website for further information.
+
+As the content is not code, there are no specific parts to list. The summary highlights the purpose of ChatJustus as an AI chatbot for enhancing the lawyer-client user experience.">**Short:** The file contains a brief description of ChatJustus, an AI chatbot designed to enhance the lawyer-client user experience.</div>
+  </div>
+</div>
+<div class='directory closed'>
+  <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 backend</div>
+  <div class='directory-summary'>
+  <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `backend` directory contains code and data for the ChatJustus backend, including AI assistants, a vector database, and a FastAPI and Uvicorn backend server. It also includes instructions for setting up the development environment using conda, virtual environment, and poetry." data-long="The `backend` directory includes a `README.md` file providing instructions for setting up the development environment and managing dependencies. The `backend/backend` directory contains code for AI assistants, a vector database, and a backend server using FastAPI and Uvicorn. The AI assistants handle client interactions, the vector database stores relevant data, and the backend server manages cases, meetings, emails, and state synchronization with the frontend. Additionally, the `data` directory contains data used to add entire German law books to a Legal DB, with details on the process in the `create_legal_db.ipynb` file.">**Short:** The `backend` directory contains code and data for the ChatJustus backend, including AI assistants, a vector database, and a FastAPI and Uvicorn backend server. It also includes instructions for setting up the development environment using conda, virtual environment, and poetry.</div>
+  </div>
+  <div class='directory-content' style='display:none;'>
+    <div class='file'>
+      <div class='file-path'>📄 README.md</div>
+      <div class='file-summary'>
+      <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The file provides instructions for setting up the development environment for the ChatJustus backend using conda for Python version and virtual environment, and poetry for dependency management. It also includes steps for environment setup, installing dependencies, updating dependencies, and setting up the `.env` file." data-long="The file provides instructions for setting up the development environment for the ChatJustus backend. It includes steps for environment setup using conda and poetry for dependency management. It also provides guidance on creating the conda environment, activating the environment, installing dependencies using poetry, adding new dependencies, and updating to the latest dependencies. Additionally, it instructs on setting up the `.env` file by copying the `.env.example` file and filling in the values for the environment variables from the Discord channel.
+
+## Development Setup
+- `environment.yaml`: Contains the configuration for the conda environment.
+
+### Environment Setup
+1. `cd backend`: Change directory to the backend folder.
+2. `conda env create -f environment.yaml`: Create the conda environment.
+3. `conda activate tc`: Activate the environment.
+4. `poetry install`: Install all dependencies using poetry.
+5. `poetry add &lt;package&gt;`: Add a new dependency using poetry.
+6. `poetry update`: Update to the latest dependencies using poetry.
+
+## Running the server
+- `poetry run server`: Run the server locally in the browser.
+- `poetry run expose`: Run the server exposed to the local network, providing a QR code for mobile app access.">**Short:** The file provides instructions for setting up the development environment for the ChatJustus backend using conda for Python version and virtual environment, and poetry for dependency management. It also includes steps for environment setup, installing dependencies, updating dependencies, and setting up the `.env` file.</div>
+      </div>
+    </div>
+    <div class='directory closed'>
+      <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 backend</div>
+      <div class='directory-summary'>
+      <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `backend/backend` directory contains code for two AI assistants, a vector database, and a backend server using FastAPI and Uvicorn. The AI assistants handle initial client interactions and follow-up interactions, the vector database stores data for the AI assistants to use, and the backend server manages cases, meetings, emails, and state synchronization with the frontend." data-long="The `backend/backend` directory contains three main subdirectories. The `assistant` directory holds code for two AI assistants, `first_contact.py` and `follow_up_qa.py`, which manage initial client interactions and follow-up interactions after meetings with the lawyer. The `database` directory contains code related to the vector database, including a custom wrapper around qdrant, schemas for each collection in the database, and Python files for handling embedding models and working with the vector database. The `server` directory contains code for the backend server using FastAPI and Uvicorn, which includes functionality for managing cases and meetings, sending emails, and defining a simple state syncing protocol using WebSocket connections for maintaining a persistent connection to the frontend and handling efficient state synchronization using JSON Patches and event/action/task handlers.">**Short:** The `backend/backend` directory contains code for two AI assistants, a vector database, and a backend server using FastAPI and Uvicorn. The AI assistants handle initial client interactions and follow-up interactions, the vector database stores data for the AI assistants to use, and the backend server manages cases, meetings, emails, and state synchronization with the frontend.</div>
+      </div>
+      <div class='directory-content' style='display:none;'>
+        <div class='directory closed'>
+          <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 assistant</div>
+          <div class='directory-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `backend/assistant` directory contains code for two AI assistants for the backend. The `first_contact.py` assistant is the initial point of contact for potential clients, while the `follow_up_qa.py` assistant handles follow-up interactions after meetings with the lawyer." data-long="The `backend/assistant` directory contains Python scripts and modules for managing AI assistants in a legal context. The `first_contact.py` script defines a chatbot for potential legal clients, assisting them by asking relevant questions, summarizing their legal case, and suggesting a suitable lawyer. The `follow_up_qa.py` module provides tools for querying law articles, managing meeting dialogs, and scheduling meetings, and initializes a chatbot for assisting clients with legal queries. Additionally, the `chatgpt.py` module includes classes for managing a synced message history and a synced GPT model, while the `utils.py` file defines functions for formatting query results.">**Short:** The `backend/assistant` directory contains code for two AI assistants for the backend. The `first_contact.py` assistant is the initial point of contact for potential clients, while the `follow_up_qa.py` assistant handles follow-up interactions after meetings with the lawyer.</div>
+          </div>
+          <div class='directory-content' style='display:none;'>
+            <div class='file'>
+              <div class='file-path'>📄 README.md</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The AI Assistant Subpackage contains two AI assistants for the backend. The `first_contact.py` assistant is the initial point of contact for potential clients, while the `follow_up_qa.py` assistant handles follow-up interactions after meetings with the lawyer." data-long="The `first_contact.py` assistant is the initial point of contact for potential clients. It has access to tools such as `summarize_first_contact` for sending a summary of the first contact to the lawyer and `end_chat` for ending the chat at any time.
+
+The `follow_up_qa.py` assistant handles follow-up interactions after meetings with the lawyer. It has access to tools such as `query_law_articles` for searching the Legal DB for relevant law articles, `query_dialog` for searching the Case DB for direct quotes from previous meeting transcripts, `message_lawyer` for sending a message to the lawyer (currently simulating success), `schedule_meeting` for scheduling a meeting with the lawyer (currently simulating success), and `end_chat` for ending the chat at any time.">**Short:** The AI Assistant Subpackage contains two AI assistants for the backend. The `first_contact.py` assistant is the initial point of contact for potential clients, while the `follow_up_qa.py` assistant handles follow-up interactions after meetings with the lawyer.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 __init__.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="(empty file)" data-long="(empty file)">**Short:** (empty file)</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 chatgpt.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code provided is a Python module that includes classes for managing a synced message history and a synced GPT (Generative Pre-trained Transformer) model. The `SyncedHistory` class manages message history and the currently generating partial message, while the `SyncedGPT` class manages the GPT model and its interactions with the message history." data-long="The code includes the following significant parts:
+
+- `SyncedHistory` class:
+  - `__init__(self, system: str, history: list[dict])`: Initializes the synced message history with a system message, history, and a sync object.
+  - `history`: Property to get the history of messages.
+  - `history.setter`: Setter for the history of messages.
+  - `append(self, message)`: Method to append a message to the history.
+  - `reset(self)`: Method to reset the history of messages.
+  - `set_partial(self, partial)`: Method to set the currently generating partial message.
+  - `append_partial(self)`: Method to append the currently generating partial message to the history.
+
+- `SyncedGPT` class:
+  - `__init__(self, messages: SyncedHistory, tools: Tools | None, model: str, temperature: float | None)`: Initializes the synced GPT model with messages, tools, model, and temperature settings.
+  - `prompt(self, prompt: str)`: Method to prompt the GPT model with a given prompt.
+  - `cancel_prompt(self)`: Method to cancel the prompt for the GPT model.">**Short:** The code provided is a Python module that includes classes for managing a synced message history and a synced GPT (Generative Pre-trained Transformer) model. The `SyncedHistory` class manages message history and the currently generating partial message, while the `SyncedGPT` class manages the GPT model and its interactions with the message history.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 first_contact.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This file appears to be a Python script that defines classes and functions for a legal chatbot. It includes tools for summarizing a potential client&#x27;s legal case, ending a chat session, and sending emails. The chatbot is designed to assist potential legal clients by asking relevant questions, determining if the law firm can address their needs, and suggesting a suitable lawyer for the case." data-long="The code defines the following significant parts:
+- `Lawyers`: An enumeration class that contains the names of lawyers retrieved from the database.
+- `FirstContactSummary`: A Pydantic BaseModel schema for displaying a form on the frontend, including fields for name, email, case, and lawyer.
+- `FirstContactToolkit`: A class that extends the Toolkit class and contains methods for summarizing a potential client&#x27;s legal case, ending a chat session, and handling the submission of a summary.
+- `FirstContactBot`: A class that extends the SyncedGPT class and initializes the chatbot with initial messages and tools from the FirstContactToolkit. It provides instructions for the chatbot&#x27;s role and behavior.
+
+The code also includes imports from various modules and packages, such as asyncio, time, enum, pydantic, and markdown. Additionally, it imports classes and functions from custom modules related to the chatbot&#x27;s functionality, such as `SyncedGPT`, `SyncedHistory`, and tools for interacting with the database and sending emails. The chatbot&#x27;s behavior is described in the initial messages provided in the `FirstContactBot` class, outlining its role in assisting potential legal clients and handling off-topic conversations.">**Short:** This file appears to be a Python script that defines classes and functions for a legal chatbot. It includes tools for summarizing a potential client&#x27;s legal case, ending a chat session, and sending emails. The chatbot is designed to assist potential legal clients by asking relevant questions, determining if the law firm can address their needs, and suggesting a suitable lawyer for the case.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 follow_up_qa.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given code is a Python module that defines two classes, `LegalDBToolkit` and `FollowUpBot`. The `LegalDBToolkit` class provides tools for querying law articles, meeting dialogs, sending messages to the lawyer, and scheduling meetings. The `FollowUpBot` class initializes a chatbot for assisting clients with legal queries and follows a set of rules for interaction." data-long="The code defines two classes, `LegalDBToolkit` and `FollowUpBot`. The `LegalDBToolkit` class is a subclass of `Toolkit` and is initialized with a `Case` object and a list of `Meeting` objects. It contains methods for querying law articles, meeting dialogs, sending messages to the lawyer, and scheduling meetings. The `FollowUpBot` class is a subclass of `SyncedGPT` and is initialized with a `Case` object and a list of `Meeting` objects. It sets up an initial message history and initializes the chatbot with a specific model and the `LegalDBToolkit` as its tools. The initial message provides instructions and rules for the chatbot&#x27;s interaction with clients. The code also imports various modules and classes from external sources.">**Short:** The given code is a Python module that defines two classes, `LegalDBToolkit` and `FollowUpBot`. The `LegalDBToolkit` class provides tools for querying law articles, meeting dialogs, sending messages to the lawyer, and scheduling meetings. The `FollowUpBot` class initializes a chatbot for assisting clients with legal queries and follows a set of rules for interaction.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 utils.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given code defines two functions, `format_query_dialog` and `format_query_law`, which take a query result as input and format it into a specific string format. If the query result is empty, the functions return &quot;No result found&quot;." data-long="The `format_query_dialog` function takes a query result and formats it into a string where each item is represented as `[^i]: **speaker:** *&quot;content&quot;*`. The `format_query_law` function also takes a query result and formats it into a string where each item is represented as `[^i]: *&quot;content&quot;*`. Both functions use list comprehension and the `join` method to create the formatted string. If the query result is empty, both functions return &quot;No result found&quot;.">**Short:** The given code defines two functions, `format_query_dialog` and `format_query_law`, which take a query result as input and format it into a specific string format. If the query result is empty, the functions return &quot;No result found&quot;.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='directory closed'>
+          <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 database</div>
+          <div class='directory-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `backend/backend/database` directory contains code related to the vector database used by the AI assistant to answer questions, including a custom wrapper around qdrant, schemas for each collection in the database, and Python files for handling embedding models and working with the vector database." data-long="The `backend/backend/database` directory contains the vector database used by the AI assistant, with a custom wrapper around qdrant in the `core/` directory and schemas for each collection in the database in `schemas.py`. The `__init__.py` file imports various schemas and databases related to lawyers, cases, meetings, dialogs, law articles, and case records. The `core/` directory contains Python files related to handling embedding models for text data and working with the vector database using the QdrantClient library. Additionally, there is a `generate.py` file that utilizes GPT-3.5 and GPT-4 language models to generate imaginary dialogs and meeting summaries for legal cases, along with functions to format and summarize the generated content. The `schemas.py` module defines schemas for managing lawyers, cases, meetings, dialogs, law articles, and case records in databases, while the `utils.py` file contains functions for formatting and processing data related to dialogs and lawyers, including functions for converting a meeting timestamp to a Unix timestamp, formatting dialogs, summaries, and lawyer information.">**Short:** The `backend/backend/database` directory contains code related to the vector database used by the AI assistant to answer questions, including a custom wrapper around qdrant, schemas for each collection in the database, and Python files for handling embedding models and working with the vector database.</div>
+          </div>
+          <div class='directory-content' style='display:none;'>
+            <div class='file'>
+              <div class='file-path'>📄 README.md</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The database subpackage contains the vector database used by the AI assistant to answer questions, utilizing qdrant as the underlying DB. It includes a custom wrapper around qdrant in the `core/` directory and schemas for each collection in the DB in `schemas.py`. Additionally, there are Jupyter notebooks in the parent directory for creating and populating the lawyer and legal databases, as well as a mocked case." data-long="The `core/` directory contains a custom wrapper around qdrant, while `schemas.py` holds the schemas for each collection in the database.
+
+- `create_lawyer_db.ipynb`: Jupyter notebook for creating and populating the lawyer database.
+- `create_legal_db.ipynb`: Jupyter notebook for creating and populating the legal database.
+- `create_mocked_case.ipynb`: Jupyter notebook for creating a mocked case in the database.">**Short:** The database subpackage contains the vector database used by the AI assistant to answer questions, utilizing qdrant as the underlying DB. It includes a custom wrapper around qdrant in the `core/` directory and schemas for each collection in the DB in `schemas.py`. Additionally, there are Jupyter notebooks in the parent directory for creating and populating the lawyer and legal databases, as well as a mocked case.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 __init__.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given file appears to import various schemas and databases related to lawyers, cases, meetings, dialogs, law articles, and case records." data-long="The file seems to be importing various schemas such as `Lawyer`, `Case`, `Meeting`, `Dialog`, `LawArticle`, and `CaseRecord`, along with their respective databases `lawyers_db`, `cases_db`, `meetings_db`, `dialogs_db`, `law_book_db`, and `case_records_db`. These likely represent the data structures and databases used in a legal application or system. Each of these schemas and databases would likely contain relevant information and functionalities for managing and storing data related to legal entities, cases, meetings, dialogs, law articles, and case records.">**Short:** The given file appears to import various schemas and databases related to lawyers, cases, meetings, dialogs, law articles, and case records.</div>
+              </div>
+            </div>
+            <div class='directory closed'>
+              <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 core</div>
+              <div class='directory-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `backend/backend/database/core` directory contains Python files related to handling embedding models for text data and working with a vector database using the QdrantClient library." data-long="The `embedding.py` file defines an abstract base class `EmbeddingModel` and two concrete subclasses `MockEmbedding` and `OpenAIEmbedding`, which are used for creating embedding models for text data. This is crucial for tasks such as natural language processing and machine learning. The `vector_db.py` file contains code for interacting with a vector database using the QdrantClient library. It defines a class `VectorDB` for managing interactions with the vector database and a class `EmbedData` for handling embeddable fields and their embeddings. These components are essential for efficiently storing and querying vector data, which is commonly used in various data-intensive applications such as recommendation systems and similarity searches.">**Short:** The `backend/backend/database/core` directory contains Python files related to handling embedding models for text data and working with a vector database using the QdrantClient library.</div>
+              </div>
+              <div class='directory-content' style='display:none;'>
+                <div class='file'>
+                  <div class='file-path'>📄 embedding.py</div>
+                  <div class='file-summary'>
+                  <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given Python code defines an abstract base class `EmbeddingModel` and two concrete subclasses `MockEmbedding` and `OpenAIEmbedding`. These classes are used for creating embedding models for text data." data-long="The code defines an abstract base class `EmbeddingModel` with a class variable `EMBEDDING_DIM` and a class variable `DISTANCE` of type `Distance`. It also includes a class method `embed` and an instance method `__call__`. 
+
+- `EmbeddingModel`: An abstract base class with class variables `EMBEDDING_DIM` and `DISTANCE`, a class method `embed`, and an instance method `__call__`.
+  - `embed`: A class method that raises a `NotImplementedError`.
+  - `__call__`: An instance method that calls the `embed` method.
+
+The code also includes a concrete subclass `MockEmbedding` which overrides the class variables and the `embed` method, and another concrete subclass `OpenAIEmbedding` which also overrides the class variables and the `embed` method. The `OpenAIEmbedding` class uses the `OpenAI` client to create embeddings for the input texts.">**Short:** The given Python code defines an abstract base class `EmbeddingModel` and two concrete subclasses `MockEmbedding` and `OpenAIEmbedding`. These classes are used for creating embedding models for text data.</div>
+                  </div>
+                </div>
+                <div class='file'>
+                  <div class='file-path'>📄 vector_db.py</div>
+                  <div class='file-summary'>
+                  <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This Python file contains code for working with a vector database using the QdrantClient library. It defines a class `VectorDB` for interacting with the vector database, as well as a class `EmbedData` for handling embeddable fields and their embeddings." data-long="The code file contains several parts:
+- `EmbedField(embedder: Type[EmbeddingModel] = OpenAIEmbedding, *args, **kwargs)`: This function defines a field that can be embedded into a vector database, allowing specification of the embedding model to use.
+- `EmbedData`: This class serves as an abstract model for data that contains at least one embeddable field. It includes methods for converting data to a payload, obtaining field embedders, and creating embeddings for a batch of data.
+- `VectorDB`: This class represents a vector database and includes methods for initializing, resetting, destroying, adding, querying, retrieving, and iterating over data in the database. It also has a method for validating vector fields.
+
+The code also includes import statements for necessary libraries and modules, as well as some type annotations and comments for documentation.">**Short:** This Python file contains code for working with a vector database using the QdrantClient library. It defines a class `VectorDB` for interacting with the vector database, as well as a class `EmbedData` for handling embeddable fields and their embeddings.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 generate.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The file contains Python code that utilizes the GPT-3.5 and GPT-4 language models to generate imaginary dialogs and meeting summaries for legal cases. It also includes functions to format and summarize the generated content." data-long="The code defines two Pydantic models, `MeetingDialogs` and `MeetingTitle`, to represent meeting dialogs and titles. It then creates instances of the `StructGPT` class for generating dialogs and titles using the GPT-3.5 language model. The file includes functions:
+- `generate_first_meeting(case)`: This function generates an imaginary dialog for the first meeting between a lawyer and a client based on a given case summary. It uses the `dialog_generator` instance to generate the dialog and handles exceptions by providing default dialogs if an error occurs.
+- `generate_next_meeting(case, summaries)`: This function generates an imaginary dialog for subsequent meetings between a lawyer and a client based on the case summary and meeting summaries. It also uses the `dialog_generator` instance and provides default dialogs in case of an exception.
+- `generate_meeting_title_summary(case, dialogs)`: This function formats the dialogs, summarizes them using the GPT-4 language model, and generates a short title for the meeting summary using the `titlizer` instance. It returns the generated title and summary as a tuple.">**Short:** The file contains Python code that utilizes the GPT-3.5 and GPT-4 language models to generate imaginary dialogs and meeting summaries for legal cases. It also includes functions to format and summarize the generated content.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 schemas.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This module defines schemas for managing lawyers, cases, meetings, dialogs, law articles, and case records in databases." data-long="The code defines several classes and functions for managing different types of data in databases. It includes the following significant parts:
+- `Lawyer`: Represents a lawyer&#x27;s data with attributes like name, specialization, introduction, and practice areas.
+- `lawyers_db()`: Returns a database for managing lawyers.
+- `Case`: Represents a client&#x27;s data and their case with attributes like case ID, client name, email, lawyer name, and summary.
+- `cases_db()`: Returns a database for managing cases.
+- `Meeting`: Represents a meeting from a case with attributes like timestamp, title, summary, and chat.
+- `meetings_db(case_id)`: Returns a database for managing meetings related to a specific case.
+- `Dialog`: Represents a dialog from a meeting with attributes like speaker and content.
+- `dialogs_db(case_id, meeting_timestamp)`: Returns a database for managing dialogs related to a specific meeting.
+- `LawArticle`: Represents a single article from a law book with attributes like book, article number, title, and content.
+- `law_book_db(book)`: Returns a database for managing law articles from a specific book.
+- `CaseRecord`: Represents a single case record from a court with attributes like timestamp, title, and content.
+- `case_records_db()`: Returns a database for managing case records.">**Short:** This module defines schemas for managing lawyers, cases, meetings, dialogs, law articles, and case records in databases.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 utils.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The file contains functions for formatting and processing data related to dialogs and lawyers. It includes functions for converting a meeting timestamp to a Unix timestamp, formatting dialogs, formatting summaries, formatting a single lawyer&#x27;s information, and formatting information for multiple lawyers." data-long="The code file contains several functions for formatting and processing data related to dialogs and lawyers. 
+- `to_timestamp(meeting_timestamp)`: This function takes a meeting timestamp in the format &#x27;%Y-%m-%d&#x27; and converts it to a Unix timestamp.
+- `format_dialogs(dialogs)`: This function takes a list of Dialog objects and formats them as a string with each dialog&#x27;s speaker and content.
+- `format_summaries(summaries)`: This function takes a list of summaries and formats them as a string with each summary prefixed by &quot;Meeting {i+1}: &quot;.
+- `format_lawyer(lawyer)`: This function takes a Lawyer object and formats their information as a string, including their name, specialization, introduction, and practice areas.
+- `format_all_lawyers(lawyers)`: This function takes a list of Lawyer objects and formats their information as a string, including the index, using the `format_lawyer` function for each lawyer.">**Short:** The file contains functions for formatting and processing data related to dialogs and lawyers. It includes functions for converting a meeting timestamp to a Unix timestamp, formatting dialogs, formatting summaries, formatting a single lawyer&#x27;s information, and formatting information for multiple lawyers.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='directory closed'>
+          <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 server</div>
+          <div class='directory-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `backend/server` directory contains code for the backend server using FastAPI and Uvicorn, which utilizes WebSocket connections for maintaining a persistent connection to the frontend and handles efficient state synchronization using JSON Patches and event/action/task handlers. It includes functionality for managing cases and meetings, sending emails, and defining a simple state syncing protocol." data-long="The `backend/server` directory contains several important files. The `README.md` provides an overview of the server subpackage and its functionality. The `case_manager.py` file defines a `CaseManager` class for initializing cases and meetings, and creating a follow-up bot. The `mail.py` file contains functions for sending emails and validating email addresses. The `server.py` file implements the backend server using FastAPI and includes WebSocket endpoints for user connections and serving static HTML files for chat interfaces. The `sync.py` file defines a state syncing protocol between the frontend and backend, including a `Connection` class for managing WebSocket connections and a `Sync` class for syncing object attributes. Lastly, the `utils.py` file provides functions for retrieving the local machine&#x27;s IP address and displaying a QR code in a web browser.">**Short:** The `backend/server` directory contains code for the backend server using FastAPI and Uvicorn, which utilizes WebSocket connections for maintaining a persistent connection to the frontend and handles efficient state synchronization using JSON Patches and event/action/task handlers. It includes functionality for managing cases and meetings, sending emails, and defining a simple state syncing protocol.</div>
+          </div>
+          <div class='directory-content' style='display:none;'>
+            <div class='file'>
+              <div class='file-path'>📄 README.md</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The server subpackage contains the backend server using FastAPI and Uvicorn for the web framework and ASGI server, respectively. It utilizes WebSocket connections for maintaining a persistent connection to the frontend and handles efficient state synchronization using JSON Patches and event/action/task handlers." data-long="The server subpackage is designed to handle backend operations using FastAPI and Uvicorn. It includes the following significant components:
+- `server.py`: This file contains the main server code, including the FastAPI app, WebSocket connection manager, and serving of frontend static files under `/webapp_static`.
+- `sync.py`: It houses the connection manager and sync protocol, responsible for managing WebSocket connections and handling JSON Patch synchronization.
+- `mail.py`: This file contains functions for sending emails.
+- `case_manager.py`: This class is used for managing the state of each chat in a multi-chat page, such as the Follow Up bot.">**Short:** The server subpackage contains the backend server using FastAPI and Uvicorn for the web framework and ASGI server, respectively. It utilizes WebSocket connections for maintaining a persistent connection to the frontend and handles efficient state synchronization using JSON Patches and event/action/task handlers.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 case_manager.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code defines a `CaseManager` class that initializes a case and its meetings, and creates a follow-up bot for the latest meeting. It also includes a `Sync` object for syncing data." data-long="The code defines a `CaseManager` class with an `__init__` method that takes a `case_id` as input. Inside the `__init__` method, it retrieves the case from the database using the `cases_db` and prints whether the case is found or not. If the case is not found, it creates a demo case. It then initializes the meetings for the case, sorts them by timestamp, and converts them to a dictionary for the frontend. It creates a `FollowUpBot` object for the case and meetings, and sets the `selected_meeting` attribute to the timestamp of the latest meeting. Finally, it creates a `Sync` object for syncing data related to meetings.
+
+- `CaseManager`: A class that manages a case and its meetings.
+  - `__init__(self, case_id: str)`: Initializes the case and meetings, creates a follow-up bot, and sets up data syncing.
+- `self.case`: The case model retrieved from the database.
+- `self.meetings_db`: The database for meetings related to the case.
+- `self.meetings`: A list of meetings converted to dictionaries for the frontend.
+- `self.assistant`: An instance of the `FollowUpBot` class for the case and meetings.
+- `self.selected_meeting`: The timestamp of the latest meeting.
+- `self.sync`: A `Sync` object for syncing data.">**Short:** The code defines a `CaseManager` class that initializes a case and its meetings, and creates a follow-up bot for the latest meeting. It also includes a `Sync` object for syncing data.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 mail.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code defines two functions: `send_email` and `is_valid_email`. The `send_email` function uses the yagmail library to send an email, while the `is_valid_email` function checks if a given email address is valid based on a regular expression pattern." data-long="The code contains two functions:
+- `send_email(to, subject, contents)`: This function uses the yagmail library to send an email. It initializes a yagmail SMTP object using the Gmail address and token obtained from environment variables. Then, it sends an email to the specified recipient with the given subject and contents.
+- `is_valid_email(email)`: This function takes an email address as input and uses a regular expression pattern to check if the email address is valid. It returns a boolean value indicating whether the email address is valid or not.">**Short:** The code defines two functions: `send_email` and `is_valid_email`. The `send_email` function uses the yagmail library to send an email, while the `is_valid_email` function checks if a given email address is valid based on a regular expression pattern.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 server.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This Python file appears to be a server implementation using FastAPI for a web-based chat application. It includes WebSocket endpoints for handling user connections, as well as serving static HTML files for different chat interfaces." data-long="The code begins with importing necessary modules and setting up environment variables using `load_dotenv` from the `dotenv` module. It then imports various modules including `FastAPI`, `WebSocket`, and others. The `users` dictionary is defined to store user connections and their respective assistants. The `assistant_factory` function is defined to create different types of chat assistants based on the provided type. The `new_session` function is defined to initialize a new chat session with a specific assistant type and session ID.
+
+The code then defines a WebSocket authentication function `ws_auth` and a WebSocket endpoint `websocket_endpoint` to handle user connections. It also overrides the endpoints to include `.html` and serves static HTML files for the chat interfaces. Lastly, there are three functions `start`, `expose`, and `expose_no_qr` to start the server with or without displaying a QR code for easy access.">**Short:** This Python file appears to be a server implementation using FastAPI for a web-based chat application. It includes WebSocket endpoints for handling user connections, as well as serving static HTML files for different chat interfaces.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 sync.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This Python module defines a simple state syncing protocol between the frontend and the backend. It includes a `Connection` class for managing the websocket connection, event handling, and networking. Additionally, it provides a `Sync` class for syncing object attributes with the frontend and handling actions and tasks." data-long="The code defines a `Connection` class for managing the websocket connection, event handling, and networking. It includes methods for registering event callbacks, handling connection initialization, sending events, and managing the connection context.
+
+The `Sync` class is used to register an object&#x27;s attributes for syncing with the frontend. It includes methods for observing attributes, registering event callbacks, sending and setting state, patching state, handling actions and tasks, and syncing attributes. The class also provides utilities for sending actions and toast messages to the frontend.
+
+The code also includes a utility function `nonblock_call` for calling a function without blocking the current thread.">**Short:** This Python module defines a simple state syncing protocol between the frontend and the backend. It includes a `Connection` class for managing the websocket connection, event handling, and networking. Additionally, it provides a `Sync` class for syncing object attributes with the frontend and handling actions and tasks.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 utils.py</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given Python code consists of two functions. The `get_ip` function is used to retrieve the IP address of the local machine, while the `open_qr` function opens a web browser to display a QR code based on the input data." data-long="The code contains two functions:
+- `get_ip()`: This function creates a socket, attempts to connect to a specific IP address (which doesn&#x27;t have to be reachable), and retrieves the local IP address. If the connection attempt fails, it defaults to the loopback address &#x27;127.0.0.1&#x27;.
+- `open_qr(data, size=512)`: This function takes input data and an optional size parameter, then uses the `webbrowser` module to open a web browser and display a QR code generated by the qrserver API based on the input data and size. The input data is URL-encoded using the `urllib.parse.quote` function before being used in the URL.">**Short:** The given Python code consists of two functions. The `get_ip` function is used to retrieve the IP address of the local machine, while the `open_qr` function opens a web browser to display a QR code based on the input data.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='directory closed'>
+      <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 data</div>
+      <div class='directory-summary'>
+      <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `backend/data` directory contains data used to add entire German law books to a Legal DB. The process of cleaning, converting, and adding the data to the DB is detailed in the `create_legal_db.ipynb` file in the parent directory." data-long="The `backend/data` directory holds the data necessary for adding entire German law books to a Legal DB. The `README.md` file provides an overview of the purpose of the data and its usage. The most significant file related to this data is the `create_legal_db.ipynb` file in the parent directory, which details the process of cleaning, converting, and adding the data to the DB. This directory likely contains structured data files or databases related to German law books.">**Short:** The `backend/data` directory contains data used to add entire German law books to a Legal DB. The process of cleaning, converting, and adding the data to the DB is detailed in the `create_legal_db.ipynb` file in the parent directory.</div>
+      </div>
+      <div class='directory-content' style='display:none;'>
+        <div class='file'>
+          <div class='file-path'>📄 README.md</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The directory contains data used to add entire German law books to a Legal DB. The process of cleaning, converting, and adding the data to the DB is detailed in the `create_legal_db.ipynb` file in the parent directory." data-long="The `create_legal_db.ipynb` file likely contains code for cleaning, converting, and adding data to the Legal DB. It may include functions and processes for handling the data from the German law books, such as parsing, formatting, and database insertion.
+
+As for the text content, it simply lists the German law books that have been added to the Legal DB, along with their corresponding links. Additionally, it mentions the presence of the code file `create_legal_db.ipynb` in the parent directory, which contains the code used for the data processing and addition to the DB.">**Short:** The directory contains data used to add entire German law books to a Legal DB. The process of cleaning, converting, and adding the data to the DB is detailed in the `create_legal_db.ipynb` file in the parent directory.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class='directory closed'>
+  <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 frontend</div>
+  <div class='directory-summary'>
+  <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend` directory contains code and configuration files for the frontend of the ChatJustus web application. It includes TypeScript and React code for layout, context, and UI components, as well as hooks for managing network connections and state synchronization." data-long="The `frontend` directory includes a `README.md` file providing information about the frontend technology stack and setup instructions. The `app` directory contains essential TypeScript and React code for setting up the layout, context, and providers for the web application, particularly for a chat application. The `components` directory houses various React components and utilities for creating UI elements, managing the sidebar layout, and providing chat-related functionality. The `hooks` directory contains TypeScript files defining components, hooks, and modules for managing network connections, handling WebSocket communication, and synchronizing state in a React application. Additionally, the `types` directory contains a file defining types and functions related to managing usecases. The `styles` directory is empty.">**Short:** The `frontend` directory contains code and configuration files for the frontend of the ChatJustus web application. It includes TypeScript and React code for layout, context, and UI components, as well as hooks for managing network connections and state synchronization.</div>
+  </div>
+  <div class='directory-content' style='display:none;'>
+    <div class='file'>
+      <div class='file-path'>📄 README.md</div>
+      <div class='file-summary'>
+      <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The file contains information about the frontend technology stack and setup instructions for the ChatJustus web application." data-long="The file provides details about the technologies used in the ChatJustus frontend, including Next.js 13, NextUI v2, Tailwind CSS, Tailwind Variants, TypeScript, Framer Motion, and next-themes. It also includes a link to the `package.json` file for more information on additional technologies. The project setup section explains the steps for installing dependencies, running the development server, building for production, and deploying to the backend server using a simple script. The frontend is already compiled and hosted on the backend server, so making changes to the frontend is not necessary for using the app.">**Short:** The file contains information about the frontend technology stack and setup instructions for the ChatJustus web application.</div>
+      </div>
+    </div>
+    <div class='directory closed'>
+      <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 app</div>
+      <div class='directory-summary'>
+      <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend/app` directory contains TypeScript and React code files and directories essential for setting up the layout, context, and providers for a web application, particularly for a chat application. It includes components for error handling, root layout, landing page, and context providers." data-long="The `frontend/app` directory contains several significant files and directories. The `error.tsx` file defines a React component for error handling and recovery. The `layout.tsx` file appears to be a Next.js component for the root layout, including metadata, viewport settings, and the structure for the body and children components. The `page.tsx` file contains a React component for the landing page of the web application. Additionally, the `first-contact` and `follow-up` directories contain essential TypeScript and React code files for setting up the layout, context, and state management, particularly for a chat application. Lastly, the `providers.tsx` file is a React component that provides context providers for the Next.js application, including the Next UI provider and the Next Themes provider.">**Short:** The `frontend/app` directory contains TypeScript and React code files and directories essential for setting up the layout, context, and providers for a web application, particularly for a chat application. It includes components for error handling, root layout, landing page, and context providers.</div>
+      </div>
+      <div class='directory-content' style='display:none;'>
+        <div class='file'>
+          <div class='file-path'>📄 error.tsx</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This code defines a React component called `Error` that logs an error to a reporting service and provides a button to attempt recovery by re-rendering a segment." data-long="The code defines a React functional component `Error` that takes in two props: `error` of type `Error` and `reset` which is a function that takes no arguments and returns void. Inside the component, it uses the `useEffect` hook to log the `error` to an error reporting service when the `error` prop changes. The component returns a JSX structure with a heading &quot;Something went wrong!&quot; and a button that, when clicked, calls the `reset` function to attempt recovery by re-rendering the segment.">**Short:** This code defines a React component called `Error` that logs an error to a reporting service and provides a button to attempt recovery by re-rendering a segment.</div>
+          </div>
+        </div>
+        <div class='directory closed'>
+          <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 first-contact</div>
+          <div class='directory-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend/app/first-contact` directory contains TypeScript and React code files that are essential for setting up the layout, context, and providers for a chat application." data-long="The `contexts.tsx` file sets up a new context using the `createContext` function from the &quot;react&quot; library, likely to manage global state or data sharing within the application. The `layout.tsx` file is responsible for defining the global styles, metadata, viewport settings, and root layout for the web application, indicating its role in the overall UI structure. The `page.tsx` file serves as the main page of the chat application, handling UI elements, connection management, and state for chat messages and other synchronized data. Lastly, the `providers.tsx` file provides a React component for establishing a connection to a WebSocket server, with consideration for client and server-side execution.">**Short:** The `frontend/app/first-contact` directory contains TypeScript and React code files that are essential for setting up the layout, context, and providers for a chat application.</div>
+          </div>
+          <div class='directory-content' style='display:none;'>
+            <div class='file'>
+              <div class='file-path'>📄 contexts.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This code snippet imports the `createContext` function from the &quot;react&quot; library and then creates a new context called `DataContext` using the `createContext` function." data-long="The code snippet is a simple TypeScript/JavaScript code that utilizes the `createContext` function from the &quot;react&quot; library to create a new context called `DataContext`. The `createContext` function is used to create a new context object, which can be used to pass data through the component tree without having to pass props down manually at every level. The `DataContext` context is initialized with an empty object as the default value.
+
+- `createContext`: This function is imported from the &quot;react&quot; library and is used to create a new context object.
+- `DataContext`: This is the newly created context using the `createContext` function, and it is exported for use in other parts of the codebase. The context is initialized with an empty object as the default value.">**Short:** This code snippet imports the `createContext` function from the &quot;react&quot; library and then creates a new context called `DataContext` using the `createContext` function.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 layout.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given code appears to be a TypeScript file that sets up the global styles, metadata, viewport, and root layout for a web application." data-long="The code sets up the global styles, metadata, viewport, and root layout for a web application. It imports global styles from &quot;@/styles/globals.css&quot;, metadata and viewport from &quot;next&quot;, site configuration and fonts from &quot;@/config&quot;, providers from &quot;./providers&quot;, and a toaster from &#x27;sonner&#x27;. It then defines the metadata and viewport objects with specific properties such as title, description, icons, and themeColor. Finally, it exports a default function called RootLayout, which takes children as a parameter and wraps them with the Providers component.
+
+Overall, the code sets up the necessary global configurations and layout for a web application, making use of TypeScript and various imported modules.">**Short:** The given code appears to be a TypeScript file that sets up the global styles, metadata, viewport, and root layout for a web application.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 page.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This code is a React component that serves as the main page of a chat application. It includes UI elements, connection handling, and state management for the chat messages and other synced data." data-long="The code defines a React functional component `Home` that serves as the main page of the chat application. It imports various hooks and components from different locations and libraries. The component includes state management for UI elements, connection handling, and synced data for the chat messages and other information. Notable parts of the code include:
+- `useState`, `useRef`, `useEffect`, `useContext`, `createContext`: Hooks for managing component state and context.
+- `useSynced`, `useSyncedReducer`: Custom hooks for managing synced data and state.
+- `DefaultConnectionContext`: Context for managing the default connection.
+- `ThemeSwitch`, `Chat`, `Messages`, `initialMessages`, `DataContext`, `DebugSidebar`, `SidebarLayout`, `useRemoteToast`, `Button`, `FaCircleCheck`, `FaHeart`, `ConfirmButton`: Imported components and context.
+- The component renders a layout with a chat interface, including UI elements for switching themes, displaying messages, and managing the chat conversation. It also handles connection status and user interactions within the chat interface.">**Short:** This code is a React component that serves as the main page of a chat application. It includes UI elements, connection handling, and state management for the chat messages and other synced data.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 providers.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This code is a React component that provides a connection to a WebSocket server based on whether the code is running on the client or server side." data-long="The `Providers` function is a React component that takes a `children` prop of type `ReactNode`. Inside the function, it uses the `useIsClient` hook to determine if the code is running on the client side. It then defines a `getHost` function that returns the host based on whether it&#x27;s running on the client or server side. If it&#x27;s running on the client side, it renders a `ConnectionProvider` component with specific props for WebSocket connection, and if it&#x27;s running on the server side, it simply renders the `children` prop. The `ConnectionProvider` component is imported from a custom networking library and is configured with a WebSocket URL, context, autoconnect, and wsAuth props.">**Short:** This code is a React component that provides a connection to a WebSocket server based on whether the code is running on the client or server side.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='directory closed'>
+          <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 follow-up</div>
+          <div class='directory-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend/app/follow-up` directory contains TypeScript and React files related to the layout, context, and state management of a web application, particularly for a chat application." data-long="The `contexts.tsx` file sets up a new context using the `createContext` function from the &quot;react&quot; library. This context likely handles global state management for the application. The `layout.tsx` file appears to be responsible for setting up global styles, metadata, viewport, and the root layout for the web application. The `page.tsx` file defines the `Home` component, which includes state management using hooks, context usage, and rendering of UI components for a chat application. Lastly, the `providers.tsx` file contains code for conditionally rendering a `ConnectionProvider` based on the client-side status. This likely handles the connection management for the chat application.">**Short:** The `frontend/app/follow-up` directory contains TypeScript and React files related to the layout, context, and state management of a web application, particularly for a chat application.</div>
+          </div>
+          <div class='directory-content' style='display:none;'>
+            <div class='file'>
+              <div class='file-path'>📄 page.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This is a React component file that defines the `Home` component. It includes state management using hooks, context usage, and rendering of UI components for a chat application." data-long="The code defines a React functional component `Home` that renders a chat application UI. It uses various hooks such as `useState`, `useContext`, `useEffect`, and custom hooks like `useSynced` and `useSyncedReducer` for state management and data synchronization. The component also utilizes context from `DefaultConnectionContext` and renders UI components such as `ThemeSwitch`, `Chat`, and `DebugSidebar`. It handles user interactions and data display based on the state and context values. The component also includes logic for meeting data, message handling, and interaction with a remote server. The UI is structured using the `SidebarLayout` component and includes conditional rendering based on the state of the application.">**Short:** This is a React component file that defines the `Home` component. It includes state management using hooks, context usage, and rendering of UI components for a chat application.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 providers.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code provided is a React component that conditionally renders a `ConnectionProvider` based on whether the code is running on the client side or not." data-long="The `Providers` component is a functional component that takes a `children` prop of type `ReactNode`. Within the component, it uses the `useIsClient` hook to determine if the code is running on the client side. It then defines a `getHost` function that returns the host based on whether the code is running on the client side and the window location hostname. The component conditionally renders a `ConnectionProvider` with specific props if it is running on the client side, and otherwise renders the `children` directly. The `ConnectionProvider` is imported from a custom networking library and is used to establish a WebSocket connection. The URL for the WebSocket connection is based on the host obtained from the `getHost` function. The `autoconnect` and `wsAuth` props are also provided to the `ConnectionProvider`.">**Short:** The code provided is a React component that conditionally renders a `ConnectionProvider` based on whether the code is running on the client side or not.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='file'>
+          <div class='file-path'>📄 layout.tsx</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This code file appears to be a Next.js component for a root layout, including metadata and viewport settings, as well as the layout structure for the body and children components." data-long="The code defines a `metadata` object containing title, description, and icon information, as well as a `viewport` object with theme color and scaling settings. The `RootLayout` function component takes in children as props and returns the layout structure for the body, including the HTML and body tags, as well as the main content area and a toaster component for notifications. The component also utilizes various CSS classes and styles for the layout and theme. Additionally, it imports several modules such as `clsx`, `sonner`, and custom providers from the `providers` file.">**Short:** This code file appears to be a Next.js component for a root layout, including metadata and viewport settings, as well as the layout structure for the body and children components.</div>
+          </div>
+        </div>
+        <div class='file'>
+          <div class='file-path'>📄 page.tsx</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This code appears to be a React component for a landing page of a web application. It includes text content and buttons for users to interact with." data-long="The code defines a React functional component `Home` that returns a JSX structure for the landing page. It includes text elements for welcoming users and providing instructions, as well as buttons wrapped in `Link` components for navigating to different parts of the application. The buttons are imported from the `@nextui-org/button` library, and the `Image` and `Link` components are imported from the `next/image` and `next/link` modules, respectively. The component uses CSS classes for styling, such as `text-primary/100` and `text-foreground/100` for text color, and `flex` for layout. Overall, the component aims to provide a welcoming message and options for users to interact with the application.">**Short:** This code appears to be a React component for a landing page of a web application. It includes text content and buttons for users to interact with.</div>
+          </div>
+        </div>
+        <div class='file'>
+          <div class='file-path'>📄 providers.tsx</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given code is a React component that provides context providers for the Next.js application. It includes the Next UI provider and the Next Themes provider, and it takes in children and theme props as input." data-long="The code defines a React component `Providers` that takes in `children` and `themeProps` as props. Inside the component, it uses the `useRouter` hook from &#x27;next/navigation&#x27; to get the router object. It then returns the Next UI provider with the router&#x27;s push function as the `navigate` prop, and within it, the Next Themes provider with the spread of `themeProps` and the `children` as its content. This component essentially wraps the application with the necessary context providers for UI and themes in a Next.js environment.">**Short:** The given code is a React component that provides context providers for the Next.js application. It includes the Next UI provider and the Next Themes provider, and it takes in children and theme props as input.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='directory closed'>
+      <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 components</div>
+      <div class='directory-summary'>
+      <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend/components` directory contains various React components and utilities for creating UI elements, managing the sidebar layout, and providing chat-related functionality, including a chat interface, form field templates, theme switcher, and utility functions." data-long="The `frontend/components` directory houses a collection of React components and utilities for building user interfaces. The `base` directory contains components for creating UI elements such as confirm buttons, expandable sections, rendering Markdown content, and customizing select dropdowns. The `chat.tsx` file defines a React component for a chat interface, including message rendering, input handling, and chat history display. The `json-forms.tsx` file provides various React components and functions for form field templates and widgets. The `sidebar` directory contains TypeScript files defining React components for managing the sidebar layout and providing debug functionality for chat-related options. Additionally, the `theme-switch.tsx` file offers a React component for a theme switcher, allowing users to toggle between light, system, and dark themes. Lastly, the `utils.ts` file defines a utility function `mergeClassNames` for merging key-value pairs to create a new object.">**Short:** The `frontend/components` directory contains various React components and utilities for creating UI elements, managing the sidebar layout, and providing chat-related functionality, including a chat interface, form field templates, theme switcher, and utility functions.</div>
+      </div>
+      <div class='directory-content' style='display:none;'>
+        <div class='directory closed'>
+          <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 base</div>
+          <div class='directory-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend/components/base` directory contains React components for creating various UI elements such as confirm buttons, expandable sections, rendering Markdown content, and customizing select dropdowns." data-long="The `frontend/components/base` directory houses several important React components. The `confirm-button.tsx` file contains components for creating a popover with a tooltip and a confirm button with a tooltip. The `expander.tsx` file defines a customized wrapper for the `Accordion` component from the `@nextui-org/react` library, allowing for additional styling and customization options. The `md.tsx` file renders Markdown content using the `react-markdown` library and utilizes plugins like `remark-gfm`, `remark-math`, `rehype-katex`, and `rehype-raw` for additional functionality. Lastly, the `single-select.tsx` file defines a custom React component `SingleSelect` that extends the `Select` component from the `@nextui-org/react` library, providing custom props for selected value, setting selected value, and a list of values, and handling selection changes while merging custom class names with defaults.">**Short:** The `frontend/components/base` directory contains React components for creating various UI elements such as confirm buttons, expandable sections, rendering Markdown content, and customizing select dropdowns.</div>
+          </div>
+          <div class='directory-content' style='display:none;'>
+            <div class='file'>
+              <div class='file-path'>📄 confirm-button.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The file contains React components for creating a popover with a tooltip and a confirm button with a tooltip." data-long="The file contains three React components: `OptionalTooltip`, `PopTooltip`, and `ConfirmButton`. 
+- `OptionalTooltip` is a component that conditionally renders a tooltip based on the presence of a `tooltip` prop.
+- `PopTooltip` is a component that combines a popover with a tooltip and allows for custom trigger, tooltip, and content.
+- `ConfirmButton` is a component that creates a button with a confirmation dialog, including a warning, confirmation button, and tooltip. It uses the `PopTooltip` component for the popover functionality. Each component takes in specific props and handles the rendering of UI elements based on the provided props.">**Short:** The file contains React components for creating a popover with a tooltip and a confirm button with a tooltip.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 expander.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code defines a React component called `Expander` which is a customized wrapper for the `Accordion` component from the `@nextui-org/react` library. It allows for additional styling and customization options." data-long="The code defines a `Expander` component which is a functional component that takes in props including `selectionMode`, `defaultExpandedKeys`, `variant`, `color`, `showDivider`, `className`, `itemClasses`, `children`, and `id`. It sets the background, title, and content colors based on the provided `color` prop or defaults to specific colors. The component then renders an `Accordion` component with the provided or default props and additional styling.
+
+The code also exports the `Expander` component and an `AccordionItem` component as `ExpanderItem`.">**Short:** The code defines a React component called `Expander` which is a customized wrapper for the `Accordion` component from the `@nextui-org/react` library. It allows for additional styling and customization options.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 md.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given code is a React component that renders Markdown content using the `react-markdown` library. It also utilizes plugins like `remark-gfm`, `remark-math`, `rehype-katex`, and `rehype-raw` for additional functionality." data-long="The code defines a React functional component `MD` which takes in `className`, `children`, and other `props` as input. Inside the component, it renders a `div` with a specific class and uses the `Markdown` component from the `react-markdown` library. The `remarkPlugins` and `rehypePlugins` are passed as props to the `Markdown` component, enabling the use of plugins like `remark-gfm` for GitHub Flavored Markdown, `remark-math` for math in Markdown, `rehype-katex` for rendering LaTeX math expressions, and `rehype-raw` for parsing raw HTML. The component also handles the rendering of Markdown content with specific styling classes.
+
+The code can be summarized as follows:
+- `MD`: A functional React component that renders Markdown content with specified plugins and styling classes. It takes in `className`, `children`, and other `props` as input.">**Short:** The given code is a React component that renders Markdown content using the `react-markdown` library. It also utilizes plugins like `remark-gfm`, `remark-math`, `rehype-katex`, and `rehype-raw` for additional functionality.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 single-select.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code defines a custom React component `SingleSelect` that extends the `Select` component from the `@nextui-org/react` library. It takes in custom props for selected value, setting selected value, and a list of values. It handles selection changes and merges custom class names with defaults." data-long="The code defines a custom React functional component `SingleSelect` that extends the `Select` component from the `@nextui-org/react` library. It takes in custom props including `selected` (string or undefined), `setSelected` (function to set selected value), and `valList` (array of strings). It also accepts `classNames` and spreads the rest of the props. Inside the component, it defines a function `handleSelectionChange` to handle selection changes and merges custom class names with defaults. The component then returns the `Select` component with specific configurations and props, including label placement, selection mode, disallowing empty selection, handling selection change, items based on the value list, and merged class names. It also maps the value list to `SelectItem` components within the `Select`. Finally, it exports the `SingleSelect` component.">**Short:** The code defines a custom React component `SingleSelect` that extends the `Select` component from the `@nextui-org/react` library. It takes in custom props for selected value, setting selected value, and a list of values. It handles selection changes and merges custom class names with defaults.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='file'>
+          <div class='file-path'>📄 chat.tsx</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This file contains a React component for a chat interface, including message rendering, input handling, and chat history display." data-long="The code defines a React component for a chat interface, including message rendering, input handling, and chat history display. It also includes various tool components for different chat functionalities. The file also contains the definition of message and tool types, as well as the initial messages and UI components for the chat interface.
+
+- `Message` and `Messages`: Define the message and messages types for the chat history.
+- `initialMessages`: Initial state for the chat messages.
+- `ToolProps`: Interface for tool properties.
+- `DefaultTool`: Component for rendering default tool.
+- `SummaryTool`: Component for rendering summary tool.
+- `ChatEndTool`: Component for rendering chat end tool.
+- `ScheduleMeetingTool`: Component for rendering schedule meeting tool.
+- `toolRenderers`: Function to render different tools based on their names.
+- `toolFootnotes`: Function to generate footnotes for specific tool calls.
+- `ToolCalls`: Component for rendering tool calls within a message.
+- `ChatAvatar`: Component for rendering chat avatars based on roles.
+- `ChatMessage`: Component for rendering chat messages.
+- `ChatInput`: Component for handling chat input and sending messages.
+- `Chat`: Main chat component for rendering the entire chat interface.">**Short:** This file contains a React component for a chat interface, including message rendering, input handling, and chat history display.</div>
+          </div>
+        </div>
+        <div class='file'>
+          <div class='file-path'>📄 json-forms.tsx</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given file is a TypeScript code file that defines various React components and functions for form field templates and widgets." data-long="The code file defines several React components and functions for form field templates and widgets. Here are the significant parts of the code:
+
+- `ArrayFieldTemplate`: This function defines the template for an array field, including the ability to add, remove, and reorder items within the array.
+- `ArrayFieldItemTemplate`: This function defines the template for a single item within an array field, including buttons for moving up, moving down, and removing the item.
+- `FieldTemplate`: This function defines the template for a field, including the label, help text, errors, and children components.
+- `ObjectFieldTemplate`: This function defines the template for an object field, including the properties and their content.
+- `DescriptionFieldTemplate`: This function defines the template for a description field, which is currently commented out.
+- `SubmitButton`: This function defines the template for a submit button, with the ability to render or not based on the UI schema.
+- `SelectWidget`: This is a custom widget for a select input field.
+- `TextWidget`: This is a custom widget for a text input field.
+- `theme`: This object defines the theme for the form, including the widgets and templates to be used.
+
+Overall, the code file provides a comprehensive set of components and functions for creating and customizing form fields and widgets in a React application.">**Short:** The given file is a TypeScript code file that defines various React components and functions for form field templates and widgets.</div>
+          </div>
+        </div>
+        <div class='directory closed'>
+          <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 sidebar</div>
+          <div class='directory-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend/components/sidebar` directory contains TypeScript files that define React components for managing the sidebar layout and providing debug functionality for chat-related options." data-long="The `debug-sidebar.tsx` file defines two React components: `LoadChat` for loading chat history from a .json file and `DebugSidebar` for providing a debug interface for chat-related options. On the other hand, the `layout.tsx` file contains code for the `SidebarLayout` React component, which handles the visibility and layout of a sidebar and its content based on the screen size. These components are essential for managing the sidebar functionality within the frontend of the application.">**Short:** The `frontend/components/sidebar` directory contains TypeScript files that define React components for managing the sidebar layout and providing debug functionality for chat-related options.</div>
+          </div>
+          <div class='directory-content' style='display:none;'>
+            <div class='file'>
+              <div class='file-path'>📄 debug-sidebar.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The given code is a TypeScript file that defines two React components: `LoadChat` and `DebugSidebar`. The `LoadChat` component allows users to load chat history from a .json file, while the `DebugSidebar` component provides a debug interface for chat-related options." data-long="The code defines two React components:
+- `LoadChat`:
+  - This component takes in a `messages` prop and renders a button to trigger the file upload functionality. Upon selecting a .json file, it reads the file, parses the JSON content, and updates the chat history accordingly. It also displays a warning message and provides feedback using toast notifications.
+- `DebugSidebar`:
+  - This component takes in various props including `listTitle`, `listContent`, `gpt`, `messages`, `showSystem`, `setShowSystem`, and `className`. It renders a debug interface for chat-related options, including model options and chat options. It utilizes components like `Expander`, `SingleSelect`, `Slider`, `Switch`, `Button`, `LoadChat`, and `ConfirmButton` to provide functionality for managing chat history, model options, and chat display preferences. It also uses toast notifications for providing feedback to the user.">**Short:** The given code is a TypeScript file that defines two React components: `LoadChat` and `DebugSidebar`. The `LoadChat` component allows users to load chat history from a .json file, while the `DebugSidebar` component provides a debug interface for chat-related options.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 layout.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This file contains code for a React component called `SidebarLayout` which manages the visibility and layout of a sidebar and its content based on the screen size." data-long="The `SidebarLayout` component is defined with props for the left sidebar, default visibility, and children. It uses state variables to manage the visibility of the sidebar and to determine if the screen is in mobile view. The `handleResize` function is used to update the `isMobile` state based on the window width. Event listeners are added and removed to handle the window resize event. The component returns different layouts based on the screen size, including a modal-based layout for mobile view and an allotment-based layout for larger screens. The component also includes buttons for toggling the sidebar visibility and icons for indicating the sidebar state. The `SidebarLayout` component is then exported for use in other parts of the application.">**Short:** This file contains code for a React component called `SidebarLayout` which manages the visibility and layout of a sidebar and its content based on the screen size.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class='file'>
+          <div class='file-path'>📄 theme-switch.tsx</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="This code is a React component for a theme switcher, allowing users to toggle between light, system, and dark themes. It utilizes various UI components from the Next UI library and React icons for the visual elements." data-long="The code defines a functional component `ThemeSwitch` which utilizes the Next UI library and React icons to create a theme switcher interface. It imports various components such as `Button`, `Switch`, `Tabs`, `Tab`, `Tooltip`, `Popover`, `PopoverTrigger`, and `PopoverContent` from the Next UI library, as well as `useTheme` from &quot;next-themes&quot; and `useIsSSR` from &quot;@react-aria/ssr&quot;. Within the component, it uses the `useTheme` hook to access the current theme and set the theme, and the `useIsSSR` hook to check if the code is running on the server side. The component renders a button with a popover trigger, allowing users to select the theme from options displayed using tabs, each representing a different theme (light, system, dark) and accompanied by corresponding icons from the React icons library. The `onSelectionChange` event handler is used to set the selected theme when a tab is clicked. The code also includes various CSS classes for styling the elements.">**Short:** This code is a React component for a theme switcher, allowing users to toggle between light, system, and dark themes. It utilizes various UI components from the Next UI library and React icons for the visual elements.</div>
+          </div>
+        </div>
+        <div class='file'>
+          <div class='file-path'>📄 utils.ts</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code defines a function `mergeClassNames` that takes in two objects of key-value pairs and merges their values to create a new object." data-long="The `mergeClassNames` function takes in two parameters: `defaultClasses` and `customClasses`, both of which are objects with string keys and string or undefined values. It then uses the `reduce` method to iterate through the keys of `defaultClasses` and merge the default class name with the custom one (if it exists) by concatenating them with a space in between. The resulting object contains the merged class names.">**Short:** The code defines a function `mergeClassNames` that takes in two objects of key-value pairs and merges their values to create a new object.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='directory closed'>
+      <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 hooks</div>
+      <div class='directory-summary'>
+      <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend/hooks` directory contains TypeScript files that define components, hooks, and modules for managing network connections, handling WebSocket communication, and synchronizing state between local and remote sources in a React application." data-long="The `frontend/hooks/networking` directory is a crucial part of the frontend codebase, as it contains TypeScript files that handle network connections, WebSocket communication, and state synchronization in a React application. These files likely include custom hooks and components for managing network-related functionality, making them essential for the overall functionality and performance of the application. The networking directory plays a significant role in ensuring seamless communication and data synchronization between the frontend and backend systems.">**Short:** The `frontend/hooks` directory contains TypeScript files that define components, hooks, and modules for managing network connections, handling WebSocket communication, and synchronizing state between local and remote sources in a React application.</div>
+      </div>
+      <div class='directory-content' style='display:none;'>
+        <div class='directory closed'>
+          <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 networking</div>
+          <div class='directory-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend/hooks/networking` directory contains TypeScript files that define components, hooks, and modules for managing network connections, handling WebSocket communication, and synchronizing state between local and remote sources in a React application." data-long="The `connection.tsx` file defines a `ConnectionProvider` component and a `Connection` class for managing WebSocket connections and providing connection context. The `remote-toast.ts` file contains a custom hook `useRemoteToast` that utilizes a connection to handle toast message events. Additionally, the `sync.ts` file includes a custom hook for state synchronization between local and remote sources using React&#x27;s hooks, along with functions for event handling and state updates. These files collectively provide networking functionality for the frontend application, facilitating communication and data synchronization with remote sources.">**Short:** The `frontend/hooks/networking` directory contains TypeScript files that define components, hooks, and modules for managing network connections, handling WebSocket communication, and synchronizing state between local and remote sources in a React application.</div>
+          </div>
+          <div class='directory-content' style='display:none;'>
+            <div class='file'>
+              <div class='file-path'>📄 connection.tsx</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code provided is a TypeScript file that defines a `ConnectionProvider` component and a `Connection` class. The `ConnectionProvider` component is used to manage a WebSocket connection and provides the connection context to its children. The `Connection` class is responsible for handling WebSocket connections, sending and receiving messages, and managing event handlers." data-long="The code defines a `ConnectionProvider` component that takes in a URL, children, context, autoconnect, and wsAuth as props. It uses the `useLocalStorage` and `useSessionStorage` hooks to manage user and session IDs if `wsAuth` is enabled. It also creates a WebSocket connection and handles autoconnect functionality. The `Connection` class is defined with properties such as `url`, `ws`, `isConnected`, and various event handlers. It includes methods for registering and deregistering events, initializing handlers, registering binary data, sending messages, connecting, disconnecting, and handling received events. The class also includes error handling and toast notifications for connection status.">**Short:** The code provided is a TypeScript file that defines a `ConnectionProvider` component and a `Connection` class. The `ConnectionProvider` component is used to manage a WebSocket connection and provides the connection context to its children. The `Connection` class is responsible for handling WebSocket connections, sending and receiving messages, and managing event handlers.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 remote-toast.ts</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code defines a custom hook `useRemoteToast` which uses a connection to register and deregister events for displaying toast messages." data-long="The code defines a custom hook `useRemoteToast` which takes a `connection` and an optional `prefix` as parameters. Inside the hook, it uses the `useEffect` hook to register an event &quot;_TOAST&quot; on the provided `connection`. When the event is triggered, it handles different types of toast messages (default, message, success, info, warning, error) by calling the corresponding methods from the `toast` library with the prefixed message. Finally, it deregisters the event when the component unmounts.">**Short:** The code defines a custom hook `useRemoteToast` which uses a connection to register and deregister events for displaying toast messages.</div>
+              </div>
+            </div>
+            <div class='file'>
+              <div class='file-path'>📄 sync.ts</div>
+              <div class='file-summary'>
+              <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code provided is a TypeScript module that contains a custom hook for managing state synchronization between a local and remote source using React&#x27;s `useReducer` and `useContext` hooks. It also includes functions for sending and handling events, as well as managing state updates and side effects." data-long="The code is a TypeScript module that provides a custom hook `useSyncedReducer` and a function `useSynced` for managing state synchronization in a React application. It utilizes various hooks and functions from the React and Immer libraries to handle state updates and side effects. The key components and functions in the code include:
+
+- `useSyncedReducer&lt;S&gt;`: A custom hook for managing state synchronization using a reducer function, with support for sending and handling events, as well as managing local and remote state updates.
+  - `setEvent`, `getEvent`, `patchEvent`, `actionEvent`, `taskStartEvent`, `taskCancelEvent`: Functions for generating event keys.
+  - `Action`, `TaskStart`, `TaskCancel`: Type definitions for different types of actions and tasks.
+  - `Sync`, `Delegate`, `SyncedReducer`: Type definitions and function signatures for synchronization and delegation.
+  - `useSyncedReducer`: The main custom hook that handles state synchronization, event handling, and side effects.
+  - `useMemo`: Hook for memoizing the setters and syncers for each attribute.
+  - `wrappedReducer`: A wrapped reducer function that handles remote events and enqueues side effects for synchronization and action delegation.
+  - `useReducer`: Hook for managing state and actions with the wrapped reducer function.
+  - `useEffect`: Hook for executing side effects after rendering, handling remote events, and registering/deregistering event handlers.
+
+- `useSynced&lt;S&gt;`: A function that utilizes `useSyncedReducer` to provide a simplified interface for managing state synchronization without specifying a custom reducer function.
+
+The code overall provides a comprehensive solution for managing state synchronization in a React application, with support for local and remote state updates, event handling, and side effects.">**Short:** The code provided is a TypeScript module that contains a custom hook for managing state synchronization between a local and remote source using React&#x27;s `useReducer` and `useContext` hooks. It also includes functions for sending and handling events, as well as managing state updates and side effects.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class='directory closed'>
+      <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 styles</div>
+      <div class='directory-summary'>
+      <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="(empty directory)" data-long="(empty directory)">**Short:** (empty directory)</div>
+      </div>
+      <div class='directory-content' style='display:none;'>
+      </div>
+    </div>
+    <div class='directory closed'>
+      <div class='directory-header' onclick='toggleVisibility(this)'><span class='toggle-arrow'></span>📁 types</div>
+      <div class='directory-summary'>
+      <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The `frontend/types` directory contains a file `usecases.ts` that defines types and functions related to managing usecases, including a reducer function and a function for applying modifications." data-long="The `frontend/types` directory houses the `usecases.ts` file, which is crucial for managing usecases within the frontend application. This file defines various types and functions related to usecases, providing a clear structure for handling usecase-related data. The inclusion of a reducer function for usecases indicates the presence of state management logic, while the function for applying modifications suggests the ability to update and manipulate usecases within the application. Overall, this directory plays a significant role in defining and managing usecases within the frontend codebase.">**Short:** The `frontend/types` directory contains a file `usecases.ts` that defines types and functions related to managing usecases, including a reducer function and a function for applying modifications.</div>
+      </div>
+      <div class='directory-content' style='display:none;'>
+        <div class='file'>
+          <div class='file-path'>📄 usecases.ts</div>
+          <div class='file-summary'>
+          <div class='summary-toggle markdown' onclick='toggleSummary(this)' data-state='short' data-short="The code provided defines a set of types and functions related to managing usecases. It includes a reducer function for usecases, as well as a function for applying modifications to the usecases." data-long="The code begins by defining the `UsecaseID`, `Usecase`, and `Usecases` types, representing the identifiers, individual usecases, and a collection of usecases respectively. It then initializes the `initialUsecases` object with default values for the usecases. The `reduceUsecases` function serves as a reducer for usecases, handling various actions such as updating, creating, deleting, restoring, importing, fetching remotely, and pushing remotely. Additionally, there is an `applyModifications` function that applies modifications to the usecases and returns the modified result. Finally, the code exports the defined types and functions for external use.">**Short:** The code provided defines a set of types and functions related to managing usecases. It includes a reducer function for usecases, as well as a function for applying modifications to the usecases.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button id="toggleAllSummaries" onclick="toggleAllSummaries()" data-state="short">Show Detailed on All</button>
+
+
+<script>
+function toggleVisibility(header) {
+    var content = header.nextElementSibling.nextElementSibling;
+    var directory = header.parentElement;
+    content.style.display = content.style.display === 'none' ? 'block' : 'none';
+    directory.classList.toggle('closed');
+}
+
+window.addEventListener('DOMContentLoaded', (event) => {
+    document.querySelectorAll('.markdown').forEach((element) => {
+        element.innerHTML = marked.parse(element.textContent);
+    });
+});
+
+</script>
+
+<script>
+function toggleSummary(element, forceState = null) {
+    if (forceState === null)
+        element.setAttribute('data-state', element.getAttribute('data-state') === 'short' ? 'long' : 'short');
+    let currentState = forceState || element.getAttribute('data-state');
+    if (currentState === 'long') {
+        element.innerHTML = marked.parse('**Detailed:** ' + element.getAttribute('data-long'));
+    } else {
+        element.innerHTML = marked.parse('**Short:** ' + element.getAttribute('data-short'));
+    }
+}
+function toggleAllSummaries() {
+    const button = document.getElementById('toggleAllSummaries');
+    let newState = button.getAttribute('data-state') === 'short' ? 'long' : 'short';
+    const summaries = document.querySelectorAll('.summary-toggle');
+
+    button.setAttribute('data-state', newState);
+    button.innerHTML = newState === 'long' ? 'Show Short on All' : 'Show Detailed on All';
+    summaries.forEach(element => toggleSummary(element, newState));
+}
+
+</script>
+
+</body></html>
