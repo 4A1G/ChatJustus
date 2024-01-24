@@ -29,7 +29,7 @@ export default function Home() {
   }, [])
 
   return (
-    <Table>
+    <Table removeWrapper>
       <TableHeader>
         <TableColumn>Client</TableColumn>
         <TableColumn>Lawyer</TableColumn>
@@ -45,7 +45,7 @@ export default function Home() {
               <TableCell>{lawyer}</TableCell>
               <TableCell>{summary}</TableCell>
               <TableCell>
-                <Button as='a' href={`/demo-first-contact?case_id=${case_id}`}>
+                <Button as='a' href={`/ChatJustus/demo-first-contact?case_id=${case_id}`}>
                   <FaEye />
                 </Button>
               </TableCell>
