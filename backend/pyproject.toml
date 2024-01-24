@@ -7,7 +7,7 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = ">=3.10,<3.13"
-gpt-wrapper = {git = "https://github.com/JoongWonSeo/gpt-wrapper.git"}
+gpt-wrapper = {git = "git@github.com:JoongWonSeo/gpt-wrapper.git"}
 qdrant-client = "^1.7.0"
 python-dotenv = "^1.0.0"
 fastapi = "^0.108.0"
