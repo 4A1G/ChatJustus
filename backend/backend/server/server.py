@@ -17,18 +17,17 @@ from .utils import get_ip, open_qr
 
 
 # connections
-users = {} # {user_id: (connection, assistant)}}
+sessions = {} # {user_id: (connection, assistant)}}
 
 
-def assistant_factory(assistant_type:str, user_id: str):
+def assistant_factory(assistant_type:str, case_id: str):
     match assistant_type:
         case "first_contact":
-            return FirstContactBot(user_id)
+            return FirstContactBot(case_id)
         
         case "follow_up":
             # init case
             db = cases_db()
-            case_id = user_id
             try:
                 case = db.retrieve([case_id])[0]
                 print(f"Case {case_id} found")
@@ -39,10 +38,11 @@ def assistant_factory(assistant_type:str, user_id: str):
         case _:
             raise Exception(f"Assistant type {assistant_type} not found")
 
-async def new_session(assistant_type: str, session_id: str, ws: WebSocket):
+
+async def new_session(assistant_type: str, case_id: str, id: str, ws: WebSocket):
     with Connection() as connection:
         try:
-            assistant = assistant_factory(assistant_type, session_id)
+            assistant = assistant_factory(assistant_type, case_id)
         except NoCaseException as e:
             await connection.disconnect("You are not assigned to a case. Please first visit First Contact!", ws)
             return False
@@ -53,12 +53,16 @@ async def new_session(assistant_type: str, session_id: str, ws: WebSocket):
         # if we have tools that need to be initialized, initialize them here
         # await assistant.default_tools.initialize()
 
-        users[f"{assistant_type}/{session_id}"] = (connection, assistant)
-        print(f"New session: {assistant_type}/{session_id}")
+        sessions[id] = (connection, assistant)
+        print(f"New session: {id}")
         return True
 
-# websocket endpoint
+# server
 app = FastAPI()
+
+@app.get("/admin/sessions")
+async def get_sessions():
+    return list(sessions.keys())
 
 async def ws_auth(ws: WebSocket) -> str | None:
     try:
@@ -72,27 +76,57 @@ async def ws_auth(ws: WebSocket) -> str | None:
         if not user or not session:
             raise Exception("Client sent invalid user or session")
         
-        return f"{user}"
+        return user, session
     except:
         try:
             await ws.close()
         finally:
-            return None
+            return None, None
+
+
+@app.websocket("/ws/demo/{assistant_type}/{case_id}")
+async def websocket_endpoint(ws: WebSocket, assistant_type: str, case_id: str):
+    await ws.accept()
+
+    user_id, session_id = await ws_auth(ws)
+    if not session_id:
+        print("Failed to authenticate")
+        return
+
+    id = f"demo/{assistant_type}/{session_id}"
+    if id not in sessions:
+        if not await new_session(assistant_type, case_id, id, ws):
+            return
+    connection = sessions[id][0]
+
+    try:
+        await connection.new_connection(ws)
+        await connection.handle_connection()
+    except Exception:
+        print(f"Error in connection handler: {traceback.format_exc()}")
+    finally:
+        try:
+            connection.ws = None
+            await ws.close()
+        except:
+            pass
+
 
 @app.websocket("/ws/{assistant_type}")
 async def websocket_endpoint(ws: WebSocket, assistant_type: str):
     await ws.accept()
 
-    session_id = await ws_auth(ws)
-    if not session_id:
+    user_id, session_id = await ws_auth(ws)
+    if not user_id:
         print("Failed to authenticate")
         return
 
-    id = f"{assistant_type}/{session_id}"
-    if id not in users:
-        if not await new_session(assistant_type, session_id, ws):
+    id = f"{assistant_type}/{user_id}"
+    if id not in sessions:
+        case_id = user_id
+        if not await new_session(assistant_type, case_id, id, ws):
             return
-    connection = users[id][0]
+    connection = sessions[id][0]
 
     try:
         await connection.new_connection(ws)

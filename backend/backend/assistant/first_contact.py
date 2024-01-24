@@ -35,14 +35,14 @@ class FirstContactSummary(BaseModel):
 
 
 class FirstContactToolkit(Toolkit):
-    def __init__(self, user_id: str, history: MessageHistory):
+    def __init__(self, case_id: str, history: MessageHistory):
         super().__init__()
 
-        self.user_id = user_id
+        self.case_id = case_id
         self._history = history
 
         self.summary = {}
-        self.chatEnded = cases_db().retrieve([user_id]) != []
+        self.chatEnded = cases_db().retrieve([case_id]) != []
         self.summarySchema = FirstContactSummary.model_json_schema()
 
         self.sync = Sync(
@@ -139,7 +139,7 @@ Sterling Legal Associates
         )
 
         # Create Case and save to DB
-        case_id = self.user_id
+        case_id = self.case_id
         new_case = Case(
             case_id=case_id,
             client=name,
@@ -211,10 +211,10 @@ Sterling Legal Associates
 
 
 class FirstContactBot(SyncedGPT):
-    def __init__(self, user_id: str):
+    def __init__(self, case_id: str):
 
         # load chat if exists
-        results = cases_db().retrieve([user_id])
+        results = cases_db().retrieve([case_id])
         if len(results) > 0:
             case = results[0]
             initial_messages = SyncedHistory(
@@ -248,5 +248,5 @@ Use clear, concise language to make it easy for users to provide the necessary i
             messages=initial_messages,
             # model="gpt-3.5-turbo-1106",
             model="gpt-4-1106-preview",
-            tools=FirstContactToolkit(user_id, initial_messages),
+            tools=FirstContactToolkit(case_id, initial_messages),
         )
