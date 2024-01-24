@@ -150,6 +150,14 @@ async def first_contact():
 async def follow_up():
     return FileResponse("webapp_static/ChatJustus/follow-up.html")
 
+@app.get("/ChatJustus/demo-first-contact")
+async def first_contact():
+    return FileResponse("webapp_static/ChatJustus/demo-first-contact.html")
+
+@app.get("/ChatJustus/demo-follow-up")
+async def follow_up():
+    return FileResponse("webapp_static/ChatJustus/demo-follow-up.html")
+
 # it's important this is mounted after the websocket route
 app.mount(
     "/", StaticFiles(directory="webapp_static", html=True), name="static"
