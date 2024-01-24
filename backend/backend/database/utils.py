@@ -9,7 +9,7 @@ def to_timestamp(meeting_timestamp):
 
 def format_dialogs(dialogs: list[Dialog]):
     return "\n".join([
-        f"{d.speaker}: {d.content}"
+        f"- **{d.speaker}:** {d.content}"
         for d in dialogs
     ])
 

@@ -2,6 +2,7 @@ import asyncio
 from time import time
 from gpt_wrapper.messages import msg
 from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with_message
+from markdown import markdown
 
 from backend.database.generate import generate_meeting_title_summary, generate_next_meeting
 from backend.database.utils import format_dialogs
@@ -25,18 +26,16 @@ class LegalDBToolkit(Toolkit):
 
         self._history = history
 
-        # case information
+        # static data
         self.case = case
-        self.meetings_db = meetings_db(case.case_id)
-        self.meetings = sorted([meeting for meeting in self.meetings_db], key=lambda x: x.timestamp)
-        self.selected_meeting = self.meetings[-1].timestamp
-        self.chatEnded = False
-
-        # databases
-        self.dialog_dbs = [dialogs_db(case.case_id, m.timestamp) for m in self.meetings]
+        self.meetings_db = meetings_db(self.case.case_id)
         self.bgb_db = law_book_db("BGB")
         self.famfg_db = law_book_db("FamFG")
         self.zpo_db = law_book_db("ZPO")
+
+        # dynamic states
+        self.chatEnded = False
+        self.load_db()        
 
         # sync
         self.sync = Sync("FOLLOW_UP", self,
@@ -57,6 +56,12 @@ class LegalDBToolkit(Toolkit):
     def meetingsDict(self):
         return [m.model_dump() for m in self.meetings]
         
+    def load_db(self):
+        # meetings
+        self.meetings = sorted([meeting for meeting in self.meetings_db], key=lambda x: x.timestamp)
+        self.selected_meeting = self.meetings[-1].timestamp
+        # dialoag dbs
+        self.dialog_dbs = [dialogs_db(self.case.case_id, m.timestamp) for m in self.meetings]
 
 
     @function_tool()
@@ -125,11 +130,18 @@ class LegalDBToolkit(Toolkit):
         return "Chat Ended"
 
     async def on_schedule(self, timestamp: int):
+
+        self.chatEnded = True
+        await self.sync()
+        await self.sync.toast(
+            f"Thank you, {self.case.lawyer or 'your lawyer'} will email you soon!",
+            type="success",
+        )
+
         # save this chat to DB
-        m_db = meetings_db(self.case.case_id)
         with_chat = self.meetings[-1]
         with_chat.chat = self._history.history
-        m_db.overwrite(with_chat, self.meetings[-1].timestamp)
+        self.meetings_db.overwrite(with_chat, self.meetings[-1].timestamp)
 
         # generate mocked dialogs
         dialogs = await generate_next_meeting(self.case, [m.summary for m in self.meetings])
@@ -143,14 +155,14 @@ class LegalDBToolkit(Toolkit):
             title=title,
             summary=summary,
         )
-        m_db.add([meeting], [timestamp])
+        self.meetings_db.add([meeting], [timestamp])
 
         contents = f"""
 Dear {self.case.client},
 
 We had a great meeting on {datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d (%A), %H:%M:%S")}. This is the transcript of our meeting:
 
-{format_dialogs(dialogs)}
+{markdown(format_dialogs(dialogs))}
 
 For any follow-up questions, <a href="http://34.90.113.6:42069/ChatJustus/follow-up">ask ChatJustus</a>.
 
@@ -163,16 +175,13 @@ Sterling Legal Associates
              send_email,
              to=self.case.email,
              subject=f"{self.case.email}, here's our meeting transcript!",
-             contents= contents,
+             contents=contents,
          ))
-        
 
-        self.chatEnded = True
+        # reload the db and sync to frontend
+        self.load_db()
+        await self._history.reset()
         await self.sync()
-        await self.sync.toast(
-            f"Thank you, {self.case.lawyer or 'your lawyer'} will email you soon!",
-            type="success",
-        )
 
 
 

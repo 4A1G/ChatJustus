@@ -163,7 +163,7 @@ Thank you for trying out our demo!
 The following is a mocked transcript of what should happen after the client's first official meeting with the lawyer.
 Please use this dialog and the summary in the next email as a reference for the follow up questions.
 
-{format_dialogs(dialogs)}
+{markdown(format_dialogs(dialogs))}
 
 In the next email, you will receive a summary of the meeting, and a link to ChatJustus to continue. Have fun! :)
 Best regards,

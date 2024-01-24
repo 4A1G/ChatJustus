@@ -22,7 +22,7 @@ async def generate_first_meeting(case: Case) -> list[Dialog]:
         d = await dialog_generator(f"""
 Generate a LONG imaginary dialog (around 20 messages!) between the lawyer {case.lawyer} and the client {case.client} based on the case summary below.
 
-It should be the first interaction of the lawyer and client. Usually, talk about general things about the case, the lawyer's strategy, and the fee. The conversation always starts with the lawyer speaking first, then taking turns. Come up with creative and specific details, instead of generic dialog. The legal case of the client should be memorable and interesting.
+It should be the first interaction of the lawyer and client. Usually, talk about general things about the case, the lawyer's strategy, and the fee. The conversation always starts with the lawyer speaking first, then taking turns. The legal case of the client should be memorable and interesting. Make up imaginary yet specific details, such that the lawyer answers the client's questions and actually makes PROGRESS on the legal case. For example, instead of saying "I will inform you about the fees", say something specific like "My fees are usually 200 euros per hour, but I offer a flat rate of 1000 euros for divorce cases.".
 
 Case Summary:
 {case.summary}

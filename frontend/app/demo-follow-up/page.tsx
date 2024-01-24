@@ -12,7 +12,8 @@ import { FUContext } from '../follow-up/contexts'
 import { DebugSidebar } from '@/components/sidebar/debug-sidebar'
 import { SidebarLayout } from '@/components/sidebar/layout'
 import { useRemoteToast } from '@/hooks/networking/remote-toast'
-import { FaEye } from 'react-icons/fa6'
+import { FaArrowLeft, FaEye } from 'react-icons/fa6'
+import { Button } from '@nextui-org/button'
 
 function nth(i: number) {
   let j = i % 10,
@@ -136,7 +137,16 @@ export default function Home() {
           }
           isConnected={isConnected}
           isGenerating={gpt.runningTasks.includes("PROMPT")}
-          isDisabled={<p className='font-bold text-center'><FaEye className='text-xl inline m-1' /> Example Legal Case - Read Only</p>}
+          isDisabled={
+            <div className='flex justify-between items-center'>
+              <p className='font-bold'>
+                <FaEye className='text-xl inline m-1' /> Example Legal Case - Read Only
+              </p>
+                <Button as='a' href={window.location.href.replace("follow-up", "first-contact")}>
+                <FaArrowLeft /> Back to First Contact 
+              </Button>
+            </div>
+          }
           showSystem={showSystem}
         />
       </SidebarLayout>

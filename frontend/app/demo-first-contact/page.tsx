@@ -13,7 +13,7 @@ import { DebugSidebar } from '@/components/sidebar/debug-sidebar'
 import { SidebarLayout } from '@/components/sidebar/layout'
 import { useRemoteToast } from '@/hooks/networking/remote-toast'
 import { Button } from '@nextui-org/button'
-import { FaCircleCheck, FaEye, FaHeart } from 'react-icons/fa6'
+import { FaArrowRight, FaCircleCheck, FaEye, FaHeart } from 'react-icons/fa6'
 import { ConfirmButton } from '@/components/base/confirm-button'
 
 
@@ -100,7 +100,16 @@ Do you have any legal questions? I can help you with:
           }
           isConnected={isConnected}
           isGenerating={gpt.runningTasks.includes("PROMPT")}
-          isDisabled={<p className='font-bold text-center'><FaEye className='text-xl inline m-1' /> Example Legal Case - Read Only</p>}
+          isDisabled={
+            <div className='flex justify-between items-center'>
+              <p className='font-bold'>
+                <FaEye className='text-xl inline m-1' /> Example Legal Case - Read Only
+              </p>
+                <Button as='a' href={window.location.href.replace("first-contact", "follow-up")}>
+                Go to Meeting Follow-Up <FaArrowRight />
+              </Button>
+            </div>
+          }
           showSystem={showSystem}
         />
 
