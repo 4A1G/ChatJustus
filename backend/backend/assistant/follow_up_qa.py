@@ -181,6 +181,7 @@ Sterling Legal Associates
         # reload the db and sync to frontend
         self.load_db()
         await self._history.reset()
+        self.chatEnded = False
         await self.sync()
 
 
