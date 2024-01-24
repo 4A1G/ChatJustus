@@ -29,6 +29,7 @@ class Case(EmbedData):
     email: str # email of the client
     lawyer: str # name of the lawyer
     summary: str # summary from First Contact
+    chat: list[dict] # for first contact chat, only saved after conclusion
 
 def cases_db():
     # validate=False because we don't actually embed anything, just a normal documentDB

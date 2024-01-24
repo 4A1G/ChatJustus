@@ -13,7 +13,7 @@ from backend.assistant.first_contact import FirstContactBot
 from backend.assistant.follow_up_qa import FollowUpBot
 from backend.database.schemas import cases_db, meetings_db
 from .sync import Connection
-from .case_manager import CaseManager
+from .case_manager import CaseManager, NoCaseException
 from .utils import get_ip, open_qr
 
 
@@ -27,19 +27,36 @@ def assistant_factory(assistant_type:str, user_id: str):
             return FirstContactBot(user_id)
         
         case "follow_up":
-            return CaseManager(user_id)
+            # init case
+            db = cases_db()
+            case_id = user_id
+            try:
+                case = db.retrieve([case_id])[0]
+                print(f"Case {case_id} found")
+            except:
+                raise NoCaseException(f"Case {case_id} not found")
+            return CaseManager(case)
         
         case _:
             raise Exception(f"Assistant type {assistant_type} not found")
 
-async def new_session(assistant_type: str, session_id: str):
+async def new_session(assistant_type: str, session_id: str, ws: WebSocket):
     with Connection() as connection:
-        assistant = assistant_factory(assistant_type, session_id)
+        try:
+            assistant = assistant_factory(assistant_type, session_id)
+        except NoCaseException as e:
+            await connection.disconnect("You are not assigned to a case. Please first visit First Contact!", ws)
+            return False
+        except Exception as e:
+            await connection.disconnect(f"Error: {e}", ws)
+            return False
+
         # if we have tools that need to be initialized, initialize them here
         # await assistant.default_tools.initialize()
 
         users[f"{assistant_type}/{session_id}"] = (connection, assistant)
         print(f"New session: {assistant_type}/{session_id}")
+        return True
 
 # websocket endpoint
 app = FastAPI()
@@ -74,7 +91,8 @@ async def websocket_endpoint(ws: WebSocket, assistant_type: str):
 
     id = f"{assistant_type}/{session_id}"
     if id not in users:
-        await new_session(assistant_type, session_id)
+        if not await new_session(assistant_type, session_id, ws):
+            return
     connection = users[id][0]
 
     try:

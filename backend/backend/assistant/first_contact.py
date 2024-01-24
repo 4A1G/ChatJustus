@@ -4,7 +4,7 @@ from enum import StrEnum
 from pydantic import BaseModel
 from markdown import markdown
 
-from gpt_wrapper.messages import msg
+from gpt_wrapper.messages import msg, MessageHistory
 from gpt_wrapper.tools import Tools, Toolkit, ToolList, function_tool, fail_with_message
 
 from .chatgpt import SyncedGPT, SyncedHistory
@@ -35,10 +35,11 @@ class FirstContactSummary(BaseModel):
 
 
 class FirstContactToolkit(Toolkit):
-    def __init__(self, user_id: str):
+    def __init__(self, user_id: str, history: MessageHistory):
         super().__init__()
 
         self.user_id = user_id
+        self._history = history
 
         self.summary = {}
         self.chatEnded = False
@@ -145,6 +146,7 @@ Sterling Legal Associates
             email=email,
             lawyer=lawyer,
             summary=case,
+            chat=self._history.history,
         )
         cases_db().add([new_case], [case_id])
 
@@ -158,7 +160,7 @@ Sterling Legal Associates
 Dear {name},
 
 Thank you for trying out our demo!
-The following will be a mocked transcript of what should happen after the client's first official meeting with the lawyer.
+The following is a mocked transcript of what should happen after the client's first official meeting with the lawyer.
 Please use this dialog and the summary in the next email as a reference for the follow up questions.
 
 {format_dialogs(dialogs)}
@@ -166,10 +168,7 @@ Please use this dialog and the summary in the next email as a reference for the 
 In the next email, you will receive a summary of the meeting, and a link to ChatJustus to continue. Have fun! :)
 Best regards,
 LegalRoad
-
         """.strip()
-
-
 
         asyncio.create_task(asyncio.to_thread(
              send_email,
@@ -185,7 +184,9 @@ LegalRoad
             title=title,
             summary=summary,
         )
-        meetings_db(case_id).add([meeting], [meeting_timestamp])
+        m_db = meetings_db(case_id)
+        m_db.reset()
+        m_db.add([meeting], [meeting_timestamp])
 
         # Send after-meeting summary to client
         contents_summary = f"""
@@ -211,8 +212,18 @@ Sterling Legal Associates
 
 class FirstContactBot(SyncedGPT):
     def __init__(self, user_id: str):
-        initial_messages = SyncedHistory(
-            system=f"""
+
+        # load chat if exists
+        results = cases_db().retrieve([user_id])
+        if len(results) > 0:
+            case = results[0]
+            initial_messages = SyncedHistory(
+                system=case.chat[0],
+                history=case.chat[1:],
+            )
+        else:
+            initial_messages = SyncedHistory(
+                system=f"""
 You are ChatJustus, a professional lawyer assistant for the law firm "Sterling Legal Associates". Your primary role is to assist the potential legal client by:
 1. Start the conversation by actively asking 2-3 relevant questions about the user's legal problems to understand their situation and needs.
 2. Determine if our law firm can address their legal needs.
@@ -229,13 +240,13 @@ Use clear, concise language to make it easy for users to provide the necessary i
 [Lawyers Information]: 
 
 {format_all_lawyers(list(lawyers_db()))}
-            """.strip(),
-            history = [],
-        )
+                """.strip(),
+                history = [],
+            )
 
         super().__init__(
             messages=initial_messages,
             # model="gpt-3.5-turbo-1106",
             model="gpt-4-1106-preview",
-            tools=FirstContactToolkit(user_id),
+            tools=FirstContactToolkit(user_id, initial_messages),
         )

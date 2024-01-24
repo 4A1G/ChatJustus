@@ -115,9 +115,11 @@ export default function Home() {
             : "*Select a meeting on your case timeline!*"
         }
         history={
-          messages.partial
-            ? [...messages.history, messages.partial]
-            : messages.history
+          selectedMeeting && selectedMeeting == meetings[meetings.length - 1].timestamp
+            ? (messages.partial
+              ? [...messages.history, messages.partial]
+              : messages.history)
+            : meetings.find(({ timestamp }: any) => timestamp == selectedMeeting)?.messages || []
         }
         onSend={
           (message) => {

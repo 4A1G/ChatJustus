@@ -53,11 +53,17 @@ class Connection:
     async def new_connection(self, ws: WebSocket):
         if self.ws is not None:
             print("Warning: Overwriting existing websocket.")
-            await self.send("_DISCONNECT", None)
-            await self.ws.close()
+            await self.disconnect()
         self.ws = ws
 
         await self.init()
+    
+    async def disconnect(self, message="Seems like you're logged in somewhere else. If this is a mistake, please refresh the page.", ws: WebSocket = None):
+        if ws:
+            self.ws = ws
+        await self.send("_DISCONNECT", message)
+        await self.ws.close()
+        self.ws = None
     
     async def init(self):
         for handler in self.init_handlers:

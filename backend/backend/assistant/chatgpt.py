@@ -31,6 +31,9 @@ class SyncedHistory(MessageHistory):
     
     @history.setter
     def history(self, value):
+        if len(value) > 0 and value[0].get('role') == 'system':
+            self.system = value[0].get('content')
+            value = value[1:]
         self._history = value
     
     async def append(self, message):
