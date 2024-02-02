@@ -39,7 +39,7 @@ export const Features1 = () => {
                      color: '$accents8',
                   }}
                >
-                  Exhausted and frustrated from searching for a divorce lawyer and waiting for replies, Marco hits a dead end. However, a silver lining appears when he discovers a website with ChatJustus. Finding a suitable lawyer becomes effortlessly simple, infusing a fresh sense of ease as he navigates the complexities of his divorce concerns.
+                  After long hours of searching for a divorce lawyer and waiting for replies, Marco is exhausted and frustrated. It seems like he hits a dead end. Just when he is about to give up, he discovers a law firm website that has a chatbot called ChatJustus. Finding a suitable lawyer becomes effortlessly simple, infusing a fresh sense of ease as he navigates the complexities of his divorce concerns.
                </Text>
 
                <Flex
@@ -82,7 +82,7 @@ export const Features1 = () => {
                            color: '$accents8',
                         }}
                      >
-                        Marco is required to provide his contact information after a brief understanding of his legal issue. This serves as a simplified contact form, allowing for an efficient submission of the legal inquiry without requiring extensive details at this initial stage.
+                        Marco is required to provide his contact information after a brief understanding of his legal issue. This serves as a simplified contact form, allowing an efficient submission of the legal inquiry without the need for extensive details at this initial stage.
                      </Text>
                   </Flex>
                </Flex>
@@ -104,7 +104,7 @@ export const Features1 = () => {
                            color: '$accents8',
                         }}
                      >
-                        Once Marco discribed his problem, ChatJustus uses this data to match him with a suitable lawyer within the law firm. This process ensures that Marco is connected with the right legal professional who can address his specific needs, setting the stage for a subsequent meeting between Marco and the chosen lawyer.
+                        Once Marco described his problem, ChatJustus uses this data to match him with a suitable lawyer within the law firm. This process ensures that Marco is connected with the right legal professional who can address his specific needs, setting the stage for a subsequent meeting between Marco and the chosen lawyer.
                      </Text>
                   </Flex>
                </Flex>

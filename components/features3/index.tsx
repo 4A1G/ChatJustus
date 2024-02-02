@@ -82,7 +82,7 @@ export const Features3 = () => {
                         <BoxIcon />
                         <Flex direction={'column'}>
                            <Text span>
-                           Answers customer' and lawyers' inquires  based on the database, so that answers are based on specific cases instead of general knowledge 
+                           Answers customers' and lawyers' inquires based on the database, so that answers are based on specific cases instead of general knowledge 
                            </Text>
                         </Flex>
                      </Flex>

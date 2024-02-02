@@ -38,7 +38,7 @@ export const Features2 = () => {
                      color: '$accents8',
                   }}
                >
-                  In the meeting, Marco didn't jot down many notes and now worries about forgetting important stuff. Plus, he gets legal papers full of confusing jargon. To untangle it all, he turns to ChatJustus for help, hoping to clear up crucial meeting points and understand the tricky legal terms.
+                  In the meeting, Marco didn't jot down many notes and now he worries about forgetting important stuff. Plus, he gets legal papers full of confusing jargon. To untangle it all, he turns to ChatJustus for help, hoping to clear up crucial meeting points and understand the tricky legal terms.
                </Text>
 
                <Flex
